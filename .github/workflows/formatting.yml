@@ -1,5 +1,4 @@
 name: Format Pull Request Files
-name: Format Pull Request Files
 
 on:
   issue_comment:
