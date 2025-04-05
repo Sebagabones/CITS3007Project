@@ -1,4 +1,0 @@
-- uses: DavidAnson/markdownlint-cli2-action@v19
-  with:
-    config: '/.github/actions/formatting/markdown/custom.markdownlint.jsonc'
-    globs: '**/*.md'
