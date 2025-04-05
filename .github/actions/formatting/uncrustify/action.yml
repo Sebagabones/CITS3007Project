@@ -1,24 +1,17 @@
 name: Formatting
+description: Checks C code formatting using uncrustify
 
-on:
-  pull_request:
-    types: [opened, synchronize]
-    paths:
-      - '**.c'
-      - '**.h'
-
-jobs:
-  cpp_style_check:
-    runs-on: ubuntu-latest
-    name: Check C Styling
-    
-    steps:
-    - name: Checkout this commit
-      uses: actions/checkout@v3
-      with:
-        fetch-depth: 2
-        
-    - name: uncrustify check
+inputs:
+  path:
+    description: 'Path to check'
+    required: false
+    default: './'
+  
+runs:
+  using: "composite"
+  steps:
+    - name: Run uncrustify check
       uses: Daniel-Trevitz/uncrustify-check@v1
+      shell: bash
       with:
         configFile: 'uncrustify.cfg'
