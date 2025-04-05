@@ -27,3 +27,5 @@ jobs:
         continue-on-error: true
         with:
           path: ./  # Path to check (default is repository root)
+          repository: ${{ steps.pr-info.outputs.result.repo }}
+          ref: ${{ steps.pr-info.outputs.result.ref }}
