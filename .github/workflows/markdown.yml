@@ -16,5 +16,5 @@ jobs:
       - name: Lint Markdown files
         uses: DavidAnson/markdownlint-cli2-action@v19
         with:
-          config: '/.github/workflows/custom.markdownlint.jsonc'
+          config: '.github/workflows/custom.markdownlint.jsonc'
           globs: '**/*.md'
