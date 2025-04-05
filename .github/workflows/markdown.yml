@@ -1,4 +1,33 @@
-- uses: DavidAnson/markdownlint-cli2-action@v19
-  with:
-    config: '/.github/actions/formatting/markdown/custom.markdownlint.jsonc'
-    globs: '**/*.md'
+name: Lint Markdown
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    paths:
+      - '**/*.md'
+
+jobs:
+  markdownlint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Lint Markdown files
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: tj-actions/changed-files@v46
+        id: changed-files
+        with:
+          fix: true
+          config: '.github/workflows/custom.markdownlint.jsonc'
+          files: '**/*.md'
+          separator: ","
+      - uses: DavidAnson/markdownlint-cli2-action@v19
+        if: steps.changed-files.outputs.any_changed == 'true'
+        with:
+          fix: true
+          config: '.github/workflows/custom.markdownlint.jsonc'
+          globs: ${{ steps.changed-files.outputs.all_changed_files }}
+          separator: ","
