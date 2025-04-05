@@ -1,0 +1,26 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+fail_fast: true
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+    -   id: trailing-whitespace
+    -   id: end-of-file-fixer
+    -   id: check-yaml
+    -   id: check-added-large-files
+-   repo: https://github.com/cpplint/cpplint
+    rev: 2.0.1  # You can use the latest version or a specific commit hash
+    hooks:
+    -   id: cpplint
+        args:
+          - --filter=+build,-legal,+readablity,+runtime,-whitespace/indent,-build/include_alpha,-whitespace/braces,-whitespace/comments,-whitespace/newline
+-   repo: https://github.com/pocc/pre-commit-hooks
+    rev: v1.3.5
+    hooks:
+      - id: clang-tidy
+     # - id: oclint
+      - id: uncrustify
+        args: ["-c", ".github/workflows/uncrustify.cfg"]
+      - id: cppcheck
+        args: ["--check-level=exhaustive"]

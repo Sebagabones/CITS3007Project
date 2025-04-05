@@ -1,0 +1,74 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-std=c11",
+      "-pedantic",
+      "-Wall",
+      "-Wextra",
+      "-Wshadow",
+      "-Wconversion",
+      "-funsigned-char",
+      "-fsanitize=undefined,address,leak",
+      "-fno-sanitize-recover=signed-integer-overflow",
+      "-fno-omit-frame-pointer",
+      "-g",
+      "-O",
+      "-c",
+      "-o",
+      "./WorkflowTest7/CTests/keep_open.o",
+      "./WorkflowTest7/CTests/keep_open.c"
+    ],
+    "directory": "/home/bones/Storage/Uniwork/2025S1/CITS3007/project/CITS3007Project",
+    "file": "/home/bones/Storage/Uniwork/2025S1/CITS3007/project/CITS3007Project/WorkflowTest7/CTests/keep_open.c",
+    "output": "/home/bones/Storage/Uniwork/2025S1/CITS3007/project/CITS3007Project/WorkflowTest7/CTests/keep_open.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-std=c11",
+      "-pedantic",
+      "-Wall",
+      "-Wextra",
+      "-Wshadow",
+      "-Wconversion",
+      "-funsigned-char",
+      "-fsanitize=undefined,address,leak",
+      "-fno-sanitize-recover=signed-integer-overflow",
+      "-fno-omit-frame-pointer",
+      "-g",
+      "-O",
+      "-c",
+      "-o",
+      "./WorkflowTest7/CTests/privileged.o",
+      "./WorkflowTest7/CTests/privileged.c"
+    ],
+    "directory": "/home/bones/Storage/Uniwork/2025S1/CITS3007/project/CITS3007Project",
+    "file": "/home/bones/Storage/Uniwork/2025S1/CITS3007/project/CITS3007Project/WorkflowTest7/CTests/privileged.c",
+    "output": "/home/bones/Storage/Uniwork/2025S1/CITS3007/project/CITS3007Project/WorkflowTest7/CTests/privileged.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-std=c11",
+      "-pedantic",
+      "-Wall",
+      "-Wextra",
+      "-Wshadow",
+      "-Wconversion",
+      "-funsigned-char",
+      "-fsanitize=undefined,address,leak",
+      "-fno-sanitize-recover=signed-integer-overflow",
+      "-fno-omit-frame-pointer",
+      "-g",
+      "-O",
+      "-c",
+      "-o",
+      "./WorkflowTest7/CTests/envprint.o",
+      "./WorkflowTest7/CTests/envprint.c"
+    ],
+    "directory": "/home/bones/Storage/Uniwork/2025S1/CITS3007/project/CITS3007Project",
+    "file": "/home/bones/Storage/Uniwork/2025S1/CITS3007/project/CITS3007Project/WorkflowTest7/CTests/envprint.c",
+    "output": "/home/bones/Storage/Uniwork/2025S1/CITS3007/project/CITS3007Project/WorkflowTest7/CTests/envprint.o"
+  }
+]
