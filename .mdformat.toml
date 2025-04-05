@@ -5,7 +5,7 @@
 # behavior.
 #
 wrap = 72         # options: {"keep", "no", INTEGER}
-number = false        # options: {false, true}
+number = true        # options: {false, true}
 end_of_line = "lf"    # options: {"lf", "crlf", "keep"}
 validate = true       # options: {false, true}
 # extensions = [      # options: a list of enabled extensions (default: all installed are enabled)
