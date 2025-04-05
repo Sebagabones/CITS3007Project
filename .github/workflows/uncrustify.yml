@@ -1,0 +1,22 @@
+name: Code Formatting Check
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+    paths:
+      - '**.c'
+      - '**.h'
+  workflow_dispatch:  # For manual runs
+
+jobs:
+  format_check:
+    runs-on: ubuntu-latest
+    name: Uncrustify Code Format Check
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Run formatting check
+        uses: ./.github/actions/formatting/uncrustify
+        with:
+          path: ./  # Path to check (default is repository root)
