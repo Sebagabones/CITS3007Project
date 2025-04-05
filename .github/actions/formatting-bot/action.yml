@@ -48,9 +48,9 @@ runs:
     - name: Checkout upstream repo
       uses: actions/checkout@v4.1.1
       with:
-        repository: ${{ steps.pr-info.outputs.RemoteRepo }}
-        ref: ${{ steps.pr-info.outputs.branchName }}
-        
+        repository: ${{ github.event.pull_request.head.repo.full_name }}
+        ref: ${{ github.event.pull_request.head.ref }}
+
     - name: Check Formatting
       uses: ./.github/actions/formatting/uncrustify
       continue-on-error: true
