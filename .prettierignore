@@ -1,0 +1,8 @@
+# .prettierignore
+
+# Ignore everything...
+*
+
+# ...but NOT Markdown files
+!*.md
+!**/*.md
