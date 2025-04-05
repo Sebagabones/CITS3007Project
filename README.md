@@ -23,7 +23,7 @@ Project for CITS3007
 alias uncrust='find . \( -name "*.cpp" -o -name "*.c" -o -name "*.h" \) -exec uncrustify -c ~/.uncrustify.cfg --no-backup {} +
 ```
 
-- I have setup a GitHub action that automatically checks to see if there
+- I have setup a Github action that automatically checks to see if there
   is any code that hasn't been formatted with uncrustify when doing a PR
   \- you can either download the zip file it provides on failure which
   has a git patch you can apply, or (tbh, probably easier) you can just
@@ -35,7 +35,7 @@ alias uncrust='find . \( -name "*.cpp" -o -name "*.c" -o -name "*.h" \) -exec un
   file/directory list.
 
 - If your code isn't formatted, you won't be able to merge it (soz)
-
+- However! If you look below (and you setup pre-commit), your code should be formatted on commit.
 #### Markdown files
 
 - Our report needs to match CommonMark spec, and so we also have a
@@ -56,5 +56,18 @@ alias uncrust='find . \( -name "*.cpp" -o -name "*.c" -o -name "*.h" \) -exec un
 
 ### Linting
 #### C Files
-- Going to be a few of these in theory, but initially I am using a clang-tidy [action](https://github.com/marketplace/actions/clang-tidy-review)
+##### Pre-Commit
+
+**NOTE**: This repo makes *heavy* use of [pre-commits](https://pre-commit.com/) (espically [this](https://github.com/pocc/pre-commit-hooks) hook lmao) - please install pre-commit.
+You will also need to install:
+- [clang-tidy](https://clang.llvm.org/extra/clang-tidy/)
+- [oclint](https://oclint.org/)
+- [uncrustify](https://github.com/uncrustify/uncrustify/tree/master)
+- [cppcheck](https://cppcheck.sourceforge.io/)
+- [cpplint](https://github.com/cpplint/cpplint)
+
+If things aren't working, let me know/if you need a hand installing stuff (tbh the most annoying will probably be oclint)
+
+##### Github Actions
+- Using a clang-tidy [action](https://github.com/marketplace/actions/clang-tidy-review) - thisa
 - cppcheck - should write a report into main - make sure to keep track of this lol

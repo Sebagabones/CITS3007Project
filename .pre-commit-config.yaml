@@ -13,4 +13,12 @@ repos:
     hooks:
     -   id: cpplint
         args:
-          - --filter=-whitespace/line_length,-whitespace/parens
+          - --filter=+build,-legal,+readablity,+runtime,-whitespace/indent,-build/include_alpha,-whitespace/braces,-whitespace/comments,-whitespace/newline
+-   repo: https://github.com/pocc/pre-commit-hooks
+    rev: v1.3.5
+    hooks:
+      - id: clang-tidy
+      - id: oclint
+      - id: uncrustify
+        args: ["-c", ".github/workflows/uncrustify.cfg"]
+      - id: cppcheck
