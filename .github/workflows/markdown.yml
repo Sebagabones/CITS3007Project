@@ -31,4 +31,3 @@ jobs:
           config: '.github/workflows/custom.markdownlint.jsonc'
           globs: ${{ steps.changed-files.outputs.all_changed_files }}
           separator: ","
-          uses: DavidAnson/markdownlint-cli2-action@v19
