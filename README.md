@@ -68,6 +68,7 @@ You will also need to install:
 
 If things aren't working, let me know/if you need a hand installing stuff (tbh the most annoying will probably be oclint)
 
+If you *need* to skip running pre-commit hooks for some reason, use `--no-verify` (eg, `git commit --no-verify`)
 ##### Github Actions
 - Using a clang-tidy [action](https://github.com/marketplace/actions/clang-tidy-review) - thisa
 - cppcheck - should write a report into main - make sure to keep track of this lol
