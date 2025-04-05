@@ -35,7 +35,11 @@ alias uncrust='find . \( -name "*.cpp" -o -name "*.c" -o -name "*.h" \) -exec un
   file/directory list.
 
 - If your code isn't formatted, you won't be able to merge it (soz)
-- However! If you look below (and you setup pre-commit), your code should be formatted on commit.
+
+- However! If you look below (and you setup pre-commit), you should get
+  a warning that your code hasn't been formatted yet (your commit will
+  fail), telling you to run uncrustify
+
 #### Markdown files
 
 - Our report needs to match CommonMark spec, and so we also have a
@@ -55,20 +59,35 @@ alias uncrust='find . \( -name "*.cpp" -o -name "*.c" -o -name "*.h" \) -exec un
   fails
 
 ### Linting
+
 #### C Files
+
 ##### Pre-Commit
 
-**NOTE**: This repo makes *heavy* use of [pre-commits](https://pre-commit.com/) (espically [this](https://github.com/pocc/pre-commit-hooks) hook lmao) - please install pre-commit.
-You will also need to install:
+**NOTE**: This repo makes _heavy_ use of
+[pre-commits](https://pre-commit.com/) (espically
+[this](https://github.com/pocc/pre-commit-hooks) hook lmao) - please
+install pre-commit. You will also need to install:
+
 - [clang-tidy](https://clang.llvm.org/extra/clang-tidy/)
-- [oclint](https://oclint.org/)
+- [oclint](https://oclint.org/) (Note to self that i still need to set this one up lmao)
 - [uncrustify](https://github.com/uncrustify/uncrustify/tree/master)
 - [cppcheck](https://cppcheck.sourceforge.io/)
 - [cpplint](https://github.com/cpplint/cpplint)
+- (possibly) [bear](https://github.com/rizsotto/Bear)
+If things aren't working, let me know/if you need a hand installing
+stuff (tbh the most annoying will probably be oclint)
 
-If things aren't working, let me know/if you need a hand installing stuff (tbh the most annoying will probably be oclint)
+If you _need_ to skip running pre-commit hooks for some reason, use
+`--no-verify` (eg, `git commit --no-verify`)
 
-If you *need* to skip running pre-commit hooks for some reason, use `--no-verify` (eg, `git commit --no-verify`)
 ##### Github Actions
-- Using a clang-tidy [action](https://github.com/marketplace/actions/clang-tidy-review) - thisa
-- cppcheck - should write a report into main - make sure to keep track of this lol
+
+- Using a clang-tidy
+  [action](https://github.com/marketplace/actions/clang-tidy-review) -
+  thisa
+- cppcheck - should write a report into main - make sure to keep track
+  of this lol
+
+#### Bear
+The bearcc file simply creates a compile commands file for every file ending in `*.c` recursively - this is not a long term thing, once we setup a make/cmake file we can use bear much more effectively
