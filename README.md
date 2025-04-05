@@ -48,3 +48,4 @@ alias uncrust='find . \( -name "*.cpp" -o -name "*.c" -o -name "*.h" \) -exec un
 - command to run prettier is `npx prettier . --write` if you installed
   it with npm - if you have a other prefered node package manager thats
   chill, just add any files it creates to `.gitignore`
+- anyway, markdown is future issue, mostly here as an FYI
