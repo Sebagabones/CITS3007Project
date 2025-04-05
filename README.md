@@ -53,3 +53,8 @@ alias uncrust='find . \( -name "*.cpp" -o -name "*.c" -o -name "*.h" \) -exec un
 - anyway, markdown is future issue, mostly here as an FYI
 - Also, unlike C formatting, you can merge even if markdown linting
   fails
+
+### Linting
+#### C Files
+- Going to be a few of these in theory, but initially I am using a clang-tidy [action](https://github.com/marketplace/actions/clang-tidy-review)
+- cppcheck - should write a report into main - make sure to keep track of this lol
