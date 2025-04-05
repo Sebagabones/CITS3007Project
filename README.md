@@ -70,13 +70,14 @@ alias uncrust='find . \( -name "*.cpp" -o -name "*.c" -o -name "*.h" \) -exec un
 install pre-commit. You will also need to install:
 
 - [clang-tidy](https://clang.llvm.org/extra/clang-tidy/)
-- [oclint](https://oclint.org/) (Note to self that i still need to set this one up lmao)
+- [oclint](https://oclint.org/) (Note to self that i still need to set
+  this one up lmao)
 - [uncrustify](https://github.com/uncrustify/uncrustify/tree/master)
 - [cppcheck](https://cppcheck.sourceforge.io/)
 - [cpplint](https://github.com/cpplint/cpplint)
-- (possibly) [bear](https://github.com/rizsotto/Bear)
-If things aren't working, let me know/if you need a hand installing
-stuff (tbh the most annoying will probably be oclint)
+- (possibly) [bear](https://github.com/rizsotto/Bear) If things aren't
+  working, let me know/if you need a hand installing stuff (tbh the most
+  annoying will probably be oclint)
 
 If you _need_ to skip running pre-commit hooks for some reason, use
 `--no-verify` (eg, `git commit --no-verify`)
@@ -87,7 +88,12 @@ If you _need_ to skip running pre-commit hooks for some reason, use
   [action](https://github.com/marketplace/actions/clang-tidy-review) -
   thisa
 - cppcheck - should write a report into main - make sure to keep track
-  of this lol
-(its now 1 oclock and these broke - ill add them in sometime, but for now precommit do the same thing so yolo im going to bed lmao)
+  of this lol (its now 1 oclock and these broke - ill add them in
+  sometime, but for now precommit do the same thing so yolo im going to
+  bed lmao)
+
 #### Bear
-The bearcc file simply creates a compile commands file for every file ending in `*.c` recursively - this is not a long term thing, once we setup a make/cmake file we can use bear much more effectively
+
+The bearcc file simply creates a compile commands file for every file
+ending in `*.c` recursively - this is not a long term thing, once we
+setup a make/cmake file we can use bear much more effectively
