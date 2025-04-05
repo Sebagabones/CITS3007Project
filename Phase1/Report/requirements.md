@@ -61,7 +61,7 @@ Assessment is based on:
 
 ## 3.5 Report format
 See the CITS3007 website FAQ, "What are the formatting expectations for project reports?" for report format guidelines.
-Briefly: you may submit a PDF, or a Markdown file. **NOTE** This *must* be wrapped at 72 characters per line, it should either adhere to the CommonMark spec or be Pandoc-compliant Markdown, It should be easily readable as plain text, and contain no diagrams, charts or raw LaTeX - see the rest on the FAQ page 
+Briefly: you may submit a PDF, or a Markdown file. **NOTE** This *must* be wrapped at 72 characters per line, it should either adhere to the CommonMark spec or be Pandoc-compliant Markdown, It should be easily readable as plain text, and contain no diagrams, charts or raw LaTeX - see the rest on the FAQ page
 
 We may want to use markdown and then convert to a PDF tbh
 
