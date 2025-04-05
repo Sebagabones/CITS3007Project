@@ -1,3 +1,4 @@
+name: Uncrustify Formatting Check
 on: [ pull_request ]
 
 jobs:
