@@ -45,3 +45,6 @@ alias uncrust='find . \( -name "*.cpp" -o -name "*.c" -o -name "*.h" \) -exec un
 - that said, prettier is setup for formatting markdown files, and a
   linter (markdownlint) is setup as an action for any new changes, so
   it'll tell us if something is off
+- command to run prettier is `npx prettier . --write` if you installed
+  it with npm - if you have a other prefered node package manager thats
+  chill, just add any files it creates to `.gitignore`
