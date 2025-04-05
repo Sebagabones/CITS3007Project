@@ -13,4 +13,4 @@ jobs:
     - name: uncrustify check
       uses: Daniel-Trevitz/uncrustify-check@v1
       with:
-        configFile: '/.github/actions/formatting/uncrustify/uncrustify.cfg'
+        configFile: '/.github/workflows/uncrustify.cfg'
