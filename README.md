@@ -38,3 +38,10 @@ alias uncrust='find . \( -name "*.cpp" -o -name "*.c" -o -name "*.h" \) -exec un
 
 - Our report needs to match CommonMark spec, and so we also have a
   formatter for that (ikr)
+- this is a lil more janky - the main thing to be aware of is text
+  wrapping - we shouldn't have lines over 72 chars in length - ngl, we
+  may just say stuff it and convert markdown into a pdf when we submit
+  it if we get sick of this
+- that said, prettier is setup for formatting markdown files, and a
+  linter (markdownlint) is setup as an action for any new changes, so
+  it'll tell us if something is off
