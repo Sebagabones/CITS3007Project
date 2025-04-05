@@ -18,6 +18,3 @@ jobs:
 
       - name: Run formatting check
         uses: ./.github/actions/formatting/uncrustify
-        with:
-          path: ./  # Path to check (default is repository root)
-          exclude-dirs: "Phase1"
