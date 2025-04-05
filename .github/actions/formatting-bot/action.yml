@@ -14,6 +14,11 @@ inputs:
   include-extensions:
     description: 'List of comma-separated extensions to add to the formatting check. Eg md, dox'
     required: false
+  repository:
+      required: false
+  ref:
+      required: false
+  
 
 runs:
   using: "composite"
@@ -43,14 +48,14 @@ runs:
         echo -e "::endgroup::"
         echo -e "${{ env.bashPass }} ${{ env.stepName }} ${{ env.bashEnd }}"
 
-    - name: Checkout upstream repo
+   - name: Checkout upstream repo
       uses: actions/checkout@v4.1.1
       with:
-        repository: ${{ steps.pr-info.outputs.RemoteRepo }}
-        ref: ${{ steps.pr-info.outputs.branchName }}
-
+        repository: ${{ inputs.repository}}
+        ref: ${{ inputs.ref }}
+        
     - name: Check Formatting
-      uses: FreeRTOS/CI-CD-Github-Actions/formatting@main
+      uses: ./.github/actions/formatting/uncrustify
       continue-on-error: true
       id: check-formatting
       with:
