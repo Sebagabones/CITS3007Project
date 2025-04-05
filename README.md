@@ -30,7 +30,7 @@ alias uncrust='find . \( -name "*.cpp" -o -name "*.c" -o -name "*.h" \) -exec un
   run uncrustify on your conmputer and commit+push changes.
 
 - If you find that non `*.c` or `*.h` files are getting picked up but
-  the action (it *shouldn't*, but I found it liked to pickup PDF files
+  the action (it _shouldn't_, but I found it liked to pickup PDF files
   for some reason) let me (Seb) know, and I'll add it to the ignore
   file/directory list.
 

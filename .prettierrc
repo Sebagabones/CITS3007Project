@@ -1,0 +1,11 @@
+[?62;1;4c]{
+  "overrides": [
+    {
+      "files": "*.md",
+      "options": {
+        "printWidth": 72,
+        "proseWrap": "always"
+      }
+    }
+  ]
+}
