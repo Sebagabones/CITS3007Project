@@ -18,9 +18,12 @@ jobs:
           ( github.event.comment.body == '/bot run formatting' ) ) }}
     runs-on: ubuntu-20.04
     steps:
-    - name: Apply Formatting Fix
-      id: check-formatting-of-rest
-      uses: ./.github/actions/formatting-bot
-      continue-on-error: true
-      with:
-        path: ./  # Path to check (default is repository root)
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Apply Formatting Fix
+        id: check-formatting-of-rest
+        uses: ./.github/actions/formatting-bot
+        continue-on-error: true
+        with:
+          path: ./  # Path to check (default is repository root)
