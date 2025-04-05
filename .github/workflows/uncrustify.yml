@@ -6,13 +6,6 @@ on:
     paths:
       - '**.c'
       - '**.h'
-  workflow_dispatch:
-    inputs:
-      check_all_files:
-        description: 'Check all files instead of just changes'
-        required: false
-        default: 'false'
-        type: boolean
 
 jobs:
   cpp_style_check:
@@ -29,4 +22,3 @@ jobs:
       uses: Daniel-Trevitz/uncrustify-check@v1
       with:
         configFile: 'uncrustify.cfg'
-        checkOnlyChangedFiles: ${{ github.event.inputs.check_all_files != 'true' }}
