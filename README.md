@@ -64,7 +64,7 @@ alias uncrust='find . \( -name "*.cpp" -o -name "*.c" -o -name "*.h" \) -exec un
 
 ##### Pre-Commit
 
-**NOTE**: This repo makes _heavy_ use of
+**NOTE**: This repo make[?62;1;4cs _heavy_ use of
 [pre-commits](https://pre-commit.com/) (espically
 [this](https://github.com/pocc/pre-commit-hooks) hook lmao) - please
 install pre-commit. You will also need to install:
@@ -88,6 +88,6 @@ If you _need_ to skip running pre-commit hooks for some reason, use
   thisa
 - cppcheck - should write a report into main - make sure to keep track
   of this lol
-
+(its now 1 oclock and these broke - ill add them in sometime, but for now precommit do the same thing so yolo im going to bed lmao)
 #### Bear
 The bearcc file simply creates a compile commands file for every file ending in `*.c` recursively - this is not a long term thing, once we setup a make/cmake file we can use bear much more effectively
