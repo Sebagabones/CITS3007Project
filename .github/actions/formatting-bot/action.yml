@@ -45,10 +45,10 @@ runs:
         echo -e "::endgroup::"
         echo -e "${{ env.bashPass }} ${{ env.stepName }} ${{ env.bashEnd }}"
 
-   - name: Checkout upstream repo
+    - name: Checkout upstream repo
       uses: actions/checkout@v4.1.1
       with:
-        repository: ${{ steps.pr-info.outputs.RemoteRepo }}
+      repository: ${{ steps.pr-info.outputs.RemoteRepo }}
         ref: ${{ steps.pr-info.outputs.branchName }}
         
     - name: Check Formatting
