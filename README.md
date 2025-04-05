@@ -4,7 +4,7 @@ Project for CITS3007
 
 ### Formatting
 #### C Files
--  We are using [Uncrustify](https://github.com/uncrustify/uncrustify/tree/master) for formatting - `uncrustify.cfg` is located in `/.github/actions/formatting/uncrustify/uncrustify.cfg` ([here](/.github/actions/formatting/uncrustify/uncrustify.cfg)) - use this file when setting up uncrustify (if you use VSCode you may find [this](https://marketplace.visualstudio.com/items?itemName=zachflower.uncrustify) useful).
+-  We are using [Uncrustify](https://github.com/uncrustify/uncrustify/tree/master) for formatting - `uncrustify.cfg` is located in `/.github/workflows/uncrustify.cfg` ([here](/.github/workflows/uncrustify.cfg)) - use this file when setting up uncrustify (if you use VSCode you may find [this](https://marketplace.visualstudio.com/items?itemName=zachflower.uncrustify) useful).
 
 - I have aliased this in my shell to make my life easier - y'all are more than welcome to use it, or setup your own workflow around uncrustify, I don't mind lol 
 
