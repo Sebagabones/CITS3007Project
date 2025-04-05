@@ -34,6 +34,8 @@ alias uncrust='find . \( -name "*.cpp" -o -name "*.c" -o -name "*.h" \) -exec un
   for some reason) let me (Seb) know, and I'll add it to the ignore
   file/directory list.
 
+- If your code isn't formatted, you won't be able to merge it (soz)
+
 #### Markdown files
 
 - Our report needs to match CommonMark spec, and so we also have a
@@ -48,3 +50,6 @@ alias uncrust='find . \( -name "*.cpp" -o -name "*.c" -o -name "*.h" \) -exec un
 - command to run prettier is `npx prettier . --write` if you installed
   it with npm - if you have a other prefered node package manager thats
   chill, just add any files it creates to `.gitignore`
+- anyway, markdown is future issue, mostly here as an FYI
+- Also, unlike C formatting, you can merge even if markdown linting
+  fails
