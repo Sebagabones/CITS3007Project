@@ -64,7 +64,7 @@ alias uncrust='find . \( -name "*.cpp" -o -name "*.c" -o -name "*.h" \) -exec un
 
 ##### Pre-Commit
 
-**NOTE**: This repo make[?62;1;4cs _heavy_ use of
+**NOTE**: This repo makes _heavy_ use of
 [pre-commits](https://pre-commit.com/) (espically
 [this](https://github.com/pocc/pre-commit-hooks) hook lmao) - please
 install pre-commit. You will also need to install:
