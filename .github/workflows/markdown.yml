@@ -1,4 +1,20 @@
-- uses: DavidAnson/markdownlint-cli2-action@v19
-  with:
-    config: '/.github/actions/formatting/markdown/custom.markdownlint.jsonc'
-    globs: '**/*.md'
+name: Lint Markdown
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    paths:
+      - '**/*.md'
+
+jobs:
+  markdownlint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Lint Markdown files
+        uses: DavidAnson/markdownlint-cli2-action@v19
+        with:
+          config: '/.github/workflows/custom.markdownlint.jsonc'
+          globs: '**/*.md'
