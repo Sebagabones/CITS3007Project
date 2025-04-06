@@ -2,9 +2,9 @@
 
 Project for CITS3007
 
-### Formatting
+## Formatting
 
-#### C Files
+### Formatting C Files
 
 - We are using
   [Uncrustify](https://github.com/uncrustify/uncrustify/tree/master) for
@@ -38,9 +38,11 @@ alias uncrust='find . \( -name "*.cpp" -o -name "*.c" -o -name "*.h" \) -exec un
 
 - However! If you look below (and you setup pre-commit), you should get
   a warning that your code hasn't been formatted yet (your commit will
-  fail), telling you to run uncrustify
+  fail), buuuut precommits should run uncrustify for you as well, so you
+  should be able to just `git add .` (possibly check diffs as well, as
+  clangtidy will also fix any errors it can, so worth checking IMO)
 
-#### Markdown files
+### Formatting Markdown files
 
 - Our report needs to match CommonMark spec, and so we also have a
   formatter for that (ikr)
@@ -58,11 +60,11 @@ alias uncrust='find . \( -name "*.cpp" -o -name "*.c" -o -name "*.h" \) -exec un
 - Also, unlike C formatting, you can merge even if markdown linting
   fails
 
-### Linting
+## Linting
 
-#### C Files
+### Linting C Files
 
-##### Pre-Commit
+#### Pre-Commit
 
 **NOTE**: This repo makes _heavy_ use of
 [pre-commits](https://pre-commit.com/) (espically
@@ -71,32 +73,39 @@ install pre-commit. You will also need to install:
 
 - [clang-tidy](https://clang.llvm.org/extra/clang-tidy/)
 - [oclint](https://oclint.org/) (Note to self that i still need to set
-  this one up lmao)
+  this one up lmao - it is a pain so we may not bother tbh)
 - [uncrustify](https://github.com/uncrustify/uncrustify/tree/master)
 - [cppcheck](https://cppcheck.sourceforge.io/)
 - [cpplint](https://github.com/cpplint/cpplint)
 - (possibly) [bear](https://github.com/rizsotto/Bear)
 
 If things aren't working, let me know/if you need a hand installing
-stuff (tbh the most annoying will probably be oclint)
+stuff
 
 If you _need_ to skip running pre-commit hooks for some reason, use
 `--no-verify` (eg, `git commit --no-verify`)
 
-##### Github Actions
+I find it helpful to run `pre-commit run` to check if things will pass
+before filling up commits with changes
 
-- Using a clang-tidy
-  [action](https://github.com/marketplace/actions/clang-tidy-review)
+If you find errors with linting let me know, but honestly, if we might
+want to start making a list of quick fixes by using comments/a page of
+them, eg:
 
-- cppcheck - should write a report into main - make sure to keep track
-  of this lol
+```c
+/*clangtidy complained so replaced with fprintf(stderr, "expected 1 arg, FILENAME\n"); */
+fputs("expected 1 arg, FILENAME\n", stderr);
+```
 
-(its now 1 oclock and these both broke - ill add them in sometime, but
-for now precommit do the same thing so yolo im going to bed lmao)
+#### Github Actions
 
-#### Bear
+- I want to add clang-tidy
+  [action](https://github.com/marketplace/actions/clang-tidy-review) at
+  some point in the future
 
-The bearcc file simply creates a compile commands file for every file
-ending in `*.c` recursively - this is not a long term thing, once we
-setup a make/cmake file we can use bear much more effectively (this is
-for oclint, which also broke, will get it working later lmao)
+#### Related Info
+
+Currently `src` just has a few of my lab files, and a super simple make
+file - if anyone is a Makefile enjoyer feel free to make a better one
+lol A few of the pre-commit hooks require a `compile_commands.json`
+which is why we use bear lol
