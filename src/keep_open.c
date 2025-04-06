@@ -25,7 +25,7 @@ int main(int argc, char **argv)
 
    if (argc != 1)
    {
-      /*replaced with fprintf(stderr, "%s", "expected 1 arg, FILENAME\n"); */
+      /*replaced with fprintf(stderr, "expected 1 arg, FILENAME\n"); */
       fputs("expected 1 arg, FILENAME\n", stderr);
       exit(EXIT_FAILURE);
    }
