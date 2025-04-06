@@ -1,18 +1,18 @@
 // keep_open.c
 
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
 #include <fcntl.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
 
 #define BUF_SIZE    1024
 
 char buf[BUF_SIZE];
 
-void fail(const char *mesg)
+static void fail(const char *mesg)
 {
    perror(mesg);
    exit(EXIT_FAILURE);
@@ -25,7 +25,8 @@ int main(int argc, char **argv)
 
    if (argc != 1)
    {
-      fprintf(stderr, "expected 1 arg, FILENAME\n");
+      /*replaced with fprintf(stderr, "%s", "expected 1 arg, FILENAME\n"); */
+      fputs("expected 1 arg, FILENAME\n", stderr);
       exit(EXIT_FAILURE);
    }
 

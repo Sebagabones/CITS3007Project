@@ -1,13 +1,13 @@
 // privileged.c
 
+#include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include <sys/stat.h>
-#include <fcntl.h>
 
-int main()
+int main(void)
 {
    int fd;
 
@@ -37,13 +37,19 @@ int main()
 
    // After the task, the root privileges are no longer needed,
    // it's time to relinquish the root privileges permanently.
-   setuid(getuid()); // getuid() returns the real uid
+   int result = setuid(getuid()); // getuid() returns the real uid
+
+   if (result == -1)
+   {
+      exit(1);
+   }
+
    uid_t spot1_ruid2 = getuid();
    uid_t spot1_euid2 = geteuid();
    printf("at spot1: ruid is: %d\n", spot1_ruid2);
    printf("at spot1: euid is: %d\n", spot1_euid2);
 
-   if (fork())  // In the parent process
+   if (fork()) // In the parent process
    {
       close(fd);
       uid_t spot1_ruid3 = getuid();
@@ -52,12 +58,12 @@ int main()
       printf("at spot1: euid is: %d\n", spot1_euid3);
       exit(0);
    }
-   else    // in the child process
-   // perform unprivileged tasks
-
-   // Now, assume that the child process is compromised, malicious
-   // attackers have injected the following statements
-   // into this process
+   else
+   /*      in the child process */
+   /* perform unprivileged tasks */
+   /* Now, assume that the child process is compromised, malicious */
+   /* attackers have injected the following statements */
+   /* into this process */
 
    {
       write(fd, "Malicious Data\n", 15);
