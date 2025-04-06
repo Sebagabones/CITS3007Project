@@ -2,9 +2,9 @@
 
 Project for CITS3007
 
-### Formatting
+## Formatting
 
-#### C Files
+### Formatting C Files
 
 - We are using
   [Uncrustify](https://github.com/uncrustify/uncrustify/tree/master) for
@@ -40,7 +40,7 @@ alias uncrust='find . \( -name "*.cpp" -o -name "*.c" -o -name "*.h" \) -exec un
   a warning that your code hasn't been formatted yet (your commit will
   fail), telling you to run uncrustify
 
-#### Markdown files
+### Formatting Markdown files
 
 - Our report needs to match CommonMark spec, and so we also have a
   formatter for that (ikr)
@@ -58,11 +58,11 @@ alias uncrust='find . \( -name "*.cpp" -o -name "*.c" -o -name "*.h" \) -exec un
 - Also, unlike C formatting, you can merge even if markdown linting
   fails
 
-### Linting
+## Linting
 
-#### C Files
+### Linting C Files
 
-##### Pre-Commit
+#### Pre-Commit
 
 **NOTE**: This repo makes _heavy_ use of
 [pre-commits](https://pre-commit.com/) (espically
@@ -83,20 +83,15 @@ stuff (tbh the most annoying will probably be oclint)
 If you _need_ to skip running pre-commit hooks for some reason, use
 `--no-verify` (eg, `git commit --no-verify`)
 
-##### Github Actions
+#### Github Actions
 
-- Using a clang-tidy
-  [action](https://github.com/marketplace/actions/clang-tidy-review)
+- I want to add clang-tidy
+  [action](https://github.com/marketplace/actions/clang-tidy-review) at
+  some point in the future
 
-- cppcheck - should write a report into main - make sure to keep track
-  of this lol
+#### Related Info
 
-(its now 1 oclock and these both broke - ill add them in sometime, but
-for now precommit do the same thing so yolo im going to bed lmao)
-
-#### Bear
-
-The bearcc file simply creates a compile commands file for every file
-ending in `*.c` recursively - this is not a long term thing, once we
-setup a make/cmake file we can use bear much more effectively (this is
-for oclint, which also broke, will get it working later lmao)
+Currently `src` just has a few of my lab files, and a super simple make
+file - if anyone is a Makefile enjoyer feel free to make a better one
+lol A few of the pre-commit hooks require a `compile_commands.json`
+which is why we use bear lol
