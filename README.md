@@ -20,7 +20,7 @@ Project for CITS3007
   uncrustify, I don't mind lol
 
 ```nushell
-alias uncrust='find . \( -name "*.cpp" -o -name "*.c" -o -name "*.h" \) -exec uncrustify -c ~/.uncrustify.cfg --no-backup {} +
+alias uncrust='find . \( -name "*.cpp" -o -name "*.c" -o -name "*.h" \) -exec uncrustify -c ~/.uncrustify.cfg --no-backup {} +'
 ```
 
 - I have setup a Github action that automatically checks to see if there
@@ -75,9 +75,10 @@ install pre-commit. You will also need to install:
 - [uncrustify](https://github.com/uncrustify/uncrustify/tree/master)
 - [cppcheck](https://cppcheck.sourceforge.io/)
 - [cpplint](https://github.com/cpplint/cpplint)
-- (possibly) [bear](https://github.com/rizsotto/Bear) If things aren't
-  working, let me know/if you need a hand installing stuff (tbh the most
-  annoying will probably be oclint)
+- (possibly) [bear](https://github.com/rizsotto/Bear)
+
+If things aren't working, let me know/if you need a hand installing
+stuff (tbh the most annoying will probably be oclint)
 
 If you _need_ to skip running pre-commit hooks for some reason, use
 `--no-verify` (eg, `git commit --no-verify`)
