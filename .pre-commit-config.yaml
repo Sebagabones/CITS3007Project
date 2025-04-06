@@ -19,8 +19,9 @@ repos:
     rev: v1.3.5
     hooks:
       - id: clang-tidy
+        args: ["--fix-errors"]
       - id: oclint
       - id: uncrustify
-        args: ["-c", ".github/workflows/uncrustify.cfg"]
+        args: ["-c", ".github/workflows/uncrustify.cfg", "--replace", "--no-backup"]
       - id: cppcheck
         args: ["--check-level=exhaustive"]
