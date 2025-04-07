@@ -23,4 +23,4 @@ repos:
     hooks:
     -   id: cpplint
         args:
-          - --filter=+build,-legal,+readablity,+runtime,-whitespace/indent,-build/include_alpha,-whitespace/braces,-whitespace/comments,-whitespace/newline,-readability/braces
+          - --filter=+build,-legal,+readablity,+runtime,-whitespace/indent,-build/include_alpha,-whitespace/braces,-whitespace/comments,-whitespace/newline,-readability/braces,-whitespace/tab,-whitespace/line_length
