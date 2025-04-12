@@ -1,3 +1,5 @@
+Group Name: TOCTOU
+
 ## 1. Team Communication & Responsibilities
 
 ### Team Communication:
@@ -25,11 +27,11 @@ This division is subject to change, once the group have more information as to t
 
 #### Other Responsibilities:
 Of course, a group project wouldn't be complete without the addition of other requirements and responsibilities, and so some other tasks are listed below:
-- **Alec**: Taking minutes at each meeting, threat modelling
 - **Peter**: Developing testing for the system, which will involve working closely with Alec and Scotty.
-- **Scotty**: Design, working on how secure coding principles can be used in the project
 - **Henry**: Assisting with documentation, and ensuring tasks are carried out (and lending a hand to any tasks if needed).
 - **Seb**: Management, coordinating team efforts, setting up version control system/linting, and documentation.
+- **Alec**: Taking minutes at each meeting, threat modelling
+- **Scotty**: Design, working on how secure coding principles can be used in the project
 
 
 There are undoubtedly areas that we have missed in the above list that we will realise once we start phase 2 of the project, and so a critical element to our teams success is being able to adapt to new (or previously unrealised) requirements.
