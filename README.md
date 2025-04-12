@@ -2,6 +2,21 @@
 
 Project for CITS3007
 
+## Make
+#### Makefile Options:
+| Command              | Description                              | Output Name         | Flags Used             |
+|----------------------|------------------------------------------|----------------------|-------------------------|
+| `make`               | Default sanitized builds                 | `file`               | `CFLAGS`                |
+| `make all`           | Same as above                            | `file`               | `CFLAGS`                |
+| `make clean`         | Deletes all generated files              | —                    | —                       |
+| `make no-sanitize`   | Builds without sanitizer flags           | `file.no-sanitize`   | `CFLAGS_NO_SANITIZE`    |
+| `make debug`         | Debug build (no optimization, symbols)   | `file.debug`         | `CFLAGS_DEBUG`          |
+| `make thread`        | Builds with thread sanitizer             | `file.thread`        | `CFLAGS_THREAD`         |
+| `make full`          | Builds with full compatible sanitizers   | `file.full`          | `CFLAGS_FULL`           |
+| `make compile-db`    | Generates `compile_commands.json` for all build modes | `compile_commands.json` | `CFLAGS` + all variants |
+
+
+
 ## Formatting
 
 ### Formatting C Files
@@ -77,7 +92,7 @@ install pre-commit. You will also need to install:
 - [uncrustify](https://github.com/uncrustify/uncrustify/tree/master)
 - [cppcheck](https://cppcheck.sourceforge.io/)
 - [cpplint](https://github.com/cpplint/cpplint)
-- (possibly) [bear](https://github.com/rizsotto/Bear)
+- [bear](https://github.com/rizsotto/Bear)
 
 If things aren't working, let me know/if you need a hand installing
 stuff

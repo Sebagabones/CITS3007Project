@@ -3,3 +3,4 @@ package_lock
 package-lock.json
 package.json
 **/.cache
+**/.ccls-cache

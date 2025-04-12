@@ -16,12 +16,12 @@
       "-O",
       "-g",
       "-o",
-      "envprint",
-      "envprint.c"
+      "fib",
+      "fib.c"
     ],
     "directory": "/home/bones/Storage/Uniwork/2025S1/CITS3007/project/CITS3007Project/src",
-    "file": "/home/bones/Storage/Uniwork/2025S1/CITS3007/project/CITS3007Project/src/envprint.c",
-    "output": "/home/bones/Storage/Uniwork/2025S1/CITS3007/project/CITS3007Project/src/envprint"
+    "file": "/home/bones/Storage/Uniwork/2025S1/CITS3007/project/CITS3007Project/src/fib.c",
+    "output": "/home/bones/Storage/Uniwork/2025S1/CITS3007/project/CITS3007Project/src/fib"
   },
   {
     "arguments": [
@@ -70,5 +70,275 @@
     "directory": "/home/bones/Storage/Uniwork/2025S1/CITS3007/project/CITS3007Project/src",
     "file": "/home/bones/Storage/Uniwork/2025S1/CITS3007/project/CITS3007Project/src/privileged.c",
     "output": "/home/bones/Storage/Uniwork/2025S1/CITS3007/project/CITS3007Project/src/privileged"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-c",
+      "-std=c11",
+      "-pedantic",
+      "-Wall",
+      "-Wextra",
+      "-Wshadow",
+      "-Wconversion",
+      "-funsigned-char",
+      "-O",
+      "-g",
+      "-o",
+      "fib.no-sanitize",
+      "fib.c"
+    ],
+    "directory": "/home/bones/Storage/Uniwork/2025S1/CITS3007/project/CITS3007Project/src",
+    "file": "/home/bones/Storage/Uniwork/2025S1/CITS3007/project/CITS3007Project/src/fib.c",
+    "output": "/home/bones/Storage/Uniwork/2025S1/CITS3007/project/CITS3007Project/src/fib.no-sanitize"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-c",
+      "-std=c11",
+      "-pedantic",
+      "-Wall",
+      "-Wextra",
+      "-Wshadow",
+      "-Wconversion",
+      "-funsigned-char",
+      "-O",
+      "-g",
+      "-o",
+      "keep_open.no-sanitize",
+      "keep_open.c"
+    ],
+    "directory": "/home/bones/Storage/Uniwork/2025S1/CITS3007/project/CITS3007Project/src",
+    "file": "/home/bones/Storage/Uniwork/2025S1/CITS3007/project/CITS3007Project/src/keep_open.c",
+    "output": "/home/bones/Storage/Uniwork/2025S1/CITS3007/project/CITS3007Project/src/keep_open.no-sanitize"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-c",
+      "-std=c11",
+      "-pedantic",
+      "-Wall",
+      "-Wextra",
+      "-Wshadow",
+      "-Wconversion",
+      "-funsigned-char",
+      "-O",
+      "-g",
+      "-o",
+      "privileged.no-sanitize",
+      "privileged.c"
+    ],
+    "directory": "/home/bones/Storage/Uniwork/2025S1/CITS3007/project/CITS3007Project/src",
+    "file": "/home/bones/Storage/Uniwork/2025S1/CITS3007/project/CITS3007Project/src/privileged.c",
+    "output": "/home/bones/Storage/Uniwork/2025S1/CITS3007/project/CITS3007Project/src/privileged.no-sanitize"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-c",
+      "-std=c11",
+      "-pedantic",
+      "-Wall",
+      "-Wextra",
+      "-Wshadow",
+      "-Wconversion",
+      "-funsigned-char",
+      "-O0",
+      "-g3",
+      "-ggdb",
+      "-o",
+      "fib.debug",
+      "fib.c"
+    ],
+    "directory": "/home/bones/Storage/Uniwork/2025S1/CITS3007/project/CITS3007Project/src",
+    "file": "/home/bones/Storage/Uniwork/2025S1/CITS3007/project/CITS3007Project/src/fib.c",
+    "output": "/home/bones/Storage/Uniwork/2025S1/CITS3007/project/CITS3007Project/src/fib.debug"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-c",
+      "-std=c11",
+      "-pedantic",
+      "-Wall",
+      "-Wextra",
+      "-Wshadow",
+      "-Wconversion",
+      "-funsigned-char",
+      "-O0",
+      "-g3",
+      "-ggdb",
+      "-o",
+      "keep_open.debug",
+      "keep_open.c"
+    ],
+    "directory": "/home/bones/Storage/Uniwork/2025S1/CITS3007/project/CITS3007Project/src",
+    "file": "/home/bones/Storage/Uniwork/2025S1/CITS3007/project/CITS3007Project/src/keep_open.c",
+    "output": "/home/bones/Storage/Uniwork/2025S1/CITS3007/project/CITS3007Project/src/keep_open.debug"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-c",
+      "-std=c11",
+      "-pedantic",
+      "-Wall",
+      "-Wextra",
+      "-Wshadow",
+      "-Wconversion",
+      "-funsigned-char",
+      "-O0",
+      "-g3",
+      "-ggdb",
+      "-o",
+      "privileged.debug",
+      "privileged.c"
+    ],
+    "directory": "/home/bones/Storage/Uniwork/2025S1/CITS3007/project/CITS3007Project/src",
+    "file": "/home/bones/Storage/Uniwork/2025S1/CITS3007/project/CITS3007Project/src/privileged.c",
+    "output": "/home/bones/Storage/Uniwork/2025S1/CITS3007/project/CITS3007Project/src/privileged.debug"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-c",
+      "-std=c11",
+      "-pedantic",
+      "-Wall",
+      "-Wextra",
+      "-Wshadow",
+      "-Wconversion",
+      "-funsigned-char",
+      "-fsanitize=thread",
+      "-fno-omit-frame-pointer",
+      "-O1",
+      "-g",
+      "-o",
+      "fib.thread",
+      "fib.c"
+    ],
+    "directory": "/home/bones/Storage/Uniwork/2025S1/CITS3007/project/CITS3007Project/src",
+    "file": "/home/bones/Storage/Uniwork/2025S1/CITS3007/project/CITS3007Project/src/fib.c",
+    "output": "/home/bones/Storage/Uniwork/2025S1/CITS3007/project/CITS3007Project/src/fib.thread"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-c",
+      "-std=c11",
+      "-pedantic",
+      "-Wall",
+      "-Wextra",
+      "-Wshadow",
+      "-Wconversion",
+      "-funsigned-char",
+      "-fsanitize=thread",
+      "-fno-omit-frame-pointer",
+      "-O1",
+      "-g",
+      "-o",
+      "keep_open.thread",
+      "keep_open.c"
+    ],
+    "directory": "/home/bones/Storage/Uniwork/2025S1/CITS3007/project/CITS3007Project/src",
+    "file": "/home/bones/Storage/Uniwork/2025S1/CITS3007/project/CITS3007Project/src/keep_open.c",
+    "output": "/home/bones/Storage/Uniwork/2025S1/CITS3007/project/CITS3007Project/src/keep_open.thread"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-c",
+      "-std=c11",
+      "-pedantic",
+      "-Wall",
+      "-Wextra",
+      "-Wshadow",
+      "-Wconversion",
+      "-funsigned-char",
+      "-fsanitize=thread",
+      "-fno-omit-frame-pointer",
+      "-O1",
+      "-g",
+      "-o",
+      "privileged.thread",
+      "privileged.c"
+    ],
+    "directory": "/home/bones/Storage/Uniwork/2025S1/CITS3007/project/CITS3007Project/src",
+    "file": "/home/bones/Storage/Uniwork/2025S1/CITS3007/project/CITS3007Project/src/privileged.c",
+    "output": "/home/bones/Storage/Uniwork/2025S1/CITS3007/project/CITS3007Project/src/privileged.thread"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-c",
+      "-std=c11",
+      "-pedantic",
+      "-Wall",
+      "-Wextra",
+      "-Wshadow",
+      "-Wconversion",
+      "-funsigned-char",
+      "-fsanitize=undefined,float-divide-by-zero,float-cast-overflow,bounds,null,return,vptr",
+      "-fno-sanitize-recover=all",
+      "-fno-omit-frame-pointer",
+      "-O1",
+      "-g",
+      "-o",
+      "fib.full",
+      "fib.c"
+    ],
+    "directory": "/home/bones/Storage/Uniwork/2025S1/CITS3007/project/CITS3007Project/src",
+    "file": "/home/bones/Storage/Uniwork/2025S1/CITS3007/project/CITS3007Project/src/fib.c",
+    "output": "/home/bones/Storage/Uniwork/2025S1/CITS3007/project/CITS3007Project/src/fib.full"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-c",
+      "-std=c11",
+      "-pedantic",
+      "-Wall",
+      "-Wextra",
+      "-Wshadow",
+      "-Wconversion",
+      "-funsigned-char",
+      "-fsanitize=undefined,float-divide-by-zero,float-cast-overflow,bounds,null,return,vptr",
+      "-fno-sanitize-recover=all",
+      "-fno-omit-frame-pointer",
+      "-O1",
+      "-g",
+      "-o",
+      "keep_open.full",
+      "keep_open.c"
+    ],
+    "directory": "/home/bones/Storage/Uniwork/2025S1/CITS3007/project/CITS3007Project/src",
+    "file": "/home/bones/Storage/Uniwork/2025S1/CITS3007/project/CITS3007Project/src/keep_open.c",
+    "output": "/home/bones/Storage/Uniwork/2025S1/CITS3007/project/CITS3007Project/src/keep_open.full"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-c",
+      "-std=c11",
+      "-pedantic",
+      "-Wall",
+      "-Wextra",
+      "-Wshadow",
+      "-Wconversion",
+      "-funsigned-char",
+      "-fsanitize=undefined,float-divide-by-zero,float-cast-overflow,bounds,null,return,vptr",
+      "-fno-sanitize-recover=all",
+      "-fno-omit-frame-pointer",
+      "-O1",
+      "-g",
+      "-o",
+      "privileged.full",
+      "privileged.c"
+    ],
+    "directory": "/home/bones/Storage/Uniwork/2025S1/CITS3007/project/CITS3007Project/src",
+    "file": "/home/bones/Storage/Uniwork/2025S1/CITS3007/project/CITS3007Project/src/privileged.c",
+    "output": "/home/bones/Storage/Uniwork/2025S1/CITS3007/project/CITS3007Project/src/privileged.full"
   }
 ]
