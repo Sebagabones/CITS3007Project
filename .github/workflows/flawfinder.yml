@@ -1,17 +1,22 @@
+
 name: 'flawfinder_scan'
 description: 'Execute Flawfinder to scan source code for vulnerabilities'
-inputs:
-  arguments:
-    description: 'Command arguments to be sent to Flawfinder'
-    required: true
-    default: ''
-  output:
-    description: 'Output file name'
-    required: true
-    default: 'flawfinder'
-runs:
-  using: 'docker'
-  image: 'Dockerfile'
-  args:
-    - ${{ inputs.arguments }}
-    - ${{ inputs.output }}
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+jobs:
+  flawFinder:
+    runs-on: ubuntu-latest
+    name: Check C Styling
+    steps:
+    - name: Checkout this commit
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 2
+    - name: flawfinder_scan
+      uses: david-a-wheeler/flawfinder@2.0.19
+      with:
+        arguments: '--sarif ./'
+        output: 'flawfinder_results.sarif'
