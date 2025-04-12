@@ -1,4 +1,5 @@
 name: flawfinder_scan
+
 on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
@@ -6,18 +7,17 @@ on:
 jobs:
   flawFinder:
     runs-on: ubuntu-latest
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Run Flawfinder
-      uses: david-a-wheeler/flawfinder@2.0.19
-      with:
-        arguments: '--error-level=1 --sarif ./'
-        output: 'flawfinder_results.sarif'
+    - name: Run Flawfinder and capture exit code
+      run: |
+        flawfinder --sarif --error-level=1 ./ > flawfinder_results.sarif
+        echo "FINDINGS_EXIT_CODE=$?" >> $GITHUB_ENV
 
-    - name: Extract Flawfinder Results Summary
-      id: parse_sarif
+    - name: Parse SARIF and create comment body
       run: |
         node <<'EOF'
         const fs = require('fs');
@@ -25,7 +25,9 @@ jobs:
         const sarif = JSON.parse(fs.readFileSync(path, 'utf8'));
         const results = sarif.runs?.[0]?.results ?? [];
 
-        let summary = `### 🛡️ Flawfinder found ${results.length} issue(s):\n`;
+        let summary = `### Flawfinder Scan Results (${results.length} issue${results.length !== 1 ? 's' : ''})\n`;
+        if (results.length === 0) summary += `No issues found at or above the configured error level.\n`;
+
         results.slice(0, 20).forEach((r, i) => {
           const msg = r.message?.text || 'No message';
           const loc = r.locations?.[0]?.physicalLocation?.artifactLocation?.uri || 'unknown';
@@ -34,11 +36,10 @@ jobs:
         });
 
         if (results.length > 20) summary += `\n...and ${results.length - 20} more.\n`;
-
         fs.writeFileSync('flawfinder_comment.md', summary);
         EOF
 
-    - name: Comment on PR
+    - name: Post comment to PR
       if: github.event_name == 'pull_request'
       uses: actions/github-script@v7
       with:
@@ -51,3 +52,11 @@ jobs:
             repo: context.repo.repo,
             body: body
           });
+
+    - name: Fail if Flawfinder found issues at or above error-level
+      run: |
+        echo "Flawfinder exit code: $FINDINGS_EXIT_CODE"
+        if [ "$FINDINGS_EXIT_CODE" -ne 0 ]; then
+          echo "Flawfinder found issues at error-level threshold."
+          exit 1
+        fi
