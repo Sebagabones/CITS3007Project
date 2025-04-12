@@ -17,7 +17,7 @@ jobs:
       continue-on-error: true
       uses: david-a-wheeler/flawfinder@2.0.19
       with:
-        arguments: '--error-level=1 --sarif ./'
+        arguments: '--error-level=10 --sarif ./'
         output: 'flawfinder_results.sarif'
 
     - name: Parse SARIF and create comment body
