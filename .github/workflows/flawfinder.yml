@@ -1,22 +1,5 @@
-name: flawfinder
-on:
-  pull_request:
-    types: [opened, synchronize, reopened, ready_for_review]
-
-jobs:
-  build:
-    name: flawfinder-action
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: flawfinder-action
-        uses: deep5050/flawfinder-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN}}
-          report_type:
-          data_only:
-          never_ignore:
-          false_positive:
-          inputs_flag:
-          dot_directories:
-          allow_link:
+- name: flawfinder_scan
+  uses: david-a-wheeler/flawfinder@2.0.19
+  with:
+    arguments: '--sarif ./'
+    output: 'flawfinder_results.sarif'
