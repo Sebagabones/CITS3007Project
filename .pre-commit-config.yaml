@@ -9,6 +9,12 @@ repos:
       entry: src/update-compile-commands.sh
       language: script
       pass_filenames: false
+-   repo: local
+    hooks:
+    - id: flawfinder
+      name: flawfinder runner
+      entry: "flawfinder --error-level=1 ./"
+      language: system
 -   repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v5.0.0
     hooks:
