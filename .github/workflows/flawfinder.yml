@@ -12,10 +12,12 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Run Flawfinder and capture exit code
-      run: |
-        flawfinder --sarif --error-level=1 ./ > flawfinder_results.sarif
-        echo "FINDINGS_EXIT_CODE=$?" >> $GITHUB_ENV
+
+    - name: Run Flawfinder
+      uses: david-a-wheeler/flawfinder@2.0.19
+      with:
+        arguments: '--error-level=1 --sarif ./'
+        output: 'flawfinder_results.sarif'
 
     - name: Parse SARIF and create comment body
       run: |
