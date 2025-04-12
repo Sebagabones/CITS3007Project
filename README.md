@@ -93,6 +93,7 @@ install pre-commit. You will also need to install:
 - [cppcheck](https://cppcheck.sourceforge.io/)
 - [cpplint](https://github.com/cpplint/cpplint)
 - [bear](https://github.com/rizsotto/Bear)
+- [flawfinder](https://dwheeler.com/flawfinder/)
 
 If things aren't working, let me know/if you need a hand installing
 stuff
