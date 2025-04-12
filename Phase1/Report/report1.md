@@ -119,7 +119,7 @@ However, one group member uses Emacs, mostly because they are used to it, and en
 The group discussed this whether using different editors would cause any issues, however the Emacs user was confident that they would be able to replicate any necessary features in Emacs, and if not will (begrudgingly) switch over to using VS Code for the remainder of the project.
 
 ### 3.2 Additional Tooling
-This will be split up into 4 main sections - formatting, static analysis/linting, dynamic analysis, and CI/CD implementing both of these.
+This will be split up into 4 main sections - formatting, static analysis/linting, dynamic analysis, and the CI/CD implementation of these.
 
 *Note: The group was absent from the lecture covering Fuzzing (due to attending the first meeting for this project), and so implementing fuzzing has not been discusseed at a group meeting yet, this is planned to be addressed and implemented at the second meeting, which is the day that this report is due, and so the usage of fuzzing is not covered in this report, however it will almost definitely be used in the testing of this project*
 
@@ -152,18 +152,24 @@ Our strategy of choosing tooling was very much based around "how many tools can 
 
 ##### Static Analysis Tools:
 - cppcheck
-  - This was chosen as it was a lot easier for our group to setup and use effectively than something like Splint, while still providing an effective anaylisis to warn of common issues that aren't always picked up by compilers.
+  - This was chosen as it was a lot easier for our group to setup and use effectively than something like Splint, while still providing an effective analysis to warn of common issues that aren't always picked up by compilers.
   - The flag used was `--check-level=exhaustive`, however this was mostly for pre-commit setup (more on that later).
 - flawfinder
   - We found flawfinder very helpful for explaining the context of any issues, which helped us quickly deem if something was a necessary problem.
   - It provided a very useful first line of checking where problems may be (such as using unsafe functions), before using static heavier tools for deeper auditing.
 
-Finally, as it is worth mentioning here, before going into more detail of the process later, we had a vast number of compiler flags and warnings designed to help us be warned of any issues we may face before running linters and static anaylisis tools.
+Finally, as it is worth mentioning here, before going into more detail of the process later, we had a vast number of compiler flags and warnings designed to help us be warned of any issues we may face before running linters and static analysis tools.
 
 #### Dynamic Analysis
 We implemented a few different tools for this, however our main approach was to use Sanitizers and Valgrind.
 
 ##### Sanitizers
-We plan to use the three main Google Sanitizers (Address, Memory, Thread), as in our environment we can control the compilation flags. These will provide us with v
+We plan to use as many Google Sanitizers as we can, as in our environment we can control the compilation flags. These will provide us with valuable abilities to do dynamic analysis on our programs, vastly increasing its safety.
 
-That said, we
+A list of the current sanitisers in use (over different compilation commands as some are not compatible with each other) is listed below, however when we start writing code this number will probably increase:
+`undefined, float-divide-by-zero, float-cast-overflow, bounds, null, return, vptr, undefined, address, leak, thread, memory`
+
+##### Valgrind
+Our group will possibly use Valgrind as well, although like with the note about fuzzing above, we are yet to discuss if/how we will use it (we only have sanitisers setup because the group member doing CI/CD set them up because they have used them before).
+
+Hence, we are unsure how/if we will use this, although it is a strong possibility due to its flexibility in debugging (for example if we cannot build a library we use with the sanitisers we could use valgrind to assist us).

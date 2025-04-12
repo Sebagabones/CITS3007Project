@@ -15,7 +15,7 @@ echo "Changed to directory: $(pwd)" >&2
 
 if git diff --cached --name-only | grep -q -E '(Makefile|src/.*\.(c|cpp|h|hpp)|CMakeLists.txt)'; then
   echo "Source files or build files changed, regenerating compile_commands.json"
-  bear -- make clean all no-sanitize debug thread full
+  bear -- make clean all no-sanitize debug thread full memory
   git add compile_commands.json
   make clean
 else

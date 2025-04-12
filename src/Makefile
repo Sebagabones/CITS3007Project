@@ -11,6 +11,8 @@ THREAD_SANITIZE_FLAGS = -fsanitize=thread -fno-omit-frame-pointer
 # Comprehensive sanitizer flags (compatible with each other)
 FULL_SANITIZE_FLAGS = -fsanitize=undefined,float-divide-by-zero,float-cast-overflow,bounds,null,return,vptr \
         -fno-sanitize-recover=all -fno-omit-frame-pointer
+# Memory sanitizer flags
+MEMORY_SANITIZE_FLAGS = -fsanitize=memory -fsanitize-memory-track-origins -fPIE -pie -fno-omit-frame-pointer
 # Optimization flags
 OPT_FLAGS = -O
 # Optimization flags for thread sanitizer (O1 recommended)
@@ -27,7 +29,7 @@ CFLAGS_DEBUG = $(CFLAGS_COMMON) $(DEBUG_FLAGS)
 CFLAGS_THREAD = $(CFLAGS_COMMON) $(THREAD_SANITIZE_FLAGS) $(OPT_FLAGS_THREAD) -g
 # Flags for comprehensive checks with compatible sanitizers
 CFLAGS_FULL = $(CFLAGS_COMMON) $(FULL_SANITIZE_FLAGS) $(OPT_FLAGS_THREAD) -g
-
+CFLAGS_MEMORY = $(CFLAGS_COMMON) $(MEMORY_SANITIZE_FLAGS) $(OPT_FLAGS_THREAD) -g
 # Get all .c files in the current directory
 SRCS = $(wildcard *.c)
 # Generate object file names from source files
@@ -42,6 +44,8 @@ DEBUG_EXECS = $(SRCS:.c=.debug)
 THREAD_EXECS = $(SRCS:.c=.thread)
 # Generate full sanitizer executable names
 FULL_EXECS = $(SRCS:.c=.full)
+# Generate memory sanitizer executable names
+MEMORY_EXECS = $(SRCS:.c=.memory)
 
 # Default target builds all executables with sanitizers
 all: $(EXECS)
@@ -57,6 +61,9 @@ thread: $(THREAD_EXECS)
 
 # Target to build all executables with full sanitizer flags
 full: $(FULL_EXECS)
+
+# Target to build all executables with memory sanitizer flags
+memory: $(FULL_EXECS)
 
 # Pattern rule to build executables from object files
 %: %.o
@@ -78,16 +85,20 @@ full: $(FULL_EXECS)
 %.full: %.c
 	$(CC) $(CFLAGS_FULL) -o $@ $<
 
+# Pattern rule to build memory sanitizer executables
+%.full: %.c
+	$(CC) $(MEMORY_FULL) -o $@ $<
+
 # Pattern rule to build object files from source files
 %.o: %.c
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 # Clean up generated files
 clean:
-	rm -f $(OBJS) $(EXECS) $(NO_SANITIZE_EXECS) $(DEBUG_EXECS) $(THREAD_EXECS) $(FULL_EXECS)
+	rm -f $(OBJS) $(EXECS) $(NO_SANITIZE_EXECS) $(DEBUG_EXECS) $(THREAD_EXECS) $(FULL_EXECS) $(MEMORY_EXECS)
 
 # Phony targets that don't create files with these names
-.PHONY: all clean no-sanitize debug thread full
+.PHONY: all clean no-sanitize debug thread full memory
 
 # Rebuild compile_commands.json if Makefile or any .c file changes
 compile-db: compile_commands.json
@@ -96,4 +107,4 @@ compile_commands.json: $(wildcard *.c) Makefile
 	@echo "Cleaning and regenerating compile_commands.json..."
 	@make clean
 	@rm -f compile_commands.json
-	@bear -- make all no-sanitize debug thread full
+	@bear -- make all no-sanitize debug thread full memory

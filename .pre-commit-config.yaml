@@ -13,8 +13,9 @@ repos:
     hooks:
     - id: flawfinder
       name: flawfinder runner
-      entry: "flawfinder --error-level=1 ./"
+      entry: "flawfinder --error-level=1"
       language: system
+      files: ^src/.*\.c$
 -   repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v5.0.0
     hooks:
