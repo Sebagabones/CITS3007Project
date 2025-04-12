@@ -13,7 +13,7 @@ jobs:
     - name: Run Flawfinder
       uses: david-a-wheeler/flawfinder@2.0.19
       with:
-        arguments: '--error-level= --sarif ./'
+        arguments: '--error-level=1 --sarif ./'
         output: 'flawfinder_results.sarif'
 
     - name: Extract Flawfinder Results Summary
