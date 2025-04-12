@@ -1,0 +1,53 @@
+name: flawfinder_scan
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+jobs:
+  flawFinder:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Run Flawfinder
+      uses: david-a-wheeler/flawfinder@2.0.19
+      with:
+        arguments: '--error-level= --sarif ./'
+        output: 'flawfinder_results.sarif'
+
+    - name: Extract Flawfinder Results Summary
+      id: parse_sarif
+      run: |
+        node <<'EOF'
+        const fs = require('fs');
+        const path = 'flawfinder_results.sarif';
+        const sarif = JSON.parse(fs.readFileSync(path, 'utf8'));
+        const results = sarif.runs?.[0]?.results ?? [];
+
+        let summary = `### 🛡️ Flawfinder found ${results.length} issue(s):\n`;
+        results.slice(0, 20).forEach((r, i) => {
+          const msg = r.message?.text || 'No message';
+          const loc = r.locations?.[0]?.physicalLocation?.artifactLocation?.uri || 'unknown';
+          const line = r.locations?.[0]?.physicalLocation?.region?.startLine || '?';
+          summary += `- \`${loc}:${line}\` — ${msg}\n`;
+        });
+
+        if (results.length > 20) summary += `\n...and ${results.length - 20} more.\n`;
+
+        fs.writeFileSync('flawfinder_comment.md', summary);
+        EOF
+
+    - name: Comment on PR
+      if: github.event_name == 'pull_request'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+          const body = fs.readFileSync('flawfinder_comment.md', 'utf8');
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: body
+          });
