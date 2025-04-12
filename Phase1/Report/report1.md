@@ -19,6 +19,7 @@ That said, everyone will, of course, be expected to write code, and so a prelimi
 - **Seb**: *Session management*
 - **Alec**: *Role-based access control*
 - **Scotty**: *Player authentication*
+
 *(Note that this is only the allocation of the coding related tasks, other responsibilities are discussed later)*
 
 The division of coding responsibilities was mostly decided as a group, with a preference given to which area everyone wanted to work on.
@@ -47,4 +48,4 @@ Finally, meeting in person once a week was deemed the best way to keep accountab
 Of course, our group also understands that life can get very hectic, and the main request we had for eachother is that if we start falling behind, to let the other group members know immediately, so that we can adjust tasks and priorities before it gets out of hand.
 
 
-## 2.
+## 2. Version Control Strategy
