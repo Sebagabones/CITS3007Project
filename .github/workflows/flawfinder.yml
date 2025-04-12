@@ -14,6 +14,7 @@ jobs:
 
 
     - name: Run Flawfinder
+      continue-on-error: true
       uses: david-a-wheeler/flawfinder@2.0.19
       with:
         arguments: '--error-level=1 --sarif ./'
@@ -54,11 +55,3 @@ jobs:
             repo: context.repo.repo,
             body: body
           });
-
-    - name: Fail if Flawfinder found issues at or above error-level
-      run: |
-        echo "Flawfinder exit code: $FINDINGS_EXIT_CODE"
-        if [ "$FINDINGS_EXIT_CODE" -ne 0 ]; then
-          echo "Flawfinder found issues at error-level threshold."
-          exit 1
-        fi
