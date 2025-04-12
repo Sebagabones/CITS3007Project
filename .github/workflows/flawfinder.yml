@@ -9,7 +9,7 @@ on:
 jobs:
   flawFinder:
     runs-on: ubuntu-latest
-    name: Check C Styling
+    name: Check C Flaw Finder
     steps:
     - name: Checkout this commit
       uses: actions/checkout@v3
@@ -20,3 +20,7 @@ jobs:
       with:
         arguments: '--sarif ./'
         output: 'flawfinder_results.sarif'
+    - name: Upload SARIF to GitHub Code Scanning
+      uses: github/codeql-action/upload-sarif@v2
+      with:
+        sarif_file: flawfinder_results.sarif
