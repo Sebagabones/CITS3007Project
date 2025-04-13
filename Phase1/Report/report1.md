@@ -68,7 +68,7 @@ Of course, our group also understands that life can get very hectic, and the mai
 
 Our group decided that GitHub would be a suitable main online VCS provider to host our repository, mostly due to members familiarity with it (and BitBucket's dark-mode *still* being under beta testing).
 
-GitHub also provides GitHub Actions, which one of our group members has experience with, which will be discussed later on in this report in [Part 3.2](#3.2-additional-tooling).
+GitHub also provides GitHub Actions, which one of our group members has experience with, which will be discussed later on in this report in [Part 3.2](#32-additional-tooling).
 
 We considered mirroring our repository to one of our members home-server, which has a simple Git based VCS server, however we decided against this, as we feel confident that if GitHub goes down, we will have much bigger problems than this project.
 
@@ -83,7 +83,7 @@ Each group member's GitHub account was added to the repository, and at the first
 The overall system will be to use separate branches for each large addition to the project, however each group member is also allowed to have a *up to date* branch specifically for the addition of smaller changes, e.g. fixing typos in documentation etcera. Each branch, when ready, will then have a pull request created, to merge it into the main/dev branch (or any other branch being worked on by a separate member).
 
 
-To mitigate against merge conflicts, a few strategies were implemented. Regular communication (and a clear layout of responsibilities as listed [above](#1.2-team-responsibilities)) helped to ensure there were no major overlapping code changes. If this was unavoidable (for example, in the case of Peter and Henry), regular merging will be implemented.
+To mitigate against merge conflicts, a few strategies were implemented. Regular communication (and a clear layout of responsibilities as listed [above](#12-team-responsibilities)) helped to ensure there were no major overlapping code changes. If this was unavoidable (for example, in the case of Peter and Henry), regular merging will be implemented.
 
 For features/branches that are worked on by a single person, regularly merging main into the branch is planned.
 
@@ -98,7 +98,7 @@ Since the group's main SCM enjoyer usually uses [Sapling](https://sapling-scm.co
 ### 2.4 VCS Policies
 The VCS policies our group decided on were not overly complex, however they were intentionally quite restrictive.
 
-At least one review (and approval) is required before the branch can be merged, the branch being merged into the main and/or dev branch(es) *must* be up to date with the destination branch, and the GitHub Actions discussed [below](#3.2-additional-tooling) must also pass before the branch is able to be merged.
+At least one review (and approval) is required before the branch can be merged, the branch being merged into the main and/or dev branch(es) *must* be up to date with the destination branch, and the GitHub Actions discussed [below](#32-additional-tooling) must also pass before the branch is able to be merged.
 
 
 Commit messages should be kept to the recommended limit (of 72 characters), with a clear descriptions to be placed in the commit description.
