@@ -128,21 +128,21 @@ Hence, both will be discussed here.
 Our strategy of choosing tooling was very much based around "how many tools can we use", and so we used as many as possible (while ensuring the group understood how to use them effectively).
 
 ##### 3.2.2.1 Linters:
-- clang-tidy
+- **clang-tidy**
   - Using compiler flags such as `gcc -Wall` provide linting (and are still a crucial part of writing secure code), clang-tidy was chosen to be used due to its deeper (and more modern) analysis.
   - Clang-tidy's ability to analyse for undefined behaviour provides much more in depth warnings of unsafe code, increasing the safety of our code.
   - It also does a nice job of fixing errors where it can, which saved a considerable amount of time.
   - The flags used by our group were `--fix-errors -warnings-as-errors=*`
-- cpplint
+- **cpplint**
   - While this might seem like an odd choice when using Uncrustify (which did involve adding a considerable number of flags to cpplint to prevent conflicts between Uncrustify and it), cpplint also enforces function size limits, code aware indentation, which can prevent hidden logic bugs.
   - It also flags style violations, unlike Uncrustify, which our team found useful.
   - There were a lot of flags used here to prevent conflicting with Uncrustify, however the main focus was on the `+runtime` and `+build` filters, which targetted things that Uncrustify doesn't
 
 ##### 3.2.2.2 Static Analysis Tools:
-- cppcheck
+- **cppcheck**
   - This was chosen as it was a lot easier for our group to setup and use effectively than something like Splint, while still providing an effective analysis to warn of common issues that aren't always picked up by compilers.
   - The flag used was `--check-level=exhaustive`, however this was mostly for pre-commit setup (more on that later).
-- flawfinder
+- **flawfinder**
   - We found flawfinder very helpful for explaining the context of any issues, which helped us quickly deem if something was a necessary problem.
   - It provided a very useful first line of checking where problems may be (such as using unsafe functions), before using static heavier tools for deeper auditing.
 
@@ -157,6 +157,7 @@ These will provide us with valuable abilities to do dynamic analysis on our prog
 
 A list of the current sanitisers in use (over different compilation commands as some are not compatible with each other) is listed below, however when we start writing code this number will probably increase:
 `undefined, float-divide-by-zero, float-cast-overflow, bounds, null, return, vptr, undefined, address, leak, thread, memory`
+
 
 ##### 3.2.3.2 Valgrind
 Our group will possibly use Valgrind as well, although like with the note about fuzzing above, we are yet to discuss if/how we will use it (we only have sanitisers setup because the group member doing CI/CD set them up because they have used them before).
@@ -188,6 +189,21 @@ The second action simply ran an aggressive flawfinder on the pull request, and i
 Because we were running a very aggressive search with flawfinder, this action did not prevent merging on errors (unlike the Uncrusitfy action), instead it was more aimed at being a tool that the code reviewers could use to help them check for potential flaws.
 
 ## 4. Key Secure Coding Practices for Phase 2
+While we be implementing many different security-related tools and practices in phase 2 of this project, three that we will be using are:
+
+### 4.1 Consistent Implementation of Security Tooling and Decisions Throughout the SDLC
+#### 4.1.1 Why it's relevant:
+Security must be a consideration from the beginning of a project, as trying to add in security at the end of the project is a surefire way to have an system that is not secure. In a system like an ACS, which has to deal with authentication, session handling, and privileged access, if we did not consider security in the beginning (such as design and development), our system would quite likely wind up with large architectural vulnerabilities, which at best would require a large amount of time and work to fix.
+
+#### 4.1.2 How it will be applied:
+Security considerations will be integrated into each stage of the project:
+- **Planning & Design**: Threat modeling (such as STRIDE) will be used to identify and mitigate key risks before code is written.
+- **Implementation**: Secure coding practices (such as input validation) and linters and static analysis tools will be enforced from day one (see [3.2.2 Static Analysis/Linting](#322-static-analysislinting) for more information about the specific tools we will be using).
+- **Testing**: Runtime tools, such as the sanitisers, as discussed in [3.2.3.1 Sanitizers](#3231-sanitizers), and Valgrind (see [3.2.3.2 Valgrind](#3232-valgrind), and static analysis tools (see [3.2.2 Static Analysis/Linting](#322-static-analysislinting)) will be part of both manual and CI testing (See [3.2.4 CI/CD](#324-cicd)).
+- **Code Review**: All pull requests will be checked for adherence to secure coding practices (as discussed in [5.2 Maintenance of Code Quality](#52-maintenance-of-code-quality), [2.4 VCS Policies](#24-vcs-policies), and [3.2.4.2 GitHub Actions](#3242-github-actions)).
+
+#### 4.1.3 How the group will ensure it is effectively used:
+Meeting minutes have a section for any security-related decisions made, and after each meeting these get added into a document that is shared among the team, so that each team member is aware of each decision, which will help with not only writing code, but also remaining consistent when reviewing code. CI hooks have been configured to run formatters, linters, sanitizers, and static analysis tools on each commit, and tooling setup to help with the review of pull requests made, decreasing the effort required by the team to use these tools, which should increase the use of the tools. Security is a large part of the code review procedure, as we will not just be reviewing functionality.
 
 ## 5. Risk Management & Quality Assurance
 
@@ -204,6 +220,6 @@ Because we were running a very aggressive search with flawfinder, this action di
 
 ### 5.2 Maintenance of Code Quality
 Our group plans to follow the [SEI CERT C Coding Standard](https://wiki.sei.cmu.edu/confluence/display/c) to help ensure the security and quality of our code.
-As discussed in [2. Version Control Strategy](#2-version-control-strategy), and [3.2 Additional Tooling](#32-additional-tooling) (with much more depth), a combination of peer reviews, automated testing, formatting, static analysis tools, linters, and dynamic analysis tools have already been setup, with our team likely to add in more tools as we progress. Justifications for, and the reasoning behind, the tooling chosen is available at the sections linked above.
+As discussed in [2. Version Control Strategy](#2-version-control-strategy), and [3.2 Additional Tooling](#32-additional-tooling) (in much more depth), a combination of peer reviews, automated testing, formatting, static analysis tools, linters, and dynamic analysis tools have will be used, with our team likely to add in more tools as we progress. Justifications for, and the reasoning behind, the tooling chosen is available at the sections linked above.
 
 ## 6. Group name
