@@ -204,6 +204,25 @@ Any pull request made triggered an action that ran Uncrustify on our code, and i
 This also has the benefit of alerting our group members to if a team's members pre-commit setup was not working, which helped us know if we need to make sure the linting/analysis tools were also skipped (along with ensuring the aforementioned benefits that come with formatted code).
 
 
-The second action simply ran an aggressive flawfinder on the codebase, and if any issues were found, returning the issues in a more readable formatted comment on the pull request, which helped the reviewers with spotting potential issues quickly.
+The second action simply ran an aggressive flawfinder on the pull request, and if any issues were found, returning the issues in a more readable formatted comment on the pull request, which helped the reviewers with spotting potential issues quickly.
 
 Because we were running a very aggressive search with flawfinder, this action did not prevent merging on errors (unlike the Uncrusitfy action), instead it was more aimed at being a tool that the code reviewers could use to help them check for potential flaws.
+
+## 4. Key Secure Coding Practices for Phase 2
+
+## 5. Risk Management & Quality Assurance
+
+### Potential Risks & Mitigation Strategies
+| Risk                                      | Impact | Likelihood | Mitigation Strategy                                                                                       |
+|------------------------------------------|--------|------------|------------------------------------------------------------------------------------------------------------|
+| Team member illness or unavailability    | Medium | Medium     | Regular updates to the spreadsheet so responsibilities can be reassigned easily, along with clear and fast communication between team members if unavailability occurs were both important mitigations to this risk |
+| Sudden death of a team member  | Medium | Medium | We discovered that one of our team members rides a motorcycle to University, which drastically increases the likelihood of this event, and so the main mitigation taken was to ask them to *please* be careful and to do regular pushes to the remote repository. |
+| Service outage (GitHub, compilers)| Low    | Low        | Each member kept local backups of the Git repository and tools used toolchains. However, as mentioned [above](# 21-remote-source-code-location), our group feels that if these systems go down we will have bigger issues, a more likely similar risk  is the next.    |
+| Member loss of GitHub, Discord accounts | Medium | Medium | If a member looses access to their accounts, we all have each others student numbers, and so we will contact each other via email if we need a new account added to the discord group, or the repository. This is quite a possible risk, as we have already had one member have their GitHub account banned and need to have a new account added to the repository, and our team used this mitigation strategy to quickly solve this issue  |
+| Merge conflicts or broken main branch    | High   | Medium     | Using a strict Git workflow and requiring passing checks before merging into `main` as discussed above in [2. Version Control System](#2version-control-strategy) and [3.2 Additional Tooling](#32-additional-tooling)   |
+| Security vulnerabilities in code         | High   | Medium     | Using static analysis tools and include security as a focus during peer code review as discussed in [3.2 Additional Tooling](#32-additional-tooling).       |
+| Missed deadlines                         | High   | Medium     | Weekly meetings and a shared spreadsheet with deadlines along with starting early and assigning buffer time for unexpected issues will be used to (hopefully) mitigate this risk       |
+
+### Code quality Maintenance
+
+## 6. Group name
