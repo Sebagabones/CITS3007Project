@@ -9,17 +9,14 @@ submission.
 ## 1. Team Communication & Responsibilities
 
 ### 1.1 Team Communication
-The team had our first meeting on Wednesday (the 09/04/2025) at 12:00 (funnily enough, we all happened to be available at 12-2pm on a Wednesday, sorry Arran), where we decided to continue to meet at the same time each week, in person.
-
+The team had our first meeting on Wednesday (the 09/04/2025) at 12:00 (the group happened to all be available at 12-2pm on a Wednesday), where we decided to continue to meet at the same time each week, in person.
 If deemed necessary as the project progresses, we agreed to meet more often, but a minimum of once a week seemed like a suitable choice for maintaining the delicate balance between ease of tracking progress without impeding the Computer Science students very (very) busy social lives.
-
 
 We quickly realised that our form of communication for outside of our meetings required decent support across different Operating Systems, while maintaining usability (ruling out IRC), and so our group settled on Discord as a suitable option.
 
 
 ### 1.2 Team Responsibilities
 A main focus of the first meeting was working out the different skillsets of each group member, to allow for a more efficient allocation of tasks.
-
 We soon noted that the group had a varying level of technical skill, which helped with working out who worked on which parts of the second phase of the project.
 
 That said, everyone will, of course, be expected to write code, and so a preliminary division of labour was allocated as so:
@@ -31,9 +28,7 @@ That said, everyone will, of course, be expected to write code, and so a prelimi
 
 *(Note that this is only the allocation of the coding related tasks, other responsibilities are discussed later)*
 
-
 The division of coding responsibilities was mostly decided as a group, with a preference given to which area everyone wanted to work on.
-
 This division is subject to change, once the group has more information as to the requirements of the project, however it provides a nice starting point for our group to have an idea of what each person is working on.
 
 
@@ -68,9 +63,7 @@ Of course, our group also understands that life can get very hectic, and the mai
 
 Our group decided that GitHub would be a suitable main online VCS provider to host our repository, mostly due to members familiarity with it (and BitBucket's dark-mode *still* being under beta testing).
 
-GitHub also provides GitHub Actions, which one of our group members has experience with, which will be discussed later on in this report in [Part 3.2](#32-additional-tooling).
-
-We considered mirroring our repository to one of our members home-server, which has a simple Git based VCS server, however we decided against this, as we feel confident that if GitHub goes down, we will have much bigger problems than this project.
+GitHub also provides GitHub Actions, which one of our group members has experience with, which will be discussed later on in this report in [Part 3.2](#32-additional-tooling). We considered mirroring our repository to one of our members home-server, which has a simple Git based VCS server, however we decided against this, as we feel confident that if GitHub goes down, we will have much bigger problems than this project.
 
 However, if GitHub *does* go down, but the project is still our biggest concern, we will still have local copies on each of our devices, so providing that every group member does not suffer the loss of their devices, *and* GitHub also goes down *all at the same time*, we will then migrate the repository to the aforementioned group members Git server (in which case, we will be using [Soft Serve](https://charm.sh/blog/self-hosted-soft-serve/) as our main VCS server)
 
@@ -82,13 +75,11 @@ Each group member's GitHub account was added to the repository, and at the first
 
 The overall system will be to use separate branches for each large addition to the project, however each group member is also allowed to have a *up to date* branch specifically for the addition of smaller changes, e.g. fixing typos in documentation etcera. Each branch, when ready, will then have a pull request created, to merge it into the main/dev branch (or any other branch being worked on by a separate member).
 
-
-To mitigate against merge conflicts, a few strategies were implemented. Regular communication (and a clear layout of responsibilities as listed [above](#12-team-responsibilities)) helped to ensure there were no major overlapping code changes. If this was unavoidable (for example, in the case of Peter and Henry), regular merging will be implemented.
-
+To mitigate against merge conflicts, a few strategies were implemented. Regular communication (and a clear layout of responsibilities as listed [above](#12-team-responsibilities)) helped to ensure there were no major overlapping code changes.
+If this was unavoidable (for example, in the case of Peter and Henry), regular merging will be implemented.
 For features/branches that are worked on by a single person, regularly merging main into the branch is planned.
 
 If merge conflicts *do* occur (this more of a case of when not if we are being honest), the team will work together to resolve them, seeking assistance from the person(s) most familiar with the conflicting code if possible.
-
 
 In the absolute worse case, we plan to implement the xkcd/1597 [approach](https://xkcd.com/1597/), however, we are all collectively hoping this will not be necessary.
 
@@ -128,11 +119,11 @@ An argument for as to why this was chosen could be made that due to the brackets
 
 However, this is somewhat mitigated by the modern editors (and Emacs) being used by the group, so a more likely reason for as to why this style was used is that the group member who setup the CI/CD for the project prefers Allman style indentation, and  no-one in the group felt strongly enough about that member's questionable stylistic choices to change it.
 
-
 Plugins for Uncrustify exist for both VS Code and Emacs, however in case these were not used, more methods for ensuring formatting are explained below
 
 #### 3.2.2 Static Analysis/Linting
-While Linters and Static Analysis are different tools, they have some cross over, with some tools being marked as both. Hence, both will be discussed here.
+While Linters and Static Analysis are different tools, they have some cross over, with some tools being marked as both.
+Hence, both will be discussed here.
 
 Our strategy of choosing tooling was very much based around "how many tools can we use", and so we used as many as possible (while ensuring the group understood how to use them effectively).
 
@@ -161,19 +152,18 @@ Finally, as it is worth mentioning here, before going into more detail of the pr
 We implemented a few different tools for this, however our main approach was to use Sanitizers and Valgrind.
 
 ##### 3.2.3.1 Sanitizers
-We plan to use as many Google Sanitizers as we can, as in our environment we can control the compilation flags. These will provide us with valuable abilities to do dynamic analysis on our programs, vastly increasing its safety.
+We plan to use as many Google Sanitizers as we can, as in our environment we can control the compilation flags.
+These will provide us with valuable abilities to do dynamic analysis on our programs, vastly increasing its safety.
 
 A list of the current sanitisers in use (over different compilation commands as some are not compatible with each other) is listed below, however when we start writing code this number will probably increase:
 `undefined, float-divide-by-zero, float-cast-overflow, bounds, null, return, vptr, undefined, address, leak, thread, memory`
 
 ##### 3.2.3.2 Valgrind
 Our group will possibly use Valgrind as well, although like with the note about fuzzing above, we are yet to discuss if/how we will use it (we only have sanitisers setup because the group member doing CI/CD set them up because they have used them before).
-
 Hence, we are unsure how/if we will use this, although it is a strong possibility due to its flexibility in debugging (for example if we cannot build a library we use with the sanitisers we could use valgrind to assist us).
 
 #### 3.2.4 CI/CD
 The above tools are only useful if they are *used*, and so to ensure usage, our team setup a few systems to make the tools as easy to use as possible.
-
 These are split into two main parts, Pre-Commits, and GitHub Actions.
 
 ##### 3.2.4.1 Pre-Commit Hooks
@@ -189,17 +179,12 @@ By running these checks locally, before pushing to the remote (and using only Gi
 
 ##### 3.2.4.2 GitHub Actions
 That is, of course, not to say that GitHub Actions do not provide a useful service for our development system.
-
-We had two main GitHub Actions setup, one to ensure formatting had been done, and another to run `flawfinder` on the code.
-
+The group have two main GitHub Actions setup, one to ensure formatting had been done, and another to run `flawfinder` on the code.
 
 Any pull request made triggered an action that ran Uncrustify on our code, and if any files were found that did not meet the agreed style standards, the action fails, blocking that Pull Request from being able to merge until the formatting is been fixed.
-
 This also has the benefit of alerting our group members to if a team's members pre-commit setup was not working, which helped us know if we need to make sure the linting/analysis tools were also skipped (along with ensuring the aforementioned benefits that come with formatted code).
 
-
 The second action simply ran an aggressive flawfinder on the pull request, and if any issues were found, returning the issues in a more readable formatted comment on the pull request, which helped the reviewers with spotting potential issues quickly.
-
 Because we were running a very aggressive search with flawfinder, this action did not prevent merging on errors (unlike the Uncrusitfy action), instead it was more aimed at being a tool that the code reviewers could use to help them check for potential flaws.
 
 ## 4. Key Secure Coding Practices for Phase 2
@@ -218,5 +203,7 @@ Because we were running a very aggressive search with flawfinder, this action di
 | Missed deadlines                         | High   | Medium     | Weekly meetings and a shared spreadsheet with deadlines along with starting early and assigning buffer time for unexpected issues will be used to (hopefully) mitigate this risk       |
 
 ### 5.2 Maintenance of Code Quality
+Our group plans to follow the [SEI CERT C Coding Standard](https://wiki.sei.cmu.edu/confluence/display/c) to help ensure the security and quality of our code.
+As discussed in [2. Version Control Strategy](#2-version-control-strategy), and [3.2 Additional Tooling](#32-additional-tooling) (with much more depth), a combination of peer reviews, automated testing, formatting, static analysis tools, linters, and dynamic analysis tools have already been setup, with our team likely to add in more tools as we progress. Justifications for, and the reasoning behind, the tooling chosen is available at the sections linked above.
 
 ## 6. Group name
