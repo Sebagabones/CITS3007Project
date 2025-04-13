@@ -194,17 +194,17 @@ While we be implementing many different security-related tools and practices in 
 
 ## 4.1 Consistent Implementation of Security Tooling and Decisions Throughout the SDLC
 ### 4.1.1 Why it's relevant:
-Security must be a consideration from the beginning of a project, as trying to add in security at the end of the project is a surefire way to have an system that is not secure. In a system like an ACS, which has to deal with authentication, session handling, and privileged access, if we did not consider security in the beginning (such as design and development), our system would quite likely wind up with large architectural vulnerabilities, which at best would require a large amount of time and work to fix.
+Security must be a consideration from the beginning of a project, because trying to add in security at the end of the project is not foolproof and unsafe. In a system like an ACS, which has to deal with authentication, session handling, and privileged access, if we did not consider security in the beginning (such as design and development), our system would very quickly end up with large architectural vulnerabilities, which would require a large amount of time and work to fix.
 
 ### 4.1.2 How it will be applied:
 Security considerations will be integrated into each stage of the project:
 - **Planning & Design**: Threat modeling (such as STRIDE) will be used to identify and mitigate key risks before code is written.
 - **Implementation**: Secure coding practices (such as input validation) and linters and static analysis tools will be enforced from day one (see [3.2.2 Static Analysis/Linting](#322-static-analysislinting) for more information about the specific tools we will be using).
 - **Testing**: Runtime tools, such as the sanitisers, as discussed in [3.2.3.1 Sanitizers](#3231-sanitizers), and Valgrind (see [3.2.3.2 Valgrind](#3232-valgrind), and static analysis tools (see [3.2.2 Static Analysis/Linting](#322-static-analysislinting)) will be part of both manual and CI testing (see [3.2.4 CI/CD](#324-cicd)).
-- **Code Review**: All pull requests will be checked for adherence to secure coding practices (as discussed in [5.2 Maintenance of Code Quality](#52-maintenance-of-code-quality), [2.4 VCS Policies](#24-vcs-policies), and [3.2.4.2 GitHub Actions](#3242-github-actions)).
+- **Code Review**: All pull requests will be reviewed for adherence to secure coding practices (as discussed in [5.2 Maintenance of Code Quality](#52-maintenance-of-code-quality), [2.4 VCS Policies](#24-vcs-policies), and [3.2.4.2 GitHub Actions](#3242-github-actions)).
 
 ### 4.1.3 How the group will ensure it is effectively used:
-Meeting minutes have a section for any security-related decisions made, and after each meeting these get added into a document that is shared among the team, so that each team member is aware of each decision, which will help with not only writing code, but also remaining consistent when reviewing code. CI hooks have been configured to run formatters, linters, sanitizers, and static analysis tools on each commit, and tooling setup to help with the review of pull requests made, decreasing the effort required by the team to use these tools, which should increase the use of the tools. Security is a large part of the code review procedure, as we will not just be reviewing functionality.
+Meeting minutes have a section for any security-related decisions made, and after each meeting these get added into a document that is shared among the team, so that each team member is aware of each decision, which will help with not only writing code, but also remaining consistent when reviewing code. CI hooks have been configured to run formatters, linters, sanitizers, and static analysis tools on each commit, and tooling setup to help with the review of pull requests made, reducing the effort required by the team to use these tools, which would increase the use of the tools. Security is a large part of the code review procedure, because we will not just be reviewing functionality.
 
 ## 4.2 Input Validation & Bounds Checking
 
@@ -214,12 +214,43 @@ As the ACS will be handling user inputs (such as usernames, passwords, and sessi
 ### 4.2.2 How it will be applied:
 Multiple techniques will be used to ensure safe inputs, these include validating and parsing the input, but also sanitising and canonicalisation (normalisation) where necessary. All functions that deal with user input will also use safe C functions (such as `fgets` instead of `gets` and `snprintf` instead of `sprintf`), and will explicitly check lengths and formats before processing.
 
-A semi-related technique will be to ensure environment variables are sanitised, as the ACS will likely need to be run with root privileges.
+A similar technique will be to ensure environment variables are sanitised, because the ACS will likely need to be run with root privileges.
 
 ### 4.2.3 How the group will ensure it is effectively used:
-Code reviews will be explicitly including input handling, and the `flawfinder` GitHub Action has been setup to help the reviewers find unsafe functions (although, of course, the reviewers will not solely be relying on `flawfinder`). The pre-commit setup has a large amount of linters and static analysers that will also pick up on unsafe functions before they can be committed to the working branch.
+Code reviews will be explicitly including input handling, and the `flawfinder` GitHub Action has been setup to help the reviewers find unsafe functions (however the reviewers will not solely be relying on `flawfinder`). The pre-commit setup has a large amount of linters and static analysers that will also pick up on unsafe functions before they can be committed to the working branch.
 
 The group will also be testing sanitisation of inputs using fuzzing, however see the note in [3.2 Additional Tooling](#32-additional-tooling) as to why this is not discussed in much depth in this report.
+
+## Authentication & Credential Management
+### 4.3.1 Why it’s relevant:
+
+A system like an ACS is directly responsible for managing who can access what, the authentication mechanism is what makes up the bulk of the system’s security. Improper authentication can lead to unauthorized access, privilege escalation, or complete system compromise. Since C does not have built-in memory safety features, mishandling passwords or session tokens can also lead to vulnerabilities such as buffer overflows, memory leaks, or inadvertent exposure of secrets in memory.
+
+### 4.3.2 How it will be applied:
+
+Authentication in the ACS will be based on username-password pairs, securely stored and verified using cryptographic hashing. Specifically:
+
+    Passwords will be hashed using `Argon2` via a C-compatible library such as libargon2.
+
+    A salt will be randomly generated and stored as a prefix of the hashed password to prevent precomputed dictionary attacks (e.g., rainbow tables).
+
+    Memory used to store sensitive information (e.g., raw passwords) will be immediately cleared (memset_s or equivalent) after use to avoid leaving secrets in memory.
+
+The ACS will also use:
+
+    Account lockout after a configurable number of failed attempts
+
+    Secure comparison functions (consttime_memcmp) to prevent timing attacks
+
+    Session tracking with unique, securely generated session tokens (e.g., using /dev/urandom)
+
+### 4.3.3 How the group will ensure it is effectively used:
+
+The group will audit all code paths that deal with credential input, storage, and verification as part of the code review process. To enforce safe coding standards, static analysis tools (such as Flawfinder and Cppcheck as mentioned before) and linters will flag any unsafe handling of user input or improper use of memory.
+
+Test cases will be written to simulate common attack scenarios such as brute force login attempts, malformed credential inputs, and memory scraping. These tests will be included in CI workflows to catch regressions.
+
+Additionally, a secure coding guideline for authentication will be documented and shared among the team to ensure consistent implementation practices. Periodic team reviews will evaluate whether authentication remains effective as new features are added.
 
 # 5. Risk Management & Quality Assurance
 
