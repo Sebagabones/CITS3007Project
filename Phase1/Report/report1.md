@@ -9,7 +9,7 @@ submission.
 # 1. Team Communication & Responsibilities
 
 ## 1.1 Team Communication
-The team had our first meeting on Wednesday (the 09/04/2025) at 12:00 (the group happened to all be available at 12-2pm on a Wednesday), where we decided to continue to meet at the same time each week, in person.
+The team had our first meeting on Wednesday (the 09/04/2025) at 12:00 (the group just so happened to all be available at 12-2pm on a Wednesday), where we decided to continue to meet at the same time each week, in person.
 If deemed necessary as the project progresses, we agreed to meet more often, but a minimum of once a week seemed like a suitable choice for maintaining the delicate balance between ease of tracking progress without impeding the Computer Science students very (very) busy social lives.
 
 We quickly realised that our form of communication for outside of our meetings required decent support across different Operating Systems, while maintaining usability (ruling out IRC), and so our group settled on Discord as a suitable option.
@@ -59,6 +59,9 @@ Of course, our group also understands that life can get very hectic, and the mai
 
 
 # 2. Version Control Strategy
+
+Git was chosen as the underlying VCS, as even though there are (realistically) better options, (see [Jujutsu](https://github.com/jj-vcs/jj?tab=readme-ov-file), [Sapling](https://sapling-scm.com/), or [Pijul](https://nest.pijul.com/pijul/pijul), along with the classics such as Fossil, Darcs, or Mercurial),  due to Git's extreme popularity (and 4 out of 5 group members unwillingness to not have to learn how to use a new SCM system while also working on the project), we decided to just use Git.
+
 ## 2.1 Remote Source Code Location
 
 Our group decided that GitHub would be a suitable main online VCS provider to host our repository, mostly due to members familiarity with it (and BitBucket's dark-mode *still* being under beta testing).
@@ -66,8 +69,6 @@ Our group decided that GitHub would be a suitable main online VCS provider to ho
 GitHub also provides GitHub Actions, which one of our group members has experience with, which will be discussed later on in this report in [Part 3.2](#32-additional-tooling). We considered mirroring our repository to one of our members home-server, which has a simple Git based VCS server, however we decided against this, as we feel confident that if GitHub goes down, we will have much bigger problems than this project.
 
 However, if GitHub *does* go down, but the project is still our biggest concern, we will still have local copies on each of our devices, so providing that every group member does not suffer the loss of their devices, *and* GitHub also goes down *all at the same time*, we will then migrate the repository to the aforementioned group members Git server (in which case, we will be using [Soft Serve](https://charm.sh/blog/self-hosted-soft-serve/) as our main VCS server)
-
-Finally, we decided to go with Git as the underlying VCS, even though there are (realistically) better options, (see [Jujutsu](https://github.com/jj-vcs/jj?tab=readme-ov-file), [Sapling](https://sapling-scm.com/), or [Pijul](https://nest.pijul.com/pijul/pijul), along with the classics such as Fossil, Darcs, or Mercurial), due to Git's extreme popularity (and 4/5 group members unwillingness to not have to learn how to use a new SCM system while also working on the project), we decided to just use Git.
 
 ## 2.2 Merging Strategies
 
@@ -189,7 +190,7 @@ The second action simply ran an aggressive flawfinder on the pull request, and i
 Because we were running a very aggressive search with flawfinder, this action did not prevent merging on errors (unlike the Uncrusitfy action), instead it was more aimed at being a tool that the code reviewers could use to help them check for potential flaws.
 
 # 4. Key Secure Coding Practices for Phase 2
-While we be implementing many different security-related tools and practices in phase 2 of this project, three that we will be using are:
+While we be implementing many different security-related tools and practices in phase 2 of this project, three such tools\practices (that have not already been discussed above) that we will be using are:
 
 ## 4.1 Consistent Implementation of Security Tooling and Decisions Throughout the SDLC
 ### 4.1.1 Why it's relevant:
@@ -204,6 +205,21 @@ Security considerations will be integrated into each stage of the project:
 
 ### 4.1.3 How the group will ensure it is effectively used:
 Meeting minutes have a section for any security-related decisions made, and after each meeting these get added into a document that is shared among the team, so that each team member is aware of each decision, which will help with not only writing code, but also remaining consistent when reviewing code. CI hooks have been configured to run formatters, linters, sanitizers, and static analysis tools on each commit, and tooling setup to help with the review of pull requests made, decreasing the effort required by the team to use these tools, which should increase the use of the tools. Security is a large part of the code review procedure, as we will not just be reviewing functionality.
+
+## 4.2 Input Validation & Bounds Checking
+
+### 4.2.1 Why it's relevant:
+As the ACS will be handling user inputs (such as usernames, passwords, and session tokens), great care must be taken to parse (not only validating) inputs, to prevent buffer overflows and injection vulnerabilities.
+
+### 4.2.2 How it will be applied:
+Multiple techniques will be used to ensure safe inputs, these include validating and parsing the input, but also sanitising and canonicalisation (normalisation) where necessary. All functions that deal with user input will also use safe C functions (such as `fgets` instead of `gets` and `snprintf` instead of `sprintf`), and will explicitly check lengths and formats before processing.
+
+A semi-related technique will be to ensure environment variables are sanitised, as the ACS will likely need to be run with root privileges.
+
+### 4.2.3 How the group will ensure it is effectively used:
+Code reviews will be explicitly including input handling, and the `flawfinder` GitHub Action has been setup to help the reviewers find unsafe functions (although, of course, the reviewers will not solely be relying on `flawfinder`). The pre-commit setup has a large amount of linters and static analysers that will also pick up on unsafe functions before they can be committed to the working branch.
+
+The group will also be testing sanitisation of inputs using fuzzing, however see the note in [3.2 Additional Tooling](#32-additional-tooling) as to why this is not discussed in much depth in this report.
 
 # 5. Risk Management & Quality Assurance
 
