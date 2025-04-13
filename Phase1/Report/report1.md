@@ -199,7 +199,7 @@ Security must be a consideration from the beginning of a project, as trying to a
 Security considerations will be integrated into each stage of the project:
 - **Planning & Design**: Threat modeling (such as STRIDE) will be used to identify and mitigate key risks before code is written.
 - **Implementation**: Secure coding practices (such as input validation) and linters and static analysis tools will be enforced from day one (see [3.2.2 Static Analysis/Linting](#322-static-analysislinting) for more information about the specific tools we will be using).
-- **Testing**: Runtime tools, such as the sanitisers, as discussed in [3.2.3.1 Sanitizers](#3231-sanitizers), and Valgrind (see [3.2.3.2 Valgrind](#3232-valgrind), and static analysis tools (see [3.2.2 Static Analysis/Linting](#322-static-analysislinting)) will be part of both manual and CI testing (See [3.2.4 CI/CD](#324-cicd)).
+- **Testing**: Runtime tools, such as the sanitisers, as discussed in [3.2.3.1 Sanitizers](#3231-sanitizers), and Valgrind (see [3.2.3.2 Valgrind](#3232-valgrind), and static analysis tools (see [3.2.2 Static Analysis/Linting](#322-static-analysislinting)) will be part of both manual and CI testing (see [3.2.4 CI/CD](#324-cicd)).
 - **Code Review**: All pull requests will be checked for adherence to secure coding practices (as discussed in [5.2 Maintenance of Code Quality](#52-maintenance-of-code-quality), [2.4 VCS Policies](#24-vcs-policies), and [3.2.4.2 GitHub Actions](#3242-github-actions)).
 
 ### 4.1.3 How the group will ensure it is effectively used:
