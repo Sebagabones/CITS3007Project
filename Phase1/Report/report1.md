@@ -124,7 +124,7 @@ This will be split up into 4 main sections - formatting, static analysis/linting
 *Note: The group was absent from the lecture covering Fuzzing (due to attending the first meeting for this project), and so implementing fuzzing has not been discusseed at a group meeting yet, this is planned to be addressed and implemented at the second meeting, which is the day that this report is due, and so the usage of fuzzing is not covered in this report, however it will almost definitely be used in the testing of this project*
 
 
-#### Formatting
+#### 3.2.1 Formatting
 Consistent formatting is important to ensure a codebase remains readable, and so [Uncrustify](https://github.com/uncrustify/uncrustify/) was setup for formatting our all of code. Somewhat controversially, the style used was derived from an Allman/BSD Style.
 
 An argument for as to why this was chosen could be made that due to the brackets being on a separate line to the control statement that commenting out a block of code/control statement while refactoring is less likely to cause errors via missing or dangling braces.
@@ -134,12 +134,12 @@ However, this is somewhat mitigated by the modern editors (and Emacs) being used
 
 Plugins for Uncrustify exist for both VS Code and Emacs, however in case these were not used, more methods for ensuring formatting are explained below
 
-#### Static Analysis/Linting
+#### 3.2.2 Static Analysis/Linting
 While Linters and Static Analysis are different tools, they have some cross over, with some tools being marked as both. Hence, both will be discussed here.
 
 Our strategy of choosing tooling was very much based around "how many tools can we use", and so we used as many as possible (while ensuring the group understood how to use them effectively).
 
-##### Linters:
+##### 3.2.2.1 Linters:
 - clang-tidy
   - Using compiler flags such as `gcc -Wall` provide linting (and are still a crucial part of writing secure code), clang-tidy was chosen to be used due to its deeper (and more modern) analysis.
   - Clang-tidy's ability to analyse for undefined behaviour provides much more in depth warnings of unsafe code, increasing the safety of our code.
@@ -150,7 +150,7 @@ Our strategy of choosing tooling was very much based around "how many tools can 
   - It also flags style violations, unlike Uncrustify, which our team found useful.
   - There were a lot of flags used here to prevent conflicting with Uncrustify, however the main focus was on the `+runtime` and `+build` filters, which targetted things that Uncrustify doesn't
 
-##### Static Analysis Tools:
+##### 3.2.2.2 Static Analysis Tools:
 - cppcheck
   - This was chosen as it was a lot easier for our group to setup and use effectively than something like Splint, while still providing an effective analysis to warn of common issues that aren't always picked up by compilers.
   - The flag used was `--check-level=exhaustive`, however this was mostly for pre-commit setup (more on that later).
@@ -160,16 +160,50 @@ Our strategy of choosing tooling was very much based around "how many tools can 
 
 Finally, as it is worth mentioning here, before going into more detail of the process later, we had a vast number of compiler flags and warnings designed to help us be warned of any issues we may face before running linters and static analysis tools.
 
-#### Dynamic Analysis
+#### 3.2.3 Dynamic Analysis
 We implemented a few different tools for this, however our main approach was to use Sanitizers and Valgrind.
 
-##### Sanitizers
+##### 3.2.3.1 Sanitizers
 We plan to use as many Google Sanitizers as we can, as in our environment we can control the compilation flags. These will provide us with valuable abilities to do dynamic analysis on our programs, vastly increasing its safety.
 
 A list of the current sanitisers in use (over different compilation commands as some are not compatible with each other) is listed below, however when we start writing code this number will probably increase:
 `undefined, float-divide-by-zero, float-cast-overflow, bounds, null, return, vptr, undefined, address, leak, thread, memory`
 
-##### Valgrind
+##### 3.2.3.2 Valgrind
 Our group will possibly use Valgrind as well, although like with the note about fuzzing above, we are yet to discuss if/how we will use it (we only have sanitisers setup because the group member doing CI/CD set them up because they have used them before).
 
 Hence, we are unsure how/if we will use this, although it is a strong possibility due to its flexibility in debugging (for example if we cannot build a library we use with the sanitisers we could use valgrind to assist us).
+
+#### 3.2.4 CI/CD
+The above tools are only useful if they are *used*, and so to ensure usage, our team setup a few systems to make the tools as easy to use as possible.
+
+These are split into two main parts, Pre-Commits, and GitHub Actions.
+
+##### 3.2.4.1 Pre-Commit Hooks
+We decided to make heavy usage of [pre-commit](https://pre-commit.com/) hooks, to ensure formatting, linters,  and analysers was run to prevent "dirty" commits from being added to branches.
+
+Formatting before commits are made will help with any merges that need to be done, as it ensures brackets/indentation (and overall code styling) was consistent reduced the likelihood at any unnecessary merge conflicts, which will reduce the strain on working on code collaboratively.
+
+Hence, we setup a simple Uncrusitfy hook here to check if formatting has been done, and if any files that were found to not be were formatted.
+
+We also ran clang-tidy, cppcheck, cpplint and flawfinder, preventing any commits being made if insecure code/issues were found by these tools (and in the case of clang-tidy, fixing any issues that it could automatically).
+
+
+Finally, to make sure our code compiled with all of our Makefile options (with different compiler flags), we ran a simple script that would run [bear](https://github.com/rizsotto/Bear) on our Makefile, generating a `compile_commands.json` file (which was also used by clang-tidy), and attempting to build each option in our Makefile.
+
+By running these checks locally, before pushing to the remote (and using only GitHub actions), it saved our group time, because instead of having to do multiple pushes to the remote (one to find any issues and then another fixing those issues), we would be alerted to any issues before they left our local machines.
+
+##### 3.2.4.2 GitHub Actions
+That is, of course, not to say that GitHub Actions do not provide a useful service for our development system.
+
+We had two main GitHub Actions setup, one to ensure formatting had been done, and another to run `flawfinder` on the code.
+
+
+Any pull request made triggered an action that ran Uncrustify on our code, and if any files were found that did not meet the agreed style standards, the action fails, blocking that Pull Request from being able to merge until the formatting is been fixed.
+
+This also has the benefit of alerting our group members to if a team's members pre-commit setup was not working, which helped us know if we need to make sure the linting/analysis tools were also skipped (along with ensuring the aforementioned benefits that come with formatted code).
+
+
+The second action simply ran an aggressive flawfinder on the codebase, and if any issues were found, returning the issues in a more readable formatted comment on the pull request, which helped the reviewers with spotting potential issues quickly.
+
+Because we were running a very aggressive search with flawfinder, this action did not prevent merging on errors (unlike the Uncrusitfy action), instead it was more aimed at being a tool that the code reviewers could use to help them check for potential flaws.
