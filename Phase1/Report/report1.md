@@ -34,7 +34,7 @@ That said, everyone will, of course, be expected to write code, and so a prelimi
 
 The division of coding responsibilities was mostly decided as a group, with a preference given to which area everyone wanted to work on.
 
-This division is subject to change, once the group have more information as to the requirements of the project, however it provides a nice starting point for our group to have an idea of what each person is working on.
+This division is subject to change, once the group has more information as to the requirements of the project, however it provides a nice starting point for our group to have an idea of what each person is working on.
 
 
 #### 1.3 Other Responsibilities
@@ -100,9 +100,7 @@ The VCS policies our group decided on were not overly complex, however they were
 
 At least one review (and approval) is required before the branch can be merged, the branch being merged into the main and/or dev branch(es) *must* be up to date with the destination branch, and the GitHub Actions discussed [below](#32-additional-tooling) must also pass before the branch is able to be merged.
 
-
 Commit messages should be kept to the recommended limit (of 72 characters), with a clear descriptions to be placed in the commit description.
-
 However, this will not be enforced, and group members are encouraged to prioritise clarity over brevity.
 
 
@@ -113,7 +111,6 @@ However, this will not be enforced, and group members are encouraged to prioriti
 There will be two main editors in use for this project, Visual Studio Code (VS Code), and Emacs.
 
 The majority of the group plan to use VS Code for this project, as it is what they are used to and are comfortable using, and it has a wide plugin ecosystem.
-
 However, one group member uses Emacs, mostly because they are used to it, and enjoys the extensibility of it.
 
 The group discussed this whether using different editors would cause any issues, however the Emacs user was confident that they would be able to replicate any necessary features in Emacs, and if not will (begrudgingly) switch over to using VS Code for the remainder of the project.
@@ -185,12 +182,9 @@ We decided to make heavy usage of [pre-commit](https://pre-commit.com/) hooks, t
 Formatting before commits are made will help with any merges that need to be done, as it ensures brackets/indentation (and overall code styling) was consistent reduced the likelihood at any unnecessary merge conflicts, which will reduce the strain on working on code collaboratively.
 
 Hence, we setup a simple Uncrusitfy hook here to check if formatting has been done, and if any files that were found to not be were formatted.
-
 We also ran clang-tidy, cppcheck, cpplint and flawfinder, preventing any commits being made if insecure code/issues were found by these tools (and in the case of clang-tidy, fixing any issues that it could automatically).
 
-
 Finally, to make sure our code compiled with all of our Makefile options (with different compiler flags), we ran a simple script that would run [bear](https://github.com/rizsotto/Bear) on our Makefile, generating a `compile_commands.json` file (which was also used by clang-tidy), and attempting to build each option in our Makefile.
-
 By running these checks locally, before pushing to the remote (and using only GitHub actions), it saved our group time, because instead of having to do multiple pushes to the remote (one to find any issues and then another fixing those issues), we would be alerted to any issues before they left our local machines.
 
 ##### 3.2.4.2 GitHub Actions
@@ -223,6 +217,6 @@ Because we were running a very aggressive search with flawfinder, this action di
 | Security vulnerabilities in code         | High   | Medium     | Using static analysis tools and include security as a focus during peer code review as discussed in [3.2 Additional Tooling](#32-additional-tooling).       |
 | Missed deadlines                         | High   | Medium     | Weekly meetings and a shared spreadsheet with deadlines along with starting early and assigning buffer time for unexpected issues will be used to (hopefully) mitigate this risk       |
 
-### 5.2 Code quality Maintenance
+### 5.2 Maintenance of Code Quality
 
 ## 6. Group name
