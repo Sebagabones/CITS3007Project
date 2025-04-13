@@ -1,10 +1,17 @@
-Group Name: TOCTOU
+### Group Name:
+TOCTOU *(/tɒk ˈtuːə/)*
 
-NOTE:
-- Ensure that the name and student number of all group members are included in the
-submission.
+#### Group Number:
+23
 
-- Ensure that the group name and number are included in the submission.
+#### Group Members:
+| Student Number | Title | First Name | Last Name |
+|----------------|-------|------------|-----------|
+| 23832656       | Mr    | Peter      | Fang      |
+| 23417131       | Mx    | Seb        | Gazey     |
+| 23804015       | Mr    | Alec       | Hassell   |
+| 23478063       | Mr    | Scotty     | Maw       |
+| 23926055       | Lord  | Henry      | Yau       |
 
 # 1. Team Communication & Responsibilities
 
@@ -193,7 +200,7 @@ Because we were running a very aggressive search with flawfinder, this action di
 While we be implementing many different security-related tools and practices in phase 2 of this project, three such tools\practices (that have not already been discussed above) that we will be using are:
 
 ## 4.1 Consistent Implementation of Security Tooling and Decisions Throughout the SDLC
-### 4.1.1 Why it's relevant:
+### 4.1.1 Relevancy:
 Security must be a consideration from the beginning of a project, because trying to add in security at the end of the project is not foolproof and unsafe. In a system like an ACS, which has to deal with authentication, session handling, and privileged access, if we did not consider security in the beginning (such as design and development), our system would very quickly end up with large architectural vulnerabilities, which would require a large amount of time and work to fix.
 
 ### 4.1.2 How it will be applied:
@@ -208,7 +215,7 @@ Meeting minutes have a section for any security-related decisions made, and afte
 
 ## 4.2 Input Validation & Bounds Checking
 
-### 4.2.1 Why it's relevant:
+### 4.2.1 Relevancy:
 As the ACS will be handling user inputs (such as usernames, passwords, and session tokens), great care must be taken to parse (not only validating) inputs, to prevent buffer overflows and injection vulnerabilities.
 
 ### 4.2.2 How it will be applied:
@@ -221,8 +228,8 @@ Code reviews will be explicitly including input handling, and the `flawfinder` G
 
 The group will also be testing sanitisation of inputs using fuzzing, however see the note in [3.2 Additional Tooling](#32-additional-tooling) as to why this is not discussed in much depth in this report.
 
-## Authentication & Credential Management
-### 4.3.1 Why it’s relevant:
+## 4.3 Authentication & Credential Management
+### 4.3.1 Relevancy:
 
 A system like an ACS is directly responsible for managing who can access what, the authentication mechanism is what makes up the bulk of the system’s security. Improper authentication can lead to unauthorized access, privilege escalation, or complete system compromise. Since C does not have built-in memory safety features, mishandling passwords or session tokens can also lead to vulnerabilities such as buffer overflows, memory leaks, or inadvertent exposure of secrets in memory.
 
@@ -230,23 +237,23 @@ A system like an ACS is directly responsible for managing who can access what, t
 
 Authentication in the ACS will be based on username-password pairs, securely stored and verified using cryptographic hashing. Specifically:
 
-    Passwords will be hashed using `Argon2` via a C-compatible library such as libargon2.
+  - Passwords will be hashed using `Argon2` via a C-compatible library such as libargon2.
 
-    A salt will be randomly generated and stored as a prefix of the hashed password to prevent precomputed dictionary attacks (e.g., rainbow tables).
+  - A salt will be randomly generated and stored as a prefix of the hashed password to prevent precomputed dictionary attacks (e.g., rainbow tables).
 
-    Memory used to store sensitive information (e.g., raw passwords) will be immediately cleared (memset_s or equivalent) after use to avoid leaving secrets in memory.
+  - Memory used to store sensitive information (e.g., raw passwords) will be immediately cleared (`memset_s` or equivalent) after use to avoid leaving secrets in memory.
 
 The ACS will also use:
 
-    Account lockout after a configurable number of failed attempts
+  - Account lockout after a configurable number of failed attempts
 
-    Secure comparison functions (consttime_memcmp) to prevent timing attacks
+  - Secure comparison functions (`consttime_memcmp`) to prevent timing attacks
 
-    Session tracking with unique, securely generated session tokens (e.g., using /dev/urandom)
+  - Session tracking with unique, securely generated session tokens (e.g., using `/dev/urandom`)
 
 ### 4.3.3 How the group will ensure it is effectively used:
 
-The group will audit all code paths that deal with credential input, storage, and verification as part of the code review process. To enforce safe coding standards, static analysis tools (such as Flawfinder and Cppcheck as mentioned before) and linters will flag any unsafe handling of user input or improper use of memory.
+The group will audit all code paths that deal with credential input, storage, and verification as part of the code review process. To enforce safe coding standards, static analysis tools (such as flawfinder and cppcheck as mentioned before) and linters will flag unsafe handling of user input or improper use of memory.
 
 Test cases will be written to simulate common attack scenarios such as brute force login attempts, malformed credential inputs, and memory scraping. These tests will be included in CI workflows to catch regressions.
 
@@ -270,3 +277,4 @@ Our group plans to follow the [SEI CERT C Coding Standard](https://wiki.sei.cmu.
 As discussed in [2. Version Control Strategy](#2-version-control-strategy), and [3.2 Additional Tooling](#32-additional-tooling) (in much more depth), a combination of peer reviews, automated testing, formatting, static analysis tools, linters, and dynamic analysis tools have will be used, with our team likely to add in more tools as we progress. Justifications for, and the reasoning behind, the tooling chosen is available at the sections linked above.
 
 # 6. Group name
+Our group name is TOCTOU.
