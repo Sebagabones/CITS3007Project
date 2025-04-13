@@ -73,7 +73,7 @@ Git was chosen as the underlying VCS, as even though there are (realistically) b
 
 Our group decided that GitHub would be a suitable main online VCS provider to host our repository, mostly due to members familiarity with it (and BitBucket's dark-mode *still* being under beta testing).
 
-GitHub also provides GitHub Actions, which one of our group members has experience with, which will be discussed later on in this report in [Part 3.2](#32-additional-tooling). We considered mirroring our repository to one of our members home-server, which has a simple Git based VCS server, however we decided against this, as we feel confident that if GitHub goes down, we will have much bigger problems than this project.
+GitHub also provides GitHub Actions, which one of our group members has experience with, which will be discussed later on in this report in [Part 3.2](#additional-tooling). We considered mirroring our repository to one of our members home-server, which has a simple Git based VCS server, however we decided against this, as we feel confident that if GitHub goes down, we will have much bigger problems than this project.
 
 However, if GitHub *does* go down, but the project is still our biggest concern, we will still have local copies on each of our devices, so providing that every group member does not suffer the loss of their devices, *and* GitHub also goes down *all at the same time*, we will then migrate the repository to the aforementioned group members Git server (in which case, we will be using [Soft Serve](https://charm.sh/blog/self-hosted-soft-serve/) as our main VCS server)
 
@@ -83,7 +83,7 @@ Each group member's GitHub account was added to the repository, and at the first
 
 The overall system will be to use separate branches for each large addition to the project, however each group member is also allowed to have a *up to date* branch specifically for the addition of smaller changes, e.g. fixing typos in documentation etcera. Each branch, when ready, will then have a pull request created, to merge it into the main/dev branch (or any other branch being worked on by a separate member).
 
-To mitigate against merge conflicts, a few strategies were implemented. Regular communication (and a clear layout of responsibilities as listed [above](#12-team-responsibilities)) helped to ensure there were no major overlapping code changes.
+To mitigate against merge conflicts, a few strategies were implemented. Regular communication (and a clear layout of responsibilities as listed above, see [1.2 Team Responsibilities](#team-responsibilities)) helped to ensure there were no major overlapping code changes.
 If this was unavoidable (for example, in the case of Peter and Henry), regular merging will be implemented.
 For features/branches that are worked on by a single person, regularly merging main into the branch is planned.
 
@@ -97,7 +97,7 @@ Since the group's main SCM enjoyer usually uses [Sapling](https://sapling-scm.co
 ## 2.4 VCS Policies
 The VCS policies our group decided on were not overly complex, however they were intentionally quite restrictive.
 
-At least one review (and approval) is required before the branch can be merged, the branch being merged into the main and/or dev branch(es) *must* be up to date with the destination branch, and the GitHub Actions discussed [below](#32-additional-tooling) must also pass before the branch is able to be merged.
+At least one review (and approval) is required before the branch can be merged, the branch being merged into the main and/or dev branch(es) *must* be up to date with the destination branch, and the GitHub Actions discussed below (see [3.2 Additional Tooling](#additional-tooling)) must also pass before the branch is able to be merged.
 
 Commit messages should be kept to the recommended limit (of 72 characters), with a clear descriptions to be placed in the commit description.
 However, this will not be enforced, and group members are encouraged to prioritise clarity over brevity.
@@ -197,7 +197,7 @@ The second action simply ran an aggressive flawfinder on the pull request, and i
 Because we were running a very aggressive search with flawfinder, this action did not prevent merging on errors (unlike the Uncrusitfy action), instead it was more aimed at being a tool that the code reviewers could use to help them check for potential flaws.
 
 # 4. Key Secure Coding Practices for Phase 2
-While we be implementing many different security-related tools and practices in phase 2 of this project, three such tools\practices (that have not already been discussed above) that we will be using are:
+While we will be implementing many different security-related tools and practices in phase 2 of this project, three such tools/practices (that have not already been discussed above) that we will be using are:
 
 ## 4.1 Consistent Implementation of Security Tooling and Decisions Throughout the SDLC
 ### 4.1.1 Relevancy:
@@ -206,9 +206,9 @@ Security must be a consideration from the beginning of a project, because trying
 ### 4.1.2 How it will be applied:
 Security considerations will be integrated into each stage of the project:
 - **Planning & Design**: Threat modeling (such as STRIDE) will be used to identify and mitigate key risks before code is written.
-- **Implementation**: Secure coding practices (such as input validation) and linters and static analysis tools will be enforced from day one (see [3.2.2 Static Analysis/Linting](#322-static-analysislinting) for more information about the specific tools we will be using).
-- **Testing**: Runtime tools, such as the sanitisers, as discussed in [3.2.3.1 Sanitizers](#3231-sanitizers), and Valgrind (see [3.2.3.2 Valgrind](#3232-valgrind), and static analysis tools (see [3.2.2 Static Analysis/Linting](#322-static-analysislinting)) will be part of both manual and CI testing (see [3.2.4 CI/CD](#324-cicd)).
-- **Code Review**: All pull requests will be reviewed for adherence to secure coding practices (as discussed in [5.2 Maintenance of Code Quality](#52-maintenance-of-code-quality), [2.4 VCS Policies](#24-vcs-policies), and [3.2.4.2 GitHub Actions](#3242-github-actions)).
+- **Implementation**: Secure coding practices (such as input validation) and linters and static analysis tools will be enforced from day one (see [3.2.2 Static Analysis/Linting](#static-analysislinting) for more information about the specific tools we will be using).
+- **Testing**: Runtime tools, such as the sanitisers, as discussed in [3.2.3.1 Sanitizers](#sanitizers), and Valgrind (see [3.2.3.2 Valgrind](#valgrind), and static analysis tools (see [3.2.2 Static Analysis/Linting](#static-analysislinting)) will be part of both manual and CI testing (see [3.2.4 CI/CD](#cicd)).
+- **Code Review**: All pull requests will be reviewed for adherence to secure coding practices (as discussed in [5.2 Maintenance of Code Quality](#maintenance-of-code-quality), [2.4 VCS Policies](#vcs-policies), and [3.2.4.2 GitHub Actions](#github-actions)).
 
 ### 4.1.3 How the group will ensure it is effectively used:
 Meeting minutes have a section for any security-related decisions made, and after each meeting these get added into a document that is shared among the team, so that each team member is aware of each decision, which will help with not only writing code, but also remaining consistent when reviewing code. CI hooks have been configured to run formatters, linters, sanitizers, and static analysis tools on each commit, and tooling setup to help with the review of pull requests made, reducing the effort required by the team to use these tools, which would increase the use of the tools. Security is a large part of the code review procedure, because we will not just be reviewing functionality.
@@ -226,7 +226,7 @@ A similar technique will be to ensure environment variables are sanitised, becau
 ### 4.2.3 How the group will ensure it is effectively used:
 Code reviews will be explicitly including input handling, and the `flawfinder` GitHub Action has been setup to help the reviewers find unsafe functions (however the reviewers will not solely be relying on `flawfinder`). The pre-commit setup has a large amount of linters and static analysers that will also pick up on unsafe functions before they can be committed to the working branch.
 
-The group will also be testing sanitisation of inputs using fuzzing, however see the note in [3.2 Additional Tooling](#32-additional-tooling) as to why this is not discussed in much depth in this report.
+The group will also be testing sanitisation of inputs using fuzzing, however see the note in [3.2 Additional Tooling](#additional-tooling) as to why this is not discussed in much depth in this report.
 
 ## 4.3 Authentication & Credential Management
 ### 4.3.1 Relevancy:
@@ -266,15 +266,15 @@ Additionally, a secure coding guideline for authentication will be documented an
 |------------------------------------------|--------|------------|------------------------------------------------------------------------------------------------------------|
 | Team member illness or unavailability    | Medium | Medium     | Regular updates to the spreadsheet so responsibilities can be reassigned easily, along with clear and fast communication between team members if unavailability occurs were both important mitigations to this risk |
 | Sudden death of a team member  | Medium | Medium | We discovered that one of our team members rides a motorcycle to University, which drastically increases the likelihood of this event, and so the main mitigation taken was to ask them to *please* be careful and to do regular pushes to the remote repository. |
-| Service outage (GitHub)| Low    | Low        | Each member kept local backups of the Git repository and tools used. However, as mentioned [above](#21-remote-source-code-location), our group feels that if these systems go down we will have bigger issues, a more likely similar risk  is the next.    |
+| Service outage (GitHub)| Low    | Low        | Each member kept local backups of the Git repository and tools used. However, as mentioned [above](#remote-source-code-location), our group feels that if these systems go down we will have bigger issues, a more likely similar risk  is the next.    |
 | Member loss of GitHub, Discord accounts | Medium | Medium | If a member looses access to their accounts, we all have each others student numbers, and so we will contact each other via email if we need a new account added to the discord group, or the repository. This is quite a possible risk, as we have already had one member have their GitHub account banned and need to have a new account added to the repository, and our team used this mitigation strategy to quickly solve this issue  |
-| Merge conflicts or broken main branch    | High   | Medium     | Using a strict Git workflow and requiring passing checks before merging into `main` as discussed above in [2. Version Control System](#2-version-control-strategy) and [3.2 Additional Tooling](#32-additional-tooling)   |
-| Security vulnerabilities in code         | High   | Medium     | Using static analysis tools and include security as a focus during peer code review as discussed in [3.2 Additional Tooling](#32-additional-tooling).       |
+| Merge conflicts or broken main branch    | High   | Medium     | Using a strict Git workflow and requiring passing checks before merging into `main` as discussed above in [2. Version Control System](#version-control-strategy) and [3.2 Additional Tooling](#additional-tooling)   |
+| Security vulnerabilities in code         | High   | Medium     | Using static analysis tools and include security as a focus during peer code review as discussed in [3.2 Additional Tooling](#additional-tooling).       |
 | Missed deadlines                         | High   | Medium     | Weekly meetings and a shared spreadsheet with deadlines along with starting early and assigning buffer time for unexpected issues will be used to (hopefully) mitigate this risk       |
 
 ## 5.2 Maintenance of Code Quality
 Our group plans to follow the [SEI CERT C Coding Standard](https://wiki.sei.cmu.edu/confluence/display/c) to help ensure the security and quality of our code.
-As discussed in [2. Version Control Strategy](#2-version-control-strategy), and [3.2 Additional Tooling](#32-additional-tooling) (in much more depth), a combination of peer reviews, automated testing, formatting, static analysis tools, linters, and dynamic analysis tools have will be used, with our team likely to add in more tools as we progress. Justifications for, and the reasoning behind, the tooling chosen is available at the sections linked above.
+As discussed in [2. Version Control Strategy](#version-control-strategy), and [3.2 Additional Tooling](#additional-tooling) (in much more depth), a combination of peer reviews, automated testing, formatting, static analysis tools, linters, and dynamic analysis tools have will be used, with our team likely to add in more tools as we progress. Justifications for, and the reasoning behind, the tooling chosen is available at the sections linked above.
 
 # 6. Group name
 Our group name is TOCTOU.
