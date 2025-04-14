@@ -164,6 +164,7 @@ We plan to use as many Google Sanitizers as we can, as in our environment we can
 These will provide us with valuable abilities to do dynamic analysis on our programs, vastly increasing its safety.
 
 A list of the current sanitisers in use (over different compilation commands as some are not compatible with each other) is listed below, however when we start writing code this number will probably increase:
+
 `undefined, float-divide-by-zero, float-cast-overflow, bounds, null, return, vptr, undefined, address, leak, thread, memory`
 
 
@@ -205,10 +206,14 @@ Security must be a consideration from the beginning of a project, because trying
 
 ### 4.1.2 How it will be applied:
 Security considerations will be integrated into each stage of the project:
-- **Planning & Design**: Threat modeling (such as STRIDE) will be used to identify and mitigate key risks before code is written.
-- **Implementation**: Secure coding practices (such as input validation), linters and static analysis tools will be enforced from day one (see [3.2.2 Static Analysis/Linting](#static-analysislinting) for more information about the specific tools we will be using).
-- **Testing**: Runtime tools, such as the sanitisers, as discussed in [3.2.3.1 Sanitizers](#sanitizers), and Valgrind (see [3.2.3.2 Valgrind](#valgrind), and static analysis tools (see [3.2.2 Static Analysis/Linting](#static-analysislinting)) will be part of both manual and CI testing (see [3.2.4 CI/CD](#cicd)).
-- **Code Review**: All pull requests will be reviewed for adherence to secure coding practices (as discussed in [5.2 Maintenance of Code Quality](#maintenance-of-code-quality), [2.4 VCS Policies](#vcs-policies), and [3.2.4.2 GitHub Actions](#github-actions)).
+
+  - **Planning & Design**: Threat modeling (such as STRIDE) will be used to identify and mitigate key risks before code is written.
+
+  - **Implementation**: Secure coding practices (such as input validation), linters and static analysis tools will be enforced from day one (see [3.2.2 Static Analysis/Linting](#static-analysislinting) for more information about the specific tools we will be using).
+
+  - **Testing**: Runtime tools, such as the sanitisers, as discussed in [3.2.3.1 Sanitizers](#sanitizers), and Valgrind (see [3.2.3.2 Valgrind](#valgrind), and static analysis tools (see [3.2.2 Static Analysis/Linting](#static-analysislinting)) will be part of both manual and CI testing (see [3.2.4 CI/CD](#cicd)).
+
+  - **Code Review**: All pull requests will be reviewed for adherence to secure coding practices (as discussed in [5.2 Maintenance of Code Quality](#maintenance-of-code-quality), [2.4 VCS Policies](#vcs-policies), and [3.2.4.2 GitHub Actions](#github-actions)).
 
 ### 4.1.3 How the group will ensure it is effectively used:
 Meeting minutes have a section for any security-related decisions made and after each meeting these get added into a document that is shared among the team, so that each team member is aware of each decision, which will help with not only writing code, but also remaining consistent when reviewing code. CI hooks have been configured to run formatters, linters, sanitizers, and static analysis tools on each commit, which helps with the review of pull requests made, reducing the effort required by the team to use these tools. Security is a large part of the code review procedure, because we will not just be reviewing functionality.
