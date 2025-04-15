@@ -1,8 +1,8 @@
 # Compiler and flags
 CC = gcc
-# Common flags
+# Common flags - NOT for release
 CFLAGS_COMMON = -std=c11 -pedantic -Wall -Wextra -Wshadow -Wconversion \
-        -funsigned-char
+        -funsigned-char -fstack-protector-all -mshstk
 # Sanitizer flags
 SANITIZE_FLAGS = -fsanitize=undefined,address,leak \
         -fno-sanitize-recover=signed-integer-overflow -fno-omit-frame-pointer
