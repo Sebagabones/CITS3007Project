@@ -247,7 +247,7 @@ Authentication in the ACS will be based on username-password pairs, securely sto
 
   - A salt will be randomly generated and stored as a prefix of the hashed password to prevent precomputed dictionary attacks (e.g., rainbow tables).
 
-  - Memory used to store sensitive information (e.g., raw passwords) will be immediately cleared (`memset` or equivalent) after use to avoid leaving secrets in memory.
+  - Memory used to store sensitive information (e.g., raw passwords) will be immediately cleared (`explicit_bzero` or safer options) after use to avoid leaving secrets in memory.
 
 The ACS will also use:
 
