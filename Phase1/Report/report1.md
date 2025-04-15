@@ -109,8 +109,8 @@ However, this will not be enforced, and group members are encouraged to prioriti
 
 There will be three main editors in use for this project, Visual Studio Code (VS Code), Emacs and VIM.
 
-The majority of the group plan to use VS Code for this project, as it is what they are used to and are comfortable using, and it has a wide plugin ecosystem.
-However, one group member uses Emacs, mostly because they are used to it, and enjoys the extensibility of it. The code will need to be routinely developed and tested in the [CITS3007 standard development environment](https://cits3007.arranstewart.io/faq/#cits3007-sde) (often on a VM) – so a lightweight text-editor like VIM will also be utilised.
+The majority of the group plan to use VS Code for this project, as it is what they are used to and are comfortable using, and it has a wide plugin ecosystem. [VS Code Remote Development](https://code.visualstudio.com/docs/remote/remote-overview) and its SSH feature will be used by members who would like to use VS Code, don't use an x86-64 chip but still ensure compliance with the [CITS3007 standard development environment](https://cits3007.arranstewart.io/faq/#cits3007-sde) (SDE).
+For other members working directly in the SDE, Emacs and VIM will be used, for reasons including members' familiarity, extensibility and their lightweight nature fitting making them attractive options in a resource constrained VM.
 
 The group discussed this whether using different editors would cause any issues, however the Emacs user was confident that they would be able to replicate any necessary features in Emacs, and if not will (begrudgingly) switch over to using VS Code for the remainder of the project.
 
