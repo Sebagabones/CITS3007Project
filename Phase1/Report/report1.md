@@ -110,12 +110,12 @@ However, this will not be enforced, and group members are encouraged to prioriti
 There will be three main editors in use for this project, Visual Studio Code (VS Code), Emacs and Vim.
 
 The majority of the group plan to use VS Code for this project, as it is what they are used to and are comfortable using, and it has a wide plugin ecosystem. [VS Code Remote Development](https://code.visualstudio.com/docs/remote/remote-overview) and its SSH feature will be used by members who would like to use VS Code, don't use an x86-64 chip but still ensure compliance with the [CITS3007 standard development environment](https://cits3007.arranstewart.io/faq/#cits3007-sde) (SDE).
-For other members working directly in the SDE, Emacs and Vim will be used, for reasons including members' familiarity, extensibility and their lightweight nature fitting making them attractive options in a resource constrained VM.
+For other members working directly in the SDE, Vim will be used, for reasons including members' familiarity, and its lightweight nature making it an attractive option in a resource constrained VM.
 
 The group discussed this whether using different editors would cause any issues, however the Emacs user was confident that they would be able to replicate any necessary features in Emacs, and if not will (begrudgingly) switch over to using VS Code for the remainder of the project.
 
 ## 3.2 Additional Tooling
-This will be split up into 4 main sections - formatting, static analysis/linting, dynamic analysis, and the CI/CD implementation of these. We will also briefly discuss 
+This will be split up into 4 main sections - formatting, static analysis/linting, dynamic analysis, and the CI/CD implementation of these.
 
 *Note: The group was absent from the lecture covering Fuzzing (due to attending the first meeting for this project), and so implementing fuzzing has not been discusseed at a group meeting yet, this is planned to be addressed and implemented at the second meeting, which is the day that this report is due, and so the usage of fuzzing is not covered in this report, however it will almost definitely be used in the testing of this project*
 
