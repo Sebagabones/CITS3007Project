@@ -87,7 +87,7 @@ To mitigate against merge conflicts, a few strategies will be implemented. Regul
 If this is unavoidable (for example, in the case of Peter and Henry), regular merging will be implemented.
 For features/branches that are worked on by a single person, regularly merging main into the branch is planned.
 
-If merge conflicts *do* occur (this more of a case of 'when' not 'if' if we are being honest), the team will work together to resolve them, seeking assistance from the person(s) most familiar with the conflicting code if possible.
+If merge conflicts *do* occur (likely more of a case of 'when' not 'if'), the team will work together to resolve them, seeking assistance from the person(s) most familiar with the conflicting code if possible.
 
 In the absolute worse case, we plan to implement the xkcd/1597 [approach](https://xkcd.com/1597/), however, we are all collectively hoping this will not be necessary.
 
@@ -107,10 +107,10 @@ However, this will not be enforced, and group members are encouraged to prioriti
 
 ## 3.1 Editors
 
-There will be two main editors in use for this project, Visual Studio Code (VS Code), and Emacs.
+There will be three main editors in use for this project, Visual Studio Code (VS Code), Emacs and Vim.
 
-The majority of the group plan to use VS Code for this project, as it is what they are used to and are comfortable using, and it has a wide plugin ecosystem.
-However, one group member uses Emacs, mostly because they are used to it, and enjoys the extensibility of it.
+The majority of the group plan to use VS Code for this project, as it is what they are used to and are comfortable using, and it has a wide plugin ecosystem. [VS Code Remote Development](https://code.visualstudio.com/docs/remote/remote-overview) and its SSH feature will be used by members who would like to use VS Code, don't use an x86-64 chip but still ensure compliance with the [CITS3007 standard development environment](https://cits3007.arranstewart.io/faq/#cits3007-sde) (SDE).
+For other members working directly in the SDE, Vim will be used, for reasons including members' familiarity, and its lightweight nature making it an attractive option in a resource constrained VM.
 
 The group discussed this whether using different editors would cause any issues, however the Emacs user was confident that they would be able to replicate any necessary features in Emacs, and if not will (begrudgingly) switch over to using VS Code for the remainder of the project.
 
@@ -197,6 +197,7 @@ This also has the benefit of alerting our group members to a faulty pre-commit s
 The second action simply runs an aggressive flawfinder on the pull request, and if any issues were found it would return the issues in a more readable formatted comment on the pull request, which helps the reviewers with spotting potential issues quickly.
 Because we are running a very aggressive search with flawfinder, this action does not prevent merging on errors (unlike the Uncrusitfy action), instead it is more aimed at being a tool that the code reviewers could use to help them check for potential flaws.
 
+
 # 4. Key Secure Coding Practices for Phase 2
 While we will be implementing many different security-related tools and practices in phase 2 of this project, three such tools/practices (that have not already been discussed above) that we will be using are:
 
@@ -221,7 +222,7 @@ Meeting minutes have a section for any security-related decisions made and after
 ## 4.2 Input Validation & Bounds Checking
 
 ### 4.2.1 Relevancy:
-As the ACS will be handling user inputs (such as usernames, passwords, and session tokens), great care must be taken to parse (not only validating) inputs, to prevent buffer overflows and injection vulnerabilities.
+As the ACS will be handling user inputs (such as usernames, passwords, and session tokens), great care must be taken to parse (not only validating) inputs, to prevent buffer overflows and injection vulnerabilities. Further, we can only speculate on how our users will affect our gamestate, and what input channels they will have. We believe that bounds checking will be especially relevant to in-game resources, e.g. ensuring the most obscenely rich plutocrats don't experience an underflow into a negative net-worth. There will undoubtably be lots of channels of user input that will come up, on top of the above, potentially including movement inputs, marketplace-like menus and potentially player-to-player communications. Each avenue will need to be relevantly neutralised to avoid downstream components introducing unexpected and potentially harmful behaviour.
 
 ### 4.2.2 How it will be applied:
 Multiple techniques will be used to ensure safe inputs, these include validating and parsing the input, but also sanitising and canonicalisation (normalisation) where necessary. All functions that deal with user input will also use safe C functions (such as `fgets` instead of `gets` and `snprintf` instead of `sprintf`), and will explicitly check lengths and formats before processing.
@@ -236,7 +237,7 @@ The group will also be testing sanitisation of inputs using fuzzing, however see
 ## 4.3 Authentication & Credential Management
 ### 4.3.1 Relevancy:
 
-A system like an ACS is directly responsible for managing who can access what, so naturally the authentication mechanism is what makes up the bulk of the system’s security. Improper authentication can lead to unauthorized access, privilege escalation, or complete system compromise. Since C does not have built-in memory safety features, mishandling passwords or session tokens can also lead to vulnerabilities such as buffer overflows, memory leaks, or inadvertent exposure of secrets in memory.
+A system like an ACS is directly responsible for managing who can access what, so naturally the authentication mechanism is what makes up the bulk of the system’s security. Improper authentication can lead to unauthorized access, privilege escalation, or complete system compromise. Since C does not have built-in memory safety features, mishandling passwords or session tokens can also lead to vulnerabilities such as buffer overflows, memory leaks, or inadvertent exposure of secrets in memory. User's accounts will have huge variability in privileges and attributes – and the central idea of the game is role-playing a nightmarish neo-capitalist society. To remain faithful to these axioms, strict policing of accounts is a necessity. Therefore ensuring we can reliably moderate access to accounts by authenticating users, will be an important feature of our ACS. 
 
 ### 4.3.2 How it will be applied:
 
@@ -246,7 +247,7 @@ Authentication in the ACS will be based on username-password pairs, securely sto
 
   - A salt will be randomly generated and stored as a prefix of the hashed password to prevent precomputed dictionary attacks (e.g., rainbow tables).
 
-  - Memory used to store sensitive information (e.g., raw passwords) will be immediately cleared (`memset_s` or equivalent) after use to avoid leaving secrets in memory.
+  - Memory used to store sensitive information (e.g., raw passwords) will be immediately cleared (`explicit_bzero` or safer options) after use to avoid leaving secrets in memory.
 
 The ACS will also use:
 
@@ -255,6 +256,8 @@ The ACS will also use:
   - Secure comparison functions (`consttime_memcmp`) to prevent timing attacks
 
   - Session tracking with unique, securely generated session tokens (e.g., using `/dev/urandom`)
+
+  - Enforcing access control through a ban list, checked during authentication. Depending on what representation of users we are given in phase 2, this list could be limited to username-password pairs, or include IP addresses or other identifiers. 
 
 ### 4.3.3 How the group will ensure it is effectively used:
 
@@ -276,6 +279,7 @@ Additionally, a secure coding guideline for authentication will be documented an
 | Merge conflicts or broken main branch    | High   | Medium     | Using a strict Git workflow and requiring passing checks before merging into `main` as discussed above in [2. Version Control System](#version-control-strategy) and [3.2 Additional Tooling](#additional-tooling)   |
 | Security vulnerabilities in code         | High   | Medium     | Using static analysis tools and include security as a focus during peer code review as discussed in [3.2 Additional Tooling](#additional-tooling).       |
 | Missed deadlines                         | High   | Medium     | Weekly meetings and a shared spreadsheet with deadlines along with starting early and assigning buffer time for unexpected issues will be used to (hopefully) mitigate this risk       |
+
 
 ## 5.2 Maintenance of Code Quality
 Our group plans to follow the [SEI CERT C Coding Standard](https://wiki.sei.cmu.edu/confluence/display/c) to help ensure the security and quality of our code.
