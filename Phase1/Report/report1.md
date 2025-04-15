@@ -67,7 +67,7 @@ Of course, our group also understands that life can get very hectic, and the mai
 
 # 2. Version Control Strategy
 
-Git was chosen as the underlying VCS, as even though there are (technically) better options, (see [Jujutsu](https://github.com/jj-vcs/jj?tab=readme-ov-file), [Sapling](https://sapling-scm.com/), or [Pijul](https://nest.pijul.com/pijul/pijul), along with the classics such as Fossil, Darcs, or Mercurial),  due to Git's extreme popularity (and 4 out of 5 group members unwillingness to not have to learn how to use a new SCM system while also working on the project), we decided to just use Git.
+Git was chosen as the underlying VCS, as even though there are (technically) better options, (see [Jujutsu](https://github.com/jj-vcs/jj?tab=readme-ov-file), [Sapling](https://sapling-scm.com/), or [Pijul](https://nest.pijul.com/pijul/pijul), along with the classics such as Fossil, Darcs, or Mercurial),  due to Git's extreme popularity (and 4 out of 5 group members unwillingness to learn how to use a new SCM system while also working on the project), we decided to just use Git.
 
 ## 2.1 Remote Source Code Location
 
@@ -75,7 +75,7 @@ Our group decided that GitHub would be a suitable main online VCS provider to ho
 
 GitHub also provides GitHub Actions, which one of our group members has experience with, which will be discussed later on in this report in [Part 3.2](#additional-tooling). We considered mirroring our repository to one of our members home-server, which has a simple Git based VCS server, however we decided against this, as we feel confident that if GitHub goes down, we will have much bigger problems than this project.
 
-However, if GitHub *does* go down, but the project is still our biggest concern, we will still have local copies on each of our devices, so providing that every group member does not suffer the loss of their devices, *and* GitHub also goes down *all at the same time*, we will then migrate the repository to the aforementioned group members Git server (in which case, we will be using [Soft Serve](https://charm.sh/blog/self-hosted-soft-serve/) as our main VCS server)
+However, if GitHub *does* go down, but the project is still our biggest concern, we will still have local copies on each of our devices, so providing that every group member does not suffer the loss of their devices, *and* GitHub also goes down *all at the same time*, we will then migrate the repository to the aforementioned group member's Git server (in which case, we will be using [Soft Serve](https://charm.sh/blog/self-hosted-soft-serve/) as our main VCS server)
 
 ## 2.2 Merging Strategies
 
@@ -109,19 +109,19 @@ However, this will not be enforced, and group members are encouraged to prioriti
 
 There will be three main editors in use for this project, Visual Studio Code (VS Code), Emacs and Vim.
 
-The majority of the group plan to use VS Code for this project, as it is what they are used to and are comfortable using, and it has a wide plugin ecosystem. [VS Code Remote Development](https://code.visualstudio.com/docs/remote/remote-overview) and its SSH feature will be used by members who would like to use VS Code, don't use an x86-64 chip but still ensure compliance with the [CITS3007 standard development environment](https://cits3007.arranstewart.io/faq/#cits3007-sde) (SDE).
+The majority of the group plan to use VS Code for this project, as it is what they are used to and are comfortable using, and it has a wide plugin ecosystem. [VS Code Remote Development](https://code.visualstudio.com/docs/remote/remote-overview) and its SSH feature will be used by members who would like to use VS Code,  still ensures compliance with the [CITS3007 standard development environment](https://cits3007.arranstewart.io/faq/#cits3007-sde) (SDE).
 For other members working directly in the SDE, Vim will be used, for reasons including members' familiarity, and its lightweight nature making it an attractive option in a resource constrained VM.
 
-The group discussed this whether using different editors would cause any issues, however the Emacs user was confident that they would be able to replicate any necessary features in Emacs, and if not will (begrudgingly) switch over to using VS Code for the remainder of the project.
+The group discussed that whether using different editors would cause any issues, however the Emacs user was confident that they would be able to replicate any necessary features in Emacs (eg, Tramp instead of Remote Development), and if not will (begrudgingly) switch over to using VS Code for the remainder of the project.
 
 ## 3.2 Additional Tooling
 This will be split up into 4 main sections - formatting, static analysis/linting, dynamic analysis, and the CI/CD implementation of these.
 
-*Note: The group was absent from the lecture covering Fuzzing (due to attending the first meeting for this project), and so implementing fuzzing has not been discusseed at a group meeting yet, this is planned to be addressed and implemented at the second meeting, which is the day that this report is due, and so the usage of fuzzing is not covered in this report, however it will almost definitely be used in the testing of this project*
+*Note: The group was absent from the lecture covering Fuzzing (due to attending the first meeting for this project), and so implementing fuzzing has not been discusseed at a group meeting yet, this is planned to be addressed and implemented at the second meeting, which is the day that this report is due, and so the usage of fuzzing is not covered in this report, however it will almost definitely be used in the testing of this project.*
 
 
 ### 3.2.1 Formatting
-Consistent formatting is important to ensure a codebase remains readable, and so [Uncrustify](https://github.com/uncrustify/uncrustify/) was setup for formatting our all of code. Somewhat controversially, the style used was derived from an Allman/BSD Style.
+Consistent formatting is important to ensure a codebase remains readable, and so [Uncrustify](https://github.com/uncrustify/uncrustify/) was setup for formatting all of our code. Somewhat controversially, the style used was derived from an Allman/BSD Style.
 
 Due to the brackets being on a separate line to the control statement, commenting out a block of code/control statement while refactoring is less likely to cause errors via missing or dangling braces.
 
@@ -237,7 +237,7 @@ The group will also be testing sanitisation of inputs using fuzzing, however see
 ## 4.3 Authentication & Credential Management
 ### 4.3.1 Relevancy:
 
-A system like an ACS is directly responsible for managing who can access what, so naturally the authentication mechanism is what makes up the bulk of the system’s security. Improper authentication can lead to unauthorized access, privilege escalation, or complete system compromise. Since C does not have built-in memory safety features, mishandling passwords or session tokens can also lead to vulnerabilities such as buffer overflows, memory leaks, or inadvertent exposure of secrets in memory. User's accounts will have huge variability in privileges and attributes – and the central idea of the game is role-playing a nightmarish neo-capitalist society. To remain faithful to these axioms, strict policing of accounts is a necessity. Therefore ensuring we can reliably moderate access to accounts by authenticating users, will be an important feature of our ACS. 
+A system like an ACS is directly responsible for managing who can access what, so naturally the authentication mechanism is what makes up the bulk of the system’s security. Improper authentication can lead to unauthorized access, privilege escalation, or complete system compromise. Since C does not have built-in memory safety features, mishandling passwords or session tokens can also lead to vulnerabilities such as buffer overflows, memory leaks, or inadvertent exposure of secrets in memory. User's accounts will have huge variability in privileges and attributes – and the central idea of the game is role-playing a nightmarish neo-capitalist society. To remain faithful to these axioms, strict policing of accounts is a necessity. Therefore ensuring we can reliably moderate access to accounts by authenticating users, will be an important feature of our ACS.
 
 ### 4.3.2 How it will be applied:
 
@@ -257,7 +257,7 @@ The ACS will also use:
 
   - Session tracking with unique, securely generated session tokens (e.g., using `/dev/urandom`)
 
-  - Enforcing access control through a ban list, checked during authentication. Depending on what representation of users we are given in phase 2, this list could be limited to username-password pairs, or include IP addresses or other identifiers. 
+  - Enforcing access control through a ban list, checked during authentication. Depending on what representation of users we are given in phase 2, this list could be limited to username-password pairs, or include IP addresses or other identifiers.
 
 ### 4.3.3 How the group will ensure it is effectively used:
 
@@ -273,7 +273,7 @@ Additionally, a secure coding guideline for authentication will be documented an
 | Risk                                      | Impact | Likelihood | Mitigation Strategy                                                                                       |
 |------------------------------------------|--------|------------|------------------------------------------------------------------------------------------------------------|
 | Team member illness or unavailability    | Medium | Medium     | Regular updates to the spreadsheet so responsibilities can be reassigned easily, along with clear and fast communication between team members if unavailability occurs. |
-| Sudden death of a team member  | Medium | Medium | We discovered that one of our team members rides a motorcycle to University, which drastically increases the likelihood of this event, and so the main mitigation taken was to ask them to *please* be careful and to do regular pushes to the remote repository. |
+| Sudden death of a team member  | Medium | Medium | We discovered that one of our team members rides a motorcycle to university, which drastically increases the likelihood of this event, and so the main mitigation taken was to ask them to *please* be careful and to do regular pushes to the remote repository. |
 | Service outage (GitHub)| Low    | Low        | Each member kept local backups of the Git repository and tools used. However, as mentioned [above](#remote-source-code-location), our group feels that if these systems go down we will have bigger issues.    |
 | Member loss of GitHub, Discord accounts | Medium | Medium | We all have each others student numbers, and so we can contact each other via email if we need a new account added to the discord group or the repository. This is quite a possible risk, as we have already had one member have their GitHub account banned and needed to have a new account added to the repository, and our team used this mitigation strategy to quickly solve this issue  |
 | Merge conflicts or broken main branch    | High   | Medium     | Using a strict Git workflow and requiring passing checks before merging into `main` as discussed above in [2. Version Control System](#version-control-strategy) and [3.2 Additional Tooling](#additional-tooling)   |
