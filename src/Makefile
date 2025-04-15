@@ -5,7 +5,7 @@ CFLAGS_COMMON = -std=c11 -pedantic -Wall -Wextra -Wshadow -Wconversion \
         -funsigned-char -fstack-protector-all -mshstk
 # Sanitizer flags
 SANITIZE_FLAGS = -fsanitize=undefined,address,leak \
-        -fno-sanitize-recover=signed-integer-overflow -fno-omit-frame-pointer -fstack-protector-all
+        -fno-sanitize-recover=signed-integer-overflow -fno-omit-frame-pointer
 # Thread sanitizer flags
 THREAD_SANITIZE_FLAGS = -fsanitize=thread -fno-omit-frame-pointer
 # Comprehensive sanitizer flags (compatible with each other)
