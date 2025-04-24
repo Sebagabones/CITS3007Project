@@ -125,3 +125,8 @@ Currently `src` just has a few of my lab files, and a super simple make
 file - if anyone is a Makefile enjoyer feel free to make a better one
 lol A few of the pre-commit hooks require a `compile_commands.json`
 which is why we use bear lol
+
+
+#### Report generation
+To generate the phase one report i used pandoc with weasyprint and a custom css file
+`pandoc report.md  --pdf-engine=weasyprint --css=print.css -o report.pdf`
