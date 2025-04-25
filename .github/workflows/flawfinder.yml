@@ -15,6 +15,10 @@ jobs:
     - name: Install Flawfinder
       run: sudo apt-get update && sudo apt-get install -y flawfinder
 
+    - name: Fetch remote branches
+      run: |
+          git fetch origin
+
     - name: Run Flawfinder (only on changed files)
       continue-on-error: true
       run: |
