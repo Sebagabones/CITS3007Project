@@ -18,7 +18,7 @@ jobs:
     - name: Run Flawfinder (only on changed files)
       continue-on-error: true
       run: |
-         CHANGED_FILES=$(git diff --name-only origin/main...HEAD | grep -E '\.(c|h)$' || true)
+         CHANGED_FILES=$(git diff --diff-filter=AM --name-only origin/main...HEAD | grep -E '\.(c|h)$' || true)
 
           echo "Changed files:"
           echo "$CHANGED_FILES"
