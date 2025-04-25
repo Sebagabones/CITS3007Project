@@ -19,10 +19,23 @@ jobs:
       run: |
           git fetch origin
 
+    - name: Get the base branch of the PR
+      id: get_base_branch
+      run: |
+        echo "Base branch: ${GITHUB_BASE_REF}"
+        echo "base_branch=${GITHUB_BASE_REF}" >> $GITHUB_ENV
+
     - name: Run Flawfinder (only on changed files)
       continue-on-error: true
       run: |
-         CHANGED_FILES=$(git diff --diff-filter=AM --name-only origin/main...HEAD | grep -E '\.(c|h)$' || true)
+          # Get the base branch from PR (e.g., main)
+          BASE_BRANCH=${BASE_BRANCH:-"main"}
+
+          # Fetch the latest commit of the base branch (if not done already)
+          git fetch origin $BASE_BRANCH
+
+          # Get the list of changed .c and .h files between the PR branch and the base branch
+          CHANGED_FILES=$(git diff --diff-filter=AM --name-only origin/$BASE_BRANCH...HEAD | grep -E '\.(c|h)$' || true)
 
           echo "Changed files:"
           echo "$CHANGED_FILES"
