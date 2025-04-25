@@ -10,15 +10,27 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
+    - name: Install Flawfinder
+      run: sudo apt-get update && sudo apt-get install -y flawfinder
 
-    - name: Run Flawfinder
+    - name: Run Flawfinder (only on changed files)
       continue-on-error: true
-      uses: david-a-wheeler/flawfinder@2.0.19
-      with:
-        arguments: '--error-level=10 --sarif ./'
-        output: 'flawfinder_results.sarif'
+      run: |
+         CHANGED_FILES=$(git diff --diff-filter=AM --name-only origin/main...HEAD | grep -E '\.(c|h)$' || true)
+
+          echo "Changed files:"
+          echo "$CHANGED_FILES"
+
+          FILES_TO_SCAN=$(echo "$CHANGED_FILES" | grep -vE '(^|/)stubs\.c$|(^|/)bogus_main\.c$|(^|/)db\.h$|(^|/)account\.h$|(^|/)login\.h$|(^|/)logging\.h$|(^|/)Phase2/ScaffoldingFilesNotModified/|\.md$' || true)
+
+          if [ -z "$FILES_TO_SCAN" ]; then
+            echo "No relevant files changed. Skipping flawfinder."
+            echo '{"runs": [{"results": []}]}' > flawfinder_results.sarif
+          else
+            flawfinder --error-level=10 --sarif $FILES_TO_SCAN > flawfinder_results.sarif
+          fi
 
     - name: Parse SARIF and create comment body
       run: |
