@@ -68,34 +68,31 @@ jobs:
           if (results.length === 0) {
             summary += `No issues found at or above the configured error level.\n`;
           } else {
-
-            function extractSeverity(message) {
-              const match = message.match(/\[Level (\w+)\]/);
-              return match ? match[1] : 'unknown';
-            }
-
-
+            // Group issues by severity level if available
             const byLevel = {};
             results.forEach(r => {
-              const message = r.message?.text || '';
-              const severity = extractSeverity(message);
-              byLevel[severity] = byLevel[severity] || [];
-              byLevel[severity].push(r);
+              const level = r.level || "unknown";
+              byLevel[level] = byLevel[level] || [];
+              byLevel[level].push(r);
             });
 
-            summary += "#### Summary by Severity\n\n";
-            Object.keys(byLevel).forEach(severity => {
-              summary += `* Level ${severity}: ${byLevel[severity].length} issue${byLevel[severity].length !== 1 ? 's' : ''}\n`;
-            });
+            // Add severity summary if we have levels
+            if (Object.keys(byLevel).length > 1) {
+              summary += "#### Summary by Severity\n\n";
+              Object.keys(byLevel).sort((a, b) => b - a).forEach(level => {
+                summary += `- Level ${level}: ${byLevel[level].length} issues\n`;
+              });
+              summary += "\n";
+            }
 
-            summary += "\n#### Details (up to 20 issues)\n\n";
+            summary += "#### Details (up to 20 issues)\n\n";
 
-            results.slice(0, 20).forEach((r) => {
+            results.slice(0, 20).forEach((r, i) => {
               const msg = r.message?.text || 'No message';
               const loc = r.locations?.[0]?.physicalLocation?.artifactLocation?.uri || 'unknown';
               const line = r.locations?.[0]?.physicalLocation?.region?.startLine || '?';
-
-              summary += `* **${loc}:${line}** — ${msg}\n`;
+              const level = r.level ? `[Level ${r.level}] ` : '';
+              summary += `- **${level}** — **${loc}:${line}** — ${msg}\n`;
             });
 
             if (results.length > 20) {
