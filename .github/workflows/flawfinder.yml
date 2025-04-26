@@ -91,7 +91,7 @@ jobs:
               const msg = r.message?.text || 'No message';
               const loc = r.locations?.[0]?.physicalLocation?.artifactLocation?.uri || 'unknown';
               const line = r.locations?.[0]?.physicalLocation?.region?.startLine || '?';
-              const level = r.level ? `[Level ${r.level}] ` : '';
+              const level = r.level ? `[${r.level}]` : '';
               summary += `- **${level}** — **${loc}:${line}** — ${msg}\n`;
             });
 
