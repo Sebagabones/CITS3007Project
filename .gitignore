@@ -6,3 +6,4 @@ package.json
 **/.ccls-cache
 .projectile
 .ccls
+.dir-locals.el
