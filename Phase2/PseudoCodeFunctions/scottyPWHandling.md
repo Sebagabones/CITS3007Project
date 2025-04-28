@@ -307,7 +307,7 @@ bool account_update_password(account_t *acc, const char *new_plaintext_password)
     return true;
 }
 
-// Helper function to generate bcrypt salt (pseudocode)
+// Helper function to generate bcrypt salt
 bool generate_bcrypt_salt(int work_factor, char *salt_output) {
     // Generate 16 random bytes for the salt
     unsigned char random_bytes[16];
