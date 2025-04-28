@@ -13,6 +13,7 @@ Project for CITS3007
 | `make debug`         | Debug build (no optimization, symbols)   | `file.debug`         | `CFLAGS_DEBUG`          |
 | `make thread`        | Builds with thread sanitizer             | `file.thread`        | `CFLAGS_THREAD`         |
 | `make full`          | Builds with full compatible sanitizers   | `file.full`          | `CFLAGS_FULL`           |
+| `make memory`        | Builds with memory sanitizer             | `file.memory`        | `CFLAGS_MEMORY`         |
 | `make compile-db`    | Generates `compile_commands.json` for all build modes | `compile_commands.json` | `CFLAGS` + all variants |
 
 
