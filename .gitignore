@@ -4,3 +4,6 @@ package-lock.json
 package.json
 **/.cache
 **/.ccls-cache
+.projectile
+.ccls
+.dir-locals.el

@@ -1,45 +1,111 @@
 name: flawfinder_scan
-
 on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
-
 jobs:
   flawFinder:
     runs-on: ubuntu-latest
-
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
-
-
-    - name: Run Flawfinder
-      continue-on-error: true
-      uses: david-a-wheeler/flawfinder@2.0.19
+      uses: actions/checkout@v4
       with:
-        arguments: '--error-level=10 --sarif ./'
-        output: 'flawfinder_results.sarif'
+        fetch-depth: 0
+
+    - name: Install Flawfinder
+      run: sudo apt-get update && sudo apt-get install -y flawfinder
+
+    - name: Run Flawfinder (only on changed files)
+      continue-on-error: true
+      run: |
+          # Get the base branch from PR context
+          BASE_BRANCH="${{ github.event.pull_request.base.ref }}"
+          echo "Base branch: $BASE_BRANCH"
+
+          # Get the list of changed .c and .h files between the PR branch and the base branch
+          CHANGED_FILES=$(git diff --diff-filter=AM --name-only origin/$BASE_BRANCH...HEAD | grep -E '\.(c|h)$' || true)
+
+          echo "Changed files:"
+          echo "$CHANGED_FILES"
+
+          # Filter out excluded files
+          FILES_TO_SCAN=$(echo "$CHANGED_FILES" | grep -vE '(^|/)stubs\.c$|(^|/)bogus_main\.c$|(^|/)db\.h$|(^|/)account\.h$|(^|/)login\.h$|(^|/)logging\.h$|(^|/)Phase2/ScaffoldingFilesNotModified/|\.md$' || true)
+
+          echo "Files to scan:"
+          echo "$FILES_TO_SCAN"
+
+          if [ -z "$FILES_TO_SCAN" ]; then
+            echo "No relevant files changed. Skipping flawfinder."
+            echo '{"runs": [{"results": []}]}' > flawfinder_results.sarif
+          else
+            # Run flawfinder with SARIF output
+            flawfinder --error-level=10 --sarif $FILES_TO_SCAN > flawfinder_results.sarif
+            echo "Flawfinder scan completed"
+          fi
 
     - name: Parse SARIF and create comment body
       run: |
         node <<'EOF'
         const fs = require('fs');
-        const path = 'flawfinder_results.sarif';
-        const sarif = JSON.parse(fs.readFileSync(path, 'utf8'));
-        const results = sarif.runs?.[0]?.results ?? [];
 
-        let summary = `### Flawfinder Scan Results (${results.length} issue${results.length !== 1 ? 's' : ''})\n`;
-        if (results.length === 0) summary += `No issues found at or above the configured error level.\n`;
+        try {
+          const path = 'flawfinder_results.sarif';
+          const sarifContent = fs.readFileSync(path, 'utf8');
 
-        results.slice(0, 20).forEach((r, i) => {
-          const msg = r.message?.text || 'No message';
-          const loc = r.locations?.[0]?.physicalLocation?.artifactLocation?.uri || 'unknown';
-          const line = r.locations?.[0]?.physicalLocation?.region?.startLine || '?';
-          summary += `- \`${loc}:${line}\` — ${msg}\n`;
-        });
+          let sarif;
+          try {
+            sarif = JSON.parse(sarifContent);
+          } catch (e) {
+            console.error("Failed to parse SARIF JSON:", e);
+            console.log("SARIF content:", sarifContent);
+            fs.writeFileSync('flawfinder_comment.md', '### Flawfinder Scan Error\nFailed to parse SARIF output.');
+            process.exit(1);
+          }
 
-        if (results.length > 20) summary += `\n...and ${results.length - 20} more.\n`;
-        fs.writeFileSync('flawfinder_comment.md', summary);
+          const results = sarif.runs?.[0]?.results ?? [];
+
+          let summary = `### Flawfinder Scan Results (${results.length} issue${results.length !== 1 ? 's' : ''})\n\n`;
+
+          if (results.length === 0) {
+            summary += `No issues found at or above the configured error level.\n`;
+          } else {
+            // Group issues by severity level if available
+            const byLevel = {};
+            results.forEach(r => {
+              const level = r.level || "unknown";
+              byLevel[level] = byLevel[level] || [];
+              byLevel[level].push(r);
+            });
+
+            // Add severity summary if we have levels
+            if (Object.keys(byLevel).length > 1) {
+              summary += "#### Summary by Severity\n\n";
+              Object.keys(byLevel).sort((a, b) => b - a).forEach(level => {
+                summary += `- Level ${level}: ${byLevel[level].length} issues\n`;
+              });
+              summary += "\n";
+            }
+
+            summary += "#### Details (up to 20 issues)\n\n";
+
+            results.slice(0, 20).forEach((r, i) => {
+              const msg = r.message?.text || 'No message';
+              const loc = r.locations?.[0]?.physicalLocation?.artifactLocation?.uri || 'unknown';
+              const line = r.locations?.[0]?.physicalLocation?.region?.startLine || '?';
+              const level = r.level ? `[${r.level}]` : '';
+              summary += `- **${level}** — **${loc}:${line}** — ${msg}\n`;
+            });
+
+            if (results.length > 20) {
+              summary += `\n... and ${results.length - 20} more issue(s). Consider addressing these security concerns.\n`;
+            }
+          }
+
+          fs.writeFileSync('flawfinder_comment.md', summary);
+          console.log("Successfully created comment from SARIF results");
+        } catch (error) {
+          console.error("Error in SARIF parsing script:", error);
+          fs.writeFileSync('flawfinder_comment.md', '### Flawfinder Scan\nAn error occurred while processing scan results.');
+        }
         EOF
 
     - name: Post comment to PR
@@ -48,10 +114,16 @@ jobs:
       with:
         script: |
           const fs = require('fs');
-          const body = fs.readFileSync('flawfinder_comment.md', 'utf8');
-          github.rest.issues.createComment({
-            issue_number: context.issue.number,
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            body: body
-          });
+          try {
+            const body = fs.readFileSync('flawfinder_comment.md', 'utf8');
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });
+            console.log("Successfully posted comment to PR");
+          } catch (error) {
+            console.error("Failed to post comment:", error);
+            core.setFailed("Failed to post comment to PR");
+          }
