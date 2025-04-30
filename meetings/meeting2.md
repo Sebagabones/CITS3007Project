@@ -28,9 +28,8 @@ We kinda forgot to take minutes here, however these are the things we left the m
 - Work on fixing/resolving the reviews left on this PR https://github.com/Sebagabones/CITS3007Project/pull/39
 - Work on getting test coverage of the functions in the project brief
 
-
 ### Henry:
-- Threat modelling (work out what it is, what you need to do, and do it)
+- Threat modelling (work out what it is, what you need to do, and do it) - probably try do a report or something, think about extra things to do, but making it easy for Peter to implement tests would be a good start
 - Implement documentation markup for this function https://github.com/Sebagabones/CITS3007Project/pull/39
 - Help Peter with resolving open reviews here https://github.com/Sebagabones/CITS3007Project/pull/39
 
