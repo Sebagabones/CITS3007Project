@@ -11,6 +11,7 @@ We kinda forgot to take minutes here, however these are the things we left the m
 - Think about writing to files securely
 - Find libraries for sanitisation
 - get better soon o7
+- once you are better if you can finish off `account_print_summary` and add doxygen comments to the file [here](https://github.com/Sebagabones/CITS3007Project/pull/41#issuecomment-2841974673 ) that would be epicccc
 
 ### Seb:
 - Also think about how to write to files safely - brainstorm with Alec to come up with a solution
