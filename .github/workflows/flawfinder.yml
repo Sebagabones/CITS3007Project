@@ -85,18 +85,19 @@ jobs:
               summary += "\n";
             }
 
-            summary += "#### Details (up to 20 issues)\n\n";
+            summary += "#### Details (up to 30 issues)\n\n";
 
-            results.slice(0, 20).forEach((r, i) => {
+            results.slice(0, 30).forEach((r, i) => {
               const msg = r.message?.text || 'No message';
               const loc = r.locations?.[0]?.physicalLocation?.artifactLocation?.uri || 'unknown';
               const line = r.locations?.[0]?.physicalLocation?.region?.startLine || '?';
               const level = r.level ? `[${r.level}]` : '';
-              summary += `- **${level}** — **${loc}:${line}** — ${msg}\n`;
+              const snippet = r.locations?.[0]?.physicalLocation?.region?.snippet?.text || '?';
+              summary += `- **${level}** — **${loc}:${line}** — ${msg}\n**Snippet:** ${"```"}c\n${snippet}\n${"```"}`;
             });
 
-            if (results.length > 20) {
-              summary += `\n... and ${results.length - 20} more issue(s). Consider addressing these security concerns.\n`;
+            if (results.length > 30) {
+              summary += `\n... and ${results.length - 30} more issue(s). Consider addressing these security concerns.\n`;
             }
           }
 
