@@ -129,7 +129,7 @@ void account_set_email(account_t *acc, const char *new_email)
 	}
 
 	// Safe copy into the email field
-	strncpy(acc->email, new_email, EMAIL_LENGTH); // safe as new_email must be null-terminated according to preconditions
+	strncpy(acc->email, new_email, EMAIL_LENGTH); // safe as new_email must be valid & null-terminated according to preconditions
 	acc->email[EMAIL_LENGTH - 1] = '\0';          // Ensure null-termination
 }
 
@@ -263,17 +263,17 @@ account_t *account_create(const char *userid, const char *plaintext_password,
 	actptr->account_id = generate_account_id();
 
 	// Copy values into struct (make sure to handle null-termination)
-	strncpy(actptr->userid, userid, USER_ID_LENGTH); //safe as userid is always null-terminated according to precondtions
+	strncpy(actptr->userid, userid, USER_ID_LENGTH); //safe as userid is always valid &  null-terminated according to precondtions
 	actptr->userid[USER_ID_LENGTH - 1] = '\0';
 
 	hash_password(plaintext_password, actptr->password_hash, HASH_LENGTH);
 	// Assuming hash_password writes the result into the buffer and handles
 	// null-termination
 
-	strncpy(actptr->email, email, EMAIL_LENGTH); //safe as email is null-terminated according to precondtions
+	strncpy(actptr->email, email, EMAIL_LENGTH); //safe as email is valid & null-terminated according to precondtions
 	actptr->email[EMAIL_LENGTH - 1] = '\0';
 
-	strncpy(actptr->birthdate, final_birthdate, BIRTHDATE_LENGTH); //safe as birthdate is null-terminated according to preconditions
+	strncpy(actptr->birthdate, final_birthdate, BIRTHDATE_LENGTH); //safe as birthdate is valid & null-terminated according to preconditions
 	actptr->birthdate[BIRTHDATE_LENGTH - 1] = '\0';
 
 	// Set defaults
