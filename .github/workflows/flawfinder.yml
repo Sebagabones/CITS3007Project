@@ -38,7 +38,7 @@ jobs:
             echo '{"runs": [{"results": []}]}' > flawfinder_results.sarif
           else
             # Run flawfinder with SARIF output
-            flawfinder --error-level=10 --sarif $FILES_TO_SCAN > flawfinder_results.sarif
+            flawfinder --context --error-level=10 --sarif $FILES_TO_SCAN > flawfinder_results.sarif
             echo "Flawfinder scan completed"
           fi
 
@@ -66,7 +66,7 @@ jobs:
           let summary = `### Flawfinder Scan Results (${results.length} issue${results.length !== 1 ? 's' : ''})\n\n`;
 
           if (results.length === 0) {
-            summary += `No issues found at or above the configured error level.\n${"```"}c\ntest()\n${"```"}`;
+            summary += `No issues found at or above the configured error level.\n`;
           } else {
             // Group issues by severity level if available
             const byLevel = {};
