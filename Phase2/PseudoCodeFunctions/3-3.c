@@ -128,7 +128,7 @@ void account_set_email(account_t *acc, const char *new_email)
 		return; // Not sure how to handle here?
 	}
 
-	// Safe copy into the email field
+	// Safe copy into the email field - this is safe as new_email must be null-terminated
 	strncpy(acc->email, new_email, EMAIL_LENGTH);
 	acc->email[EMAIL_LENGTH - 1] = '\0'; // Ensure null-termination
 }
