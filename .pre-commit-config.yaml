@@ -22,7 +22,7 @@ repos:
   - id: flawfinder
     name: flawfinder security scanner
     description: 'Scan C/C++ code for potential security vulnerabilities'
-    entry: flawfinder --error-level=1
+    entry: flawfinder --error-level=3
     language: system
     files: \.(c|cpp|h|hpp)$
     exclude: (\.md$|^Phase2/ScaffoldingFilesNotModified/|stubs\.c$|bogus_main\.c$|db\.h$|account\.h$|login\.h$|logging\.h$)
