@@ -93,7 +93,7 @@ jobs:
               const line = r.locations?.[0]?.physicalLocation?.region?.startLine || '?';
               const level = r.level ? `[${r.level}]` : '';
               const snippet = r.locations?.[0]?.physicalLocation?.region?.snippet?.text || '?';
-              summary += `- **${level}** — **${loc}:${line}** — ${msg}\n**Snippet:** ${"```"}c\n${snippet}\n${"```"}`;
+              summary += `- **${level}** — **${loc}:${line}** — ${msg}\n**Snippet:**\n${"```"}c\n${snippet}\n${"```"}\n\n`;
             });
 
             if (results.length > 30) {
