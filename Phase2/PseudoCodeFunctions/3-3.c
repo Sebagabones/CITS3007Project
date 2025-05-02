@@ -263,17 +263,17 @@ account_t *account_create(const char *userid, const char *plaintext_password,
 	actptr->account_id = generate_account_id();
 
 	// Copy values into struct (make sure to handle null-termination)
-	strncpy(actptr->userid, userid, USER_ID_LENGTH);
+	strncpy(actptr->userid, userid, USER_ID_LENGTH); //userid is always null-terminated according to precondtions
 	actptr->userid[USER_ID_LENGTH - 1] = '\0';
 
 	hash_password(plaintext_password, actptr->password_hash, HASH_LENGTH);
 	// Assuming hash_password writes the result into the buffer and handles
 	// null-termination
 
-	strncpy(actptr->email, email, EMAIL_LENGTH);
+	strncpy(actptr->email, email, EMAIL_LENGTH); //email is null-terminated according to precondtions
 	actptr->email[EMAIL_LENGTH - 1] = '\0';
 
-	strncpy(actptr->birthdate, final_birthdate, BIRTHDATE_LENGTH);
+	strncpy(actptr->birthdate, final_birthdate, BIRTHDATE_LENGTH); //birthdate is null-terminated according to preconditions
 	actptr->birthdate[BIRTHDATE_LENGTH - 1] = '\0';
 
 	// Set defaults
