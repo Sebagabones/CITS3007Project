@@ -4,9 +4,9 @@
 #ifdef ALTERNATE_MAIN
 int main()
 {
-	const char printString[] = "an alternative implementation of main";
+	const char printString[] = "an alternative implementation of main\n";
 
-	printf("%s\n", printString);
+	puts(printSring);
 
 	return(0);
 }
