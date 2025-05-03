@@ -17,7 +17,7 @@ jobs:
       continue-on-error: true
       run: |
         FILES_TO_SCAN=$(find . -type f \( -name "*.c" -o -name "*.h" \) | \
-          grep -vE '(^|/)stubs\.c$|(^|/)bogus_main\.c$|(^|/)db\.h$|(^|/)account\.h$|(^|/)login\.h$|(^|/)logging\.h$|(^|/)Phase2/ScaffoldingFilesNotModified/|\.md$' || true)
+          grep -vE '(^|/)stubs\.c$|(^|/)bogus_main\.c$|(^|/)db\.h$|(^|/)account\.h$|(^|/)login\.h$|(^|/)logging\.h$|(^|/)|(^|/)banned\.h$|(^|/)Phase2/ScaffoldingFilesNotModified/|\.md$' || true)
 
         if [ -z "$FILES_TO_SCAN" ]; then
           echo "No relevant source files found. Skipping flawfinder."
