@@ -197,9 +197,12 @@ bool account_is_expired(const account_t *acc)
 /* - Can also check if email is being truncated (not currently doing that) */
 
 /**
- * Creates a new user account with the given parameters.
- *
  * Creates a new user account with the given parameters (and defaults for any other fields).
+ *
+ * This function initializes a new dynamically allocated account structure
+ * with the given user ID, hash information derived from the specified plaintext password, email address,
+ * and birthdate. Other fields are set to their default values.
+ * On success, returns a pointer to the newly created account structure.
  * On error, returns NULL and logs an appropriate error message using log_message.
  * The caller is responsible for freeing any allocated memory with `account_free`.
  *
