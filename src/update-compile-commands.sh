@@ -22,6 +22,8 @@ if git diff --cached --name-only | grep -q -E '(Makefile|src/.*\.(c|cpp|h|hpp)|C
   bear -- make all no-sanitize debug thread full -j $logicalCpuCount
   git add compile_commands.json
   make clean
+  exit 0
 else
   echo "No relevant files changed, skipping compile_commands.json update"
 fi
+exit 0

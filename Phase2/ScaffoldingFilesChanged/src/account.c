@@ -1,12 +1,13 @@
-#define _BSD_SOURCE
 #define _DEFAULT_SOURCE
-#include "account.h"
-#include "logging.h"
 
-#include <strings.h>
-#include <string.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <strings.h>
+
+#include "account.h"
 #include "banned.h"
+#include "logging.h"
 //We may be meant to make our own .h file? idk
 //chat are we meant to do this?
 //also idk it wouldnt compile if i didnt add logging.h but i think im doing something wrong this so /shrug
@@ -37,7 +38,7 @@ account_t *account_create(const char *userid, const char *plaintext_password,
 /**
  * Free memory and resources used by the account
  *
- * Releases any memory associated with an account.
+ * Clears and releases any memory associated with an account.
  *
  * @param acc A pointer returned by `account_create`, or `NULL`.
  */

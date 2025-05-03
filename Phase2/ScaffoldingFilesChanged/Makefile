@@ -36,7 +36,7 @@ SRC_DIRS := $(shell find $(SRC_DIR) -type d)
 INC_FLAGS := $(addprefix -I, $(SRC_DIRS))
 
 # get compiler flags for installed libraries using pkg-config.
-PKG_DEPS := $(shell cat libraries.txt | grep -v "^\#" | xargs)
+PKG_DEPS := $(shell cat libraries.txt | grep -v "^#" | xargs)
 
 # Set PKG_CFLAGS to empty if no dependencies are found, otherwise
 # use pkg-config to get the compiler flags for the dependencies
@@ -92,4 +92,3 @@ clean:
 
 # Include automatically generated dependency files (.d)
 -include $(OBJ_FILES:.o=.d)
-
