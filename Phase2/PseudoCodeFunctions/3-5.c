@@ -1,3 +1,21 @@
+/**
+ * @brief login_result_t  handles the login process
+ * 
+ * @param username		The username of the account logging in
+ * @param password		The password being entered
+ * @param ip			The IP address of user logging in
+ * @param login_time	The server time currently
+ * @param output		The file descriptor for message sent to client/user
+ * @param session		The Pointer to the session structure. Used to populate when login successfule
+ *
+ * @return login_result_t
+ *		- LOGIN_SUCCESS: Login successful
+ *		- LOGIN_FAIL_USER_NOT_FOUND: Account not found
+ *		- LOGIN_FAIL_ACCOUNT_BANNED: Account is banned
+ *		- LOGIN_FAIL_ACCOUNT_EXPIRED: Account is expired
+ *		- LOGIN_FAIL_BAD_PASSWORD: Password is incorrect
+ *		- LOGIN_FAIL_INTERNAL_ERROR: Too many login tries or Memory allocation failure
+ */
 login_result_t handle_login(const char *username, const char *password, ip_t ip, time_t login_time, int output, login_session_t *session)
 {
 	//Allocate memory from heap
@@ -10,7 +28,10 @@ login_result_t handle_login(const char *username, const char *password, ip_t ip,
 		return(LOGIN_FAIL_INTERNAL_ERROR);
 	}
 
-	//The account_lookup_by_userid() function returns a boolean true or false depending on if there was an account found matching the given username, user is provided so that if an account is found the data is copied to the heap
+	/**
+	 * @brief Retrieve account information for the username
+	 * Data is copied into 'user' when information is found
+	 */
 	if (!account_lookup_by_userid(username, user))
 	{
 		log_message(LOG_INFO, "User %s not found", username);
@@ -19,9 +40,11 @@ login_result_t handle_login(const char *username, const char *password, ip_t ip,
 		return(LOGIN_FAIL_USER_NOT_FOUND);
 	}
 
-	//Banned or Expired Accounts
+	// === Banned or Expired Accounts ===
 
-	//Check if current time is before unban time
+	/**
+	 * @brief Check if the account for the user is banned
+	 */
 	if (account_is_banned(user))
 	{
 		log_message(LOG_INFO, "User %s is banned", username);
@@ -30,7 +53,9 @@ login_result_t handle_login(const char *username, const char *password, ip_t ip,
 		return(LOGIN_FAIL_ACCOUNT_BANNED);
 	}
 
-	//Check if account is expired (current time is after expiry and account is not unlimited)
+	/**
+	 * @brief Check if the account for the user is expired
+	 */
 	if (account_is_expired(user))
 	{
 		log_message(LOG_INFO, "User %s's account is expired", username);
@@ -39,7 +64,11 @@ login_result_t handle_login(const char *username, const char *password, ip_t ip,
 		return(LOGIN_FAIL_ACCOUNT_EXPIRED);
 	}
 
-	//Login Failure Count
+	// === Too Many Attempts ===
+
+	/**
+	 * @brief Checks if the failed login attempts exceed 10 attempts
+	 */
 	if (user->login_fail_count >= 10)
 	{
 		log_message(LOG_WARN, "Too many login attempts"); //This could indicate a brute force attack but as someone that has to try at least 4 passwords before remembering which one I used a warn instead of error seems reasonable
@@ -48,8 +77,12 @@ login_result_t handle_login(const char *username, const char *password, ip_t ip,
 		return(LOGIN_FAIL_INTERNAL_ERROR);
 	}
 
-	//Check Password
-	//If Password Wrong
+	// === Password Check === 
+
+	/** 
+	 * @brief Checks if the password is correct
+	 * If password wrong increment count for attempts
+	 */
 	if (!account_validate_password(user, password))
 	{
 		account_record_login_failure(user); //record unsuccessful login
