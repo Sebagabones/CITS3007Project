@@ -1,6 +1,6 @@
 /**
  * @brief login_result_t  handles the login process
- * 
+ *
  * @param username		The username of the account logging in
  * @param password		The password being entered
  * @param ip			The IP address of user logging in
@@ -77,9 +77,9 @@ login_result_t handle_login(const char *username, const char *password, ip_t ip,
 		return(LOGIN_FAIL_INTERNAL_ERROR);
 	}
 
-	// === Password Check === 
+	// === Password Check ===
 
-	/** 
+	/**
 	 * @brief Checks if the password is correct
 	 * If password wrong increment count for attempts
 	 */
@@ -92,7 +92,7 @@ login_result_t handle_login(const char *username, const char *password, ip_t ip,
 		return(LOGIN_FAIL_BAD_PASSWORD);
 	}
 
-	// === Login Successful === 
+	// === Login Successful ===
 
 	/**
 	 * @brief Reset failure count when login successful
@@ -100,7 +100,6 @@ login_result_t handle_login(const char *username, const char *password, ip_t ip,
 	account_record_login_success(user, client_ip); //record successful login with ip and reset unsuccessful logins (assuming both will be done in the function)
 	log_message(LOG_INFO, "User %s logged in successfully", username);
 	//Write message to file descriptor: Log in Successful
-
 
 	// === Populate the Session Data ===
 	session->account_id		 = user->account_id;
