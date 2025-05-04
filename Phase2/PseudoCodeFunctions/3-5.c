@@ -28,10 +28,8 @@ login_result_t handle_login(const char *username, const char *password, ip_t ip,
 		return(LOGIN_FAIL_INTERNAL_ERROR);
 	}
 
-	/**
-	 * @brief Retrieve account information for the username
-	 * Data is copied into 'user' when information is found
-	 */
+	//Retrieve account information for the username
+	//Data is copied into 'user' when information is found
 	if (!account_lookup_by_userid(username, user))
 	{
 		log_message(LOG_INFO, "User %s not found", username);
@@ -42,9 +40,8 @@ login_result_t handle_login(const char *username, const char *password, ip_t ip,
 
 	// === Banned or Expired Accounts ===
 
-	/**
-	 * @brief Check if the account for the user is banned
-	 */
+	
+	//Check if the account for the user is banned
 	if (account_is_banned(user))
 	{
 		log_message(LOG_INFO, "User %s is banned", username);
@@ -53,9 +50,7 @@ login_result_t handle_login(const char *username, const char *password, ip_t ip,
 		return(LOGIN_FAIL_ACCOUNT_BANNED);
 	}
 
-	/**
-	 * @brief Check if the account for the user is expired
-	 */
+	//Check if the account for the user is expired
 	if (account_is_expired(user))
 	{
 		log_message(LOG_INFO, "User %s's account is expired", username);
@@ -66,9 +61,7 @@ login_result_t handle_login(const char *username, const char *password, ip_t ip,
 
 	// === Too Many Attempts ===
 
-	/**
-	 * @brief Checks if the failed login attempts exceed 10 attempts
-	 */
+	//Checks if the failed login attempts exceed 10 attempts
 	if (user->login_fail_count >= 10)
 	{
 		log_message(LOG_WARN, "Too many login attempts"); //This could indicate a brute force attack but as someone that has to try at least 4 passwords before remembering which one I used a warn instead of error seems reasonable
@@ -79,10 +72,9 @@ login_result_t handle_login(const char *username, const char *password, ip_t ip,
 
 	// === Password Check ===
 
-	/**
-	 * @brief Checks if the password is correct
-	 * If password wrong increment count for attempts
-	 */
+	
+	//Checks if the password is correct
+	//If password wrong increment count for attempts
 	if (!account_validate_password(user, password))
 	{
 		account_record_login_failure(user); //record unsuccessful login
@@ -94,9 +86,7 @@ login_result_t handle_login(const char *username, const char *password, ip_t ip,
 
 	// === Login Successful ===
 
-	/**
-	 * @brief Reset failure count when login successful
-	 */
+	//Reset failure count when login successful
 	account_record_login_success(user, client_ip); //record successful login with ip and reset unsuccessful logins (assuming both will be done in the function)
 	log_message(LOG_INFO, "User %s logged in successfully", username);
 	//Write message to file descriptor: Log in Successful
