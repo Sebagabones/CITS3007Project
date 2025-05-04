@@ -8,7 +8,7 @@
 #include "account.h"
 #include "banned.h"
 #include "logging.h"
-//We may be meant to make our own .h file? idk
+//We may be meant to make our own .h file? idek
 //chat are we meant to do this?
 //also idk it wouldnt compile if i didnt add logging.h but i think im doing something wrong this so /shrug
 
