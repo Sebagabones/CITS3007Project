@@ -32,7 +32,7 @@ login_result_t handle_login(const char *username, const char *password, ip_t ip,
 	//Data is copied into 'user' when information is found
 	if (!account_lookup_by_userid(username, user))
 	{
-		log_message(LOG_INFO, "User %s not found", username);
+		log_message(LOG_INFO, "User is not found");
 
 		//Write message to file descriptor: User doesn't exist
 		return(LOGIN_FAIL_USER_NOT_FOUND);
@@ -44,7 +44,7 @@ login_result_t handle_login(const char *username, const char *password, ip_t ip,
 	//Check if the account for the user is banned
 	if (account_is_banned(user))
 	{
-		log_message(LOG_INFO, "User %s is banned", username);
+		log_message(LOG_INFO, "User is banned");
 
 		//Write message to file descriptor: Account is Banned
 		return(LOGIN_FAIL_ACCOUNT_BANNED);
@@ -53,7 +53,7 @@ login_result_t handle_login(const char *username, const char *password, ip_t ip,
 	//Check if the account for the user is expired
 	if (account_is_expired(user))
 	{
-		log_message(LOG_INFO, "User %s's account is expired", username);
+		log_message(LOG_INFO, "User account is expired");
 
 		//Write message to file descriptor: Account is Expired
 		return(LOGIN_FAIL_ACCOUNT_EXPIRED);
@@ -78,7 +78,7 @@ login_result_t handle_login(const char *username, const char *password, ip_t ip,
 	if (!account_validate_password(user, password))
 	{
 		account_record_login_failure(user); //record unsuccessful login
-		log_message(LOG_INFO, "User %s entered wrong password", username);
+		log_message(LOG_INFO, "User entered wrong password");
 
 		//Write message to file descriptor: Password wrong
 		return(LOGIN_FAIL_BAD_PASSWORD);
@@ -88,7 +88,7 @@ login_result_t handle_login(const char *username, const char *password, ip_t ip,
 
 	//Reset failure count when login successful
 	account_record_login_success(user, client_ip); //record successful login with ip and reset unsuccessful logins (assuming both will be done in the function)
-	log_message(LOG_INFO, "User %s logged in successfully", username);
+	log_message(LOG_INFO, "User logged in successfully");
 	//Write message to file descriptor: Log in Successful
 
 	// === Populate the Session Data ===
