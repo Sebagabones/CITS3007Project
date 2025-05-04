@@ -92,15 +92,21 @@ login_result_t handle_login(const char *username, const char *password, ip_t ip,
 		return(LOGIN_FAIL_BAD_PASSWORD);
 	}
 
-	//If password correct
+	// === Login Successful === 
+
+	/**
+	 * @brief Reset failure count when login successful
+	 */
 	account_record_login_success(user, client_ip); //record successful login with ip and reset unsuccessful logins (assuming both will be done in the function)
 	log_message(LOG_INFO, "User %s logged in successfully", username);
 	//Write message to file descriptor: Log in Successful
 
-	//populate session struct with username, login time and session end time
+
+	// === Populate the Session Data ===
 	session->account_id		 = user->account_id;
 	session->session_start	 = login_time;
 	session->expiration_time = login_time + 86400;  //Maximum session length 24 hours, usually session closes when closing game
 
+	// === Login Successful Return ===
 	return(LOGIN_SUCCESS);
 }
