@@ -40,10 +40,10 @@ repos:
         exclude: (\.md$|^Phase2/ScaffoldingFilesNotModified/|stubs\.c$|bogus_main\.c$|db\.h$|account\.h$|login\.h$|logging\.h$|banned\.h$)
         args: ["-c", ".github/workflows/uncrustify.cfg", "--replace", "--no-backup"]
       - id: clang-tidy
-        exclude: (\.md$|^Phase2/ScaffoldingFilesNotModified/|stubs\.c$|bogus_main\.c$|db\.h$|account\.h$|login\.h$|logging\.h$|banned\.h$)
+        exclude: (\.md$|^Phase2/ScaffoldingFilesNotModified/|^Phase2/PseudoCodeFunctions/|stubs\.c$|bogus_main\.c$|db\.h$|account\.h$|login\.h$|logging\.h$|banned\.h$)
         args: ["--fix-errors", "-warnings-as-errors=*"]
       - id: cppcheck
-        exclude: (\.md$|^Phase2/ScaffoldingFilesNotModified/|stubs\.c$|bogus_main\.c$|db\.h$|account\.h$|login\.h$|logging\.h$|banned\.h$)
+        exclude: (\.md$|^Phase2/ScaffoldingFilesNotModified/|^Phase2/PseudoCodeFunctions/|stubs\.c$|bogus_main\.c$|db\.h$|account\.h$|login\.h$|logging\.h$|banned\.h$)
         args: ["--check-level=exhaustive"]
 -   repo: https://github.com/cpplint/cpplint
     rev: 2.0.2  # You can use the latest version or a specific commit hash
