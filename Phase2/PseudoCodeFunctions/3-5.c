@@ -19,7 +19,6 @@
 login_result_t handle_login(const char *username, const char *password, ip_t ip, time_t login_time, int output, login_session_t *session)
 {
 	//Allocate memory from the heap
-	// henry remove this line and test precommits
 	account_t *user = malloc(sizeof(account_t));
 
 	if (user == NULL)
