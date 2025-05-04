@@ -7,3 +7,5 @@ package.json
 .projectile
 .ccls
 .dir-locals.el
+Phase2/ScaffoldingFilesChanged/.ccls-root
+compile_commands.json

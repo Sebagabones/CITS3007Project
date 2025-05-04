@@ -17,7 +17,7 @@ executable.
 The executable will be `bin/app` by default, but you can change this by supplying
 a different value for the `TARGET` variable at the command line:
 
-``` sh
+```
 $ make TARGET=my-executable all
 ```
 
@@ -38,7 +38,7 @@ select which one to compile.
 For instance: one such alternative implementation is in `src/alternate_main`. Delete
 `src/bogus_main.c`, and then run
 
-``` sh
+```
 $ make CFLAGS='-DALTERNATE_MAIN' clean all
 ```
 
@@ -66,7 +66,7 @@ need:
 
   Running
 
-  ``` sh
+  ```
   $ make install-dependencies
   ```
 
