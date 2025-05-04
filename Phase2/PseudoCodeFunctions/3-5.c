@@ -96,6 +96,6 @@ login_result_t handle_login(const char *username, const char *password, ip_t ip,
 	session->session_start	 = login_time;
 	session->expiration_time = login_time + 86400;  //Maximum session length 24 hours, usually session closes when closing game
 
-	// === Login Successful Return ===
+	// === Login Successful Return ==
 	return(LOGIN_SUCCESS);
 }
