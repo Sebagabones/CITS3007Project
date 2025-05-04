@@ -26,7 +26,7 @@ sub fix_c_prog {
     if ($line =~ /^\s*#\s*include\b/) {
       if ($line =~ /["<]banned\.h[">]/) {
         $banned_was_included = 1;
-        next;
+        # next;
       }
       push @include_line_idxs, $idx;
     }
@@ -66,5 +66,3 @@ if ($@) {
   warn "Exception caught: $@\n";
   exit 1;
 }
-
-
