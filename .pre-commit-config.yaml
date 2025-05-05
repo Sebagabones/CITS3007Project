@@ -45,10 +45,8 @@ repos:
       - id: cppcheck
         exclude: (\.md$|^Phase2/ScaffoldingFilesNotModified/|^Phase2/PseudoCodeFunctions/|stubs\.c$|bogus_main\.c$|db\.h$|account\.h$|login\.h$|logging\.h$|banned\.h$)
         args: ["--check-level=exhaustive"]
--   repo: https://github.com/cpplint/cpplint
-    rev: 2.0.2  # You can use the latest version or a specific commit hash
-    hooks:
-    -   id: cpplint
+      - id: cpplint
         exclude: (\.md$|^Phase2/ScaffoldingFilesNotModified/|stubs\.c$|bogus_main\.c$|db\.h$|account\.h$|login\.h$|logging\.h$|banned\.h$)
-        args:
-          - --filter=+build,-legal,+readablity,+runtime,-whitespace/indent,-build/include_alpha,-whitespace/braces,-whitespace/comments,-whitespace/newline,-readability/braces,-whitespace/tab,-whitespace/line_length,-build/include_subdir
+        args: ["--filter=+build,-legal,+readablity,+runtime,-whitespace/indent,-build/include_alpha,-whitespace/braces,-whitespace/comments,-whitespace/newline,-readability/braces,-whitespace/tab,-whitespace/line_length,-build/include_subdir"]
+      - id: include-what-you-use
+        exclude: (\.md$|^Phase2/ScaffoldingFilesNotModified/|stubs\.c$|bogus_main\.c$|db\.h$|account\.h$|login\.h$|logging\.h$|banned\.h$)

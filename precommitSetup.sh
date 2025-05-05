@@ -1,4 +1,3 @@
-#!/usr/bin/env sh
 #!/bin/bash
 
 # Script to install prerequisites, dependencies for pre-commit hooks, and set Git username
@@ -25,6 +24,20 @@ pipx install pre-commit
 echo "Ensuring pipx is in PATH..."
 pipx ensurepath
 
+# Set up pre-commit for the current repository
+echo "Setting up pre-commit in the repository..."
+# Export the new PATH to the current session to ensure pre-commit is found
+export PATH="$PATH:$HOME/.local/bin"
+
+# Initialize pre-commit if in a git repository
+if [ -d ".git" ]; then
+    # Install pre-commit hooks in the current repository
+    pre-commit install
+    echo "Pre-commit hooks installed successfully!"
+else
+    echo "Not in a git repository - skipping pre-commit installation."
+fi
+
 # Install dependencies for pre-commit hooks
 echo "===== Installing Pre-commit Hook Dependencies ====="
 
@@ -35,10 +48,10 @@ sudo apt install -y flawfinder uncrustify cppcheck clang-tidy
 # Install cpplint
 echo "Installing cpplint..."
 pipx install cpplint
-pipx ensurepath
 
 echo "Prerequisites installation complete!"
 echo "====================================="
+
 # Check if the current directory is a Git repository
 if [ ! -d ".git" ]; then
     echo "Warning: Current directory is not a Git repository."
@@ -68,4 +81,16 @@ echo "This change only affects the current repository."
 echo -e "\nCurrent Git configuration for this repository:"
 git config --local --get user.name
 
-echo -e "\nSetup complete! You may need to restart your terminal for all changes to take effect."
+# Source the current shell configuration to reload PATH
+echo -e "\nReloading shell environment..."
+if [ -f "$HOME/.bashrc" ]; then
+    source "$HOME/.bashrc"
+elif [ -f "$HOME/.zshrc" ]; then
+    source "$HOME/.zshrc"
+fi
+
+# Export the new PATH to the current session
+export PATH="$PATH:$HOME/.local/bin"
+
+echo -e "\nSetup complete! Environment has been reloaded."
+echo "If you encounter any 'command not found' errors, you may need to manually restart your terminal."
