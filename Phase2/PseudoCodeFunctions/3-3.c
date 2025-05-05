@@ -290,38 +290,38 @@ account_t *account_create(const char *userid, const char *plaintext_password,
 	return(actptr);
 }
 
-
 /**
- * 
  *
- * 
+ *
+ *
  *
  * @param acct
  * @param fd
  *
- * @return 
+ * @return
  */
 bool account_print_summary(const account_t *acct, int fd)
-{	// Caller is required to make sure fd is valid + writeable
+{                      // Caller is required to make sure fd is valid + writeable
+	char  buffer[256]; // Buffer to hold the formatted string
+	char *string = "Account ID: %d\nUserID: %s\nEmail: %s\nBirthdate: %s\n";
 
-    char buffer[256]; // Buffer to hold the formatted string
-    char *string = "Account ID: %d\nUserID: %s\nEmail: %s\nBirthdate: %s\n";
+	int bytes_written = snprintf(buffer, sizeof(buffer), "%s", string);
 
-    int bytes_written = snprintf(buffer, sizeof(buffer), "%s", string);
+	if (bytes_written < 0 || bytes_written >= sizeof(buffer))
+	{
+		log_message(LOG_ERROR, "account_print_summary: Failed to format account summary.");
 
-    if (bytes_written < 0 || bytes_written >= sizeof(buffer))
-    {
-        log_message(LOG_ERROR, "account_print_summary: Failed to format account summary.");
-        return false;
-    }
+		return(false);
+	}
 
-    ssize_t result = write(fd, buffer, bytes_written);
-    if (result == -1)
-    {
-        log_message(LOG_ERROR, "account_print_summary: Failed to write to file descriptor.");
-        return false;
-    }
+	ssize_t result = write(fd, buffer, bytes_written);
 
-    return true;
+	if (result == -1)
+	{
+		log_message(LOG_ERROR, "account_print_summary: Failed to write to file descriptor.");
+
+		return(false);
+	}
+
+	return(true);
 }
-
