@@ -16,11 +16,11 @@
             "-O",
             "-g",
             "-o",
-            "build/no-sanitize/stubs.o",
-            "src/stubs.c"
+            "build/no-sanitize/bogus_main.o",
+            "src/bogus_main.c"
         ],
         "directory": "/home/vagrant/project/CITS3007Project/src",
-        "file": "src/stubs.c"
+        "file": "src/bogus_main.c"
     },
     {
         "arguments": [
@@ -36,11 +36,38 @@
             "-fstack-protector-all",
             "-mshstk",
             "-Isrc",
-            "-g3",
-            "-ggdb",
-            "-O0",
+            "-fsanitize=thread",
+            "-fno-omit-frame-pointer",
+            "-O1",
+            "-g",
             "-o",
-            "build/debug/stubs.o",
+            "build/thread/bogus_main.o",
+            "src/bogus_main.c"
+        ],
+        "directory": "/home/vagrant/project/CITS3007Project/src",
+        "file": "src/bogus_main.c"
+    },
+    {
+        "arguments": [
+            "gcc",
+            "-c",
+            "-std=c11",
+            "-pedantic-errors",
+            "-Wall",
+            "-Wextra",
+            "-Wshadow",
+            "-Wconversion",
+            "-funsigned-char",
+            "-fstack-protector-all",
+            "-mshstk",
+            "-Isrc",
+            "-fsanitize=undefined,float-divide-by-zero,float-cast-overflow,bounds,null,return,vptr",
+            "-fno-sanitize-recover=all",
+            "-fno-omit-frame-pointer",
+            "-O1",
+            "-g",
+            "-o",
+            "build/full/stubs.o",
             "src/stubs.c"
         ],
         "directory": "/home/vagrant/project/CITS3007Project/src",
@@ -65,11 +92,63 @@
             "-O1",
             "-g",
             "-o",
-            "build/thread/login.o",
+            "build/thread/alternate_main.o",
+            "src/alternate_main.c"
+        ],
+        "directory": "/home/vagrant/project/CITS3007Project/src",
+        "file": "src/alternate_main.c"
+    },
+    {
+        "arguments": [
+            "gcc",
+            "-c",
+            "-std=c11",
+            "-pedantic-errors",
+            "-Wall",
+            "-Wextra",
+            "-Wshadow",
+            "-Wconversion",
+            "-funsigned-char",
+            "-fstack-protector-all",
+            "-mshstk",
+            "-Isrc",
+            "-fsanitize=undefined,float-divide-by-zero,float-cast-overflow,bounds,null,return,vptr",
+            "-fno-sanitize-recover=all",
+            "-fno-omit-frame-pointer",
+            "-O1",
+            "-g",
+            "-o",
+            "build/full/login.o",
             "src/login.c"
         ],
         "directory": "/home/vagrant/project/CITS3007Project/src",
         "file": "src/login.c"
+    },
+    {
+        "arguments": [
+            "gcc",
+            "-c",
+            "-std=c11",
+            "-pedantic-errors",
+            "-Wall",
+            "-Wextra",
+            "-Wshadow",
+            "-Wconversion",
+            "-funsigned-char",
+            "-fstack-protector-all",
+            "-mshstk",
+            "-Isrc",
+            "-fsanitize=undefined,float-divide-by-zero,float-cast-overflow,bounds,null,return,vptr",
+            "-fno-sanitize-recover=all",
+            "-fno-omit-frame-pointer",
+            "-O1",
+            "-g",
+            "-o",
+            "build/full/account.o",
+            "src/account.c"
+        ],
+        "directory": "/home/vagrant/project/CITS3007Project/src",
+        "file": "src/account.c"
     },
     {
         "arguments": [
@@ -96,6 +175,32 @@
         ],
         "directory": "/home/vagrant/project/CITS3007Project/src",
         "file": "src/account.c"
+    },
+    {
+        "arguments": [
+            "gcc",
+            "-c",
+            "-std=c11",
+            "-pedantic-errors",
+            "-Wall",
+            "-Wextra",
+            "-Wshadow",
+            "-Wconversion",
+            "-funsigned-char",
+            "-fstack-protector-all",
+            "-mshstk",
+            "-Isrc",
+            "-fsanitize=undefined,float-divide-by-zero,float-cast-overflow,bounds,null,return,vptr",
+            "-fno-sanitize-recover=all",
+            "-fno-omit-frame-pointer",
+            "-O1",
+            "-g",
+            "-o",
+            "build/full/alternate_main.o",
+            "src/alternate_main.c"
+        ],
+        "directory": "/home/vagrant/project/CITS3007Project/src",
+        "file": "src/alternate_main.c"
     },
     {
         "arguments": [
@@ -162,79 +267,6 @@
             "-fstack-protector-all",
             "-mshstk",
             "-Isrc",
-            "-fsanitize=undefined,float-divide-by-zero,float-cast-overflow,bounds,null,return,vptr",
-            "-fno-sanitize-recover=all",
-            "-fno-omit-frame-pointer",
-            "-O1",
-            "-g",
-            "-o",
-            "build/full/stubs.o",
-            "src/stubs.c"
-        ],
-        "directory": "/home/vagrant/project/CITS3007Project/src",
-        "file": "src/stubs.c"
-    },
-    {
-        "arguments": [
-            "gcc",
-            "-c",
-            "-std=c11",
-            "-pedantic-errors",
-            "-Wall",
-            "-Wextra",
-            "-Wshadow",
-            "-Wconversion",
-            "-funsigned-char",
-            "-fstack-protector-all",
-            "-mshstk",
-            "-Isrc",
-            "-O",
-            "-g",
-            "-o",
-            "build/no-sanitize/login.o",
-            "src/login.c"
-        ],
-        "directory": "/home/vagrant/project/CITS3007Project/src",
-        "file": "src/login.c"
-    },
-    {
-        "arguments": [
-            "gcc",
-            "-c",
-            "-std=c11",
-            "-pedantic-errors",
-            "-Wall",
-            "-Wextra",
-            "-Wshadow",
-            "-Wconversion",
-            "-funsigned-char",
-            "-fstack-protector-all",
-            "-mshstk",
-            "-Isrc",
-            "-g3",
-            "-ggdb",
-            "-O0",
-            "-o",
-            "build/debug/bogus_main.o",
-            "src/bogus_main.c"
-        ],
-        "directory": "/home/vagrant/project/CITS3007Project/src",
-        "file": "src/bogus_main.c"
-    },
-    {
-        "arguments": [
-            "gcc",
-            "-c",
-            "-std=c11",
-            "-pedantic-errors",
-            "-Wall",
-            "-Wextra",
-            "-Wshadow",
-            "-Wconversion",
-            "-funsigned-char",
-            "-fstack-protector-all",
-            "-mshstk",
-            "-Isrc",
             "-g3",
             "-ggdb",
             "-O0",
@@ -259,35 +291,13 @@
             "-fstack-protector-all",
             "-mshstk",
             "-Isrc",
+            "-fsanitize=undefined,address,leak",
+            "-fno-sanitize-recover=signed-integer-overflow",
+            "-fno-omit-frame-pointer",
             "-O",
             "-g",
             "-o",
-            "build/no-sanitize/alternate_main.o",
-            "src/alternate_main.c"
-        ],
-        "directory": "/home/vagrant/project/CITS3007Project/src",
-        "file": "src/alternate_main.c"
-    },
-    {
-        "arguments": [
-            "gcc",
-            "-c",
-            "-std=c11",
-            "-pedantic-errors",
-            "-Wall",
-            "-Wextra",
-            "-Wshadow",
-            "-Wconversion",
-            "-funsigned-char",
-            "-fstack-protector-all",
-            "-mshstk",
-            "-Isrc",
-            "-fsanitize=thread",
-            "-fno-omit-frame-pointer",
-            "-O1",
-            "-g",
-            "-o",
-            "build/thread/bogus_main.o",
+            "build/bogus_main.o",
             "src/bogus_main.c"
         ],
         "directory": "/home/vagrant/project/CITS3007Project/src",
@@ -307,13 +317,10 @@
             "-fstack-protector-all",
             "-mshstk",
             "-Isrc",
-            "-fsanitize=undefined,float-divide-by-zero,float-cast-overflow,bounds,null,return,vptr",
-            "-fno-sanitize-recover=all",
-            "-fno-omit-frame-pointer",
-            "-O1",
+            "-O",
             "-g",
             "-o",
-            "build/full/login.o",
+            "build/no-sanitize/login.o",
             "src/login.c"
         ],
         "directory": "/home/vagrant/project/CITS3007Project/src",
@@ -358,17 +365,86 @@
             "-fstack-protector-all",
             "-mshstk",
             "-Isrc",
-            "-fsanitize=undefined,address,leak",
-            "-fno-sanitize-recover=signed-integer-overflow",
-            "-fno-omit-frame-pointer",
-            "-O",
-            "-g",
+            "-g3",
+            "-ggdb",
+            "-O0",
             "-o",
-            "build/alternate_main.o",
+            "build/debug/alternate_main.o",
             "src/alternate_main.c"
         ],
         "directory": "/home/vagrant/project/CITS3007Project/src",
         "file": "src/alternate_main.c"
+    },
+    {
+        "arguments": [
+            "gcc",
+            "-c",
+            "-std=c11",
+            "-pedantic-errors",
+            "-Wall",
+            "-Wextra",
+            "-Wshadow",
+            "-Wconversion",
+            "-funsigned-char",
+            "-fstack-protector-all",
+            "-mshstk",
+            "-Isrc",
+            "-O",
+            "-g",
+            "-o",
+            "build/no-sanitize/account.o",
+            "src/account.c"
+        ],
+        "directory": "/home/vagrant/project/CITS3007Project/src",
+        "file": "src/account.c"
+    },
+    {
+        "arguments": [
+            "gcc",
+            "-c",
+            "-std=c11",
+            "-pedantic-errors",
+            "-Wall",
+            "-Wextra",
+            "-Wshadow",
+            "-Wconversion",
+            "-funsigned-char",
+            "-fstack-protector-all",
+            "-mshstk",
+            "-Isrc",
+            "-O",
+            "-g",
+            "-o",
+            "build/no-sanitize/alternate_main.o",
+            "src/alternate_main.c"
+        ],
+        "directory": "/home/vagrant/project/CITS3007Project/src",
+        "file": "src/alternate_main.c"
+    },
+    {
+        "arguments": [
+            "gcc",
+            "-c",
+            "-std=c11",
+            "-pedantic-errors",
+            "-Wall",
+            "-Wextra",
+            "-Wshadow",
+            "-Wconversion",
+            "-funsigned-char",
+            "-fstack-protector-all",
+            "-mshstk",
+            "-Isrc",
+            "-fsanitize=thread",
+            "-fno-omit-frame-pointer",
+            "-O1",
+            "-g",
+            "-o",
+            "build/thread/login.o",
+            "src/login.c"
+        ],
+        "directory": "/home/vagrant/project/CITS3007Project/src",
+        "file": "src/login.c"
     },
     {
         "arguments": [
@@ -414,54 +490,7 @@
             "-O",
             "-g",
             "-o",
-            "build/bogus_main.o",
-            "src/bogus_main.c"
-        ],
-        "directory": "/home/vagrant/project/CITS3007Project/src",
-        "file": "src/bogus_main.c"
-    },
-    {
-        "arguments": [
-            "gcc",
-            "-c",
-            "-std=c11",
-            "-pedantic-errors",
-            "-Wall",
-            "-Wextra",
-            "-Wshadow",
-            "-Wconversion",
-            "-funsigned-char",
-            "-fstack-protector-all",
-            "-mshstk",
-            "-Isrc",
-            "-O",
-            "-g",
-            "-o",
-            "build/no-sanitize/bogus_main.o",
-            "src/bogus_main.c"
-        ],
-        "directory": "/home/vagrant/project/CITS3007Project/src",
-        "file": "src/bogus_main.c"
-    },
-    {
-        "arguments": [
-            "gcc",
-            "-c",
-            "-std=c11",
-            "-pedantic-errors",
-            "-Wall",
-            "-Wextra",
-            "-Wshadow",
-            "-Wconversion",
-            "-funsigned-char",
-            "-fstack-protector-all",
-            "-mshstk",
-            "-Isrc",
-            "-g3",
-            "-ggdb",
-            "-O0",
-            "-o",
-            "build/debug/alternate_main.o",
+            "build/alternate_main.o",
             "src/alternate_main.c"
         ],
         "directory": "/home/vagrant/project/CITS3007Project/src",
@@ -481,40 +510,15 @@
             "-fstack-protector-all",
             "-mshstk",
             "-Isrc",
-            "-fsanitize=undefined,float-divide-by-zero,float-cast-overflow,bounds,null,return,vptr",
-            "-fno-sanitize-recover=all",
-            "-fno-omit-frame-pointer",
-            "-O1",
-            "-g",
+            "-g3",
+            "-ggdb",
+            "-O0",
             "-o",
-            "build/full/account.o",
-            "src/account.c"
+            "build/debug/bogus_main.o",
+            "src/bogus_main.c"
         ],
         "directory": "/home/vagrant/project/CITS3007Project/src",
-        "file": "src/account.c"
-    },
-    {
-        "arguments": [
-            "gcc",
-            "-c",
-            "-std=c11",
-            "-pedantic-errors",
-            "-Wall",
-            "-Wextra",
-            "-Wshadow",
-            "-Wconversion",
-            "-funsigned-char",
-            "-fstack-protector-all",
-            "-mshstk",
-            "-Isrc",
-            "-O",
-            "-g",
-            "-o",
-            "build/no-sanitize/account.o",
-            "src/account.c"
-        ],
-        "directory": "/home/vagrant/project/CITS3007Project/src",
-        "file": "src/account.c"
+        "file": "src/bogus_main.c"
     },
     {
         "arguments": [
@@ -582,17 +586,15 @@
             "-fstack-protector-all",
             "-mshstk",
             "-Isrc",
-            "-fsanitize=undefined,float-divide-by-zero,float-cast-overflow,bounds,null,return,vptr",
-            "-fno-sanitize-recover=all",
-            "-fno-omit-frame-pointer",
-            "-O1",
-            "-g",
+            "-g3",
+            "-ggdb",
+            "-O0",
             "-o",
-            "build/full/alternate_main.o",
-            "src/alternate_main.c"
+            "build/debug/stubs.o",
+            "src/stubs.c"
         ],
         "directory": "/home/vagrant/project/CITS3007Project/src",
-        "file": "src/alternate_main.c"
+        "file": "src/stubs.c"
     },
     {
         "arguments": [
@@ -608,15 +610,13 @@
             "-fstack-protector-all",
             "-mshstk",
             "-Isrc",
-            "-fsanitize=thread",
-            "-fno-omit-frame-pointer",
-            "-O1",
+            "-O",
             "-g",
             "-o",
-            "build/thread/alternate_main.o",
-            "src/alternate_main.c"
+            "build/no-sanitize/stubs.o",
+            "src/stubs.c"
         ],
         "directory": "/home/vagrant/project/CITS3007Project/src",
-        "file": "src/alternate_main.c"
+        "file": "src/stubs.c"
     }
 ]
