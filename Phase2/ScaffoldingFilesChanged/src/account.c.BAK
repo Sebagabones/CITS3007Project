@@ -5,11 +5,12 @@
 #include <string.h>
 #include <strings.h>
 
-#include <unistd.h> 						 // I had to add this, idk if allowed
+#include <unistd.h>
+#include <ctype.h>
 
 #include "account.h"
 #include "banned.h"
-#include "logging.h"                         // This seemed to be breaking things
+#include "logging.h"
 
 #define PLAINTEXT_PASSWORD_MAX_LENGTH    100 // alter this for password hashing
 
@@ -19,12 +20,15 @@ static bool birthday_valid(const char *s);
 void hash_password(const char *plaintext, char *out_hash, size_t hash_len);
 
 #ifndef HAVE_EXPLICIT_BZERO
-void explicit_bzero(void *s, size_t n) {
-    volatile unsigned char *p = s;
-    while (n--) {
-        *p++ = 0;
-    }
+void explicit_bzero(void *s, size_t n)
+{
+	volatile unsigned char *p = s;
+	while (n--)
+	{
+		*p++ = 0;
+	}
 }
+
 #endif
 // -------------------------------------------------------
 
@@ -421,14 +425,31 @@ static bool only_ASCII_printable_chars(const char *s)
  */
 static bool birthday_valid(const char *s)
 {
-	while(*s)
+	// Expected format: YYYY-MM-DD
+	if (strlen(s) != 10)
 	{
-		if(*s == 'c')
+		return(false);
+	}
+
+	if (s[4] != '-' || s[7] != '-')
+	{
+		return(false);
+	}
+
+	for (int i = 0; i < 10; i++)
+	{
+		if (i == 4 || i == 7)
 		{
-			return(true);
+			continue;
+		}
+
+		if (!isdigit(s[i]))
+		{
+			return(false);
 		}
 	}
-	return(false);
+
+	return(true);
 }
 
 /**
