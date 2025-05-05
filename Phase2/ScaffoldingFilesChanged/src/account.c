@@ -12,35 +12,98 @@
 //chat are we meant to do this?
 //also idk it wouldnt compile if i didnt add logging.h but i think im doing something wrong this so /shrug
 
+#define PLAINTEXT_PASSWORD_MAX_LENGTH 100	// very likely delete this, but its a reminder to check how our hashing function works
+
 /**
- * Create a new account with the specified parameters.
+ * @brief Create a new account with the specified parameters.
  *
- * This function initializes a new dynamically allocated account structure
- * with the given user ID, hash information derived from the specified plaintext password, email address,
- * and birthdate. Other fields are set to their default values.
+ * Initializes a dynamically allocated account structure with the given user ID,
+ * password, email, and birthdate. Performs validation and sets default metadata fields.
  *
- * On success, returns a pointer to the newly created account structure.
- * On error, returns NULL and logs an error message.
+ * @param userid Null-terminated string for the user ID.
+ * @param plaintext_password Null-terminated string for the password (to be hashed).
+ * @param email Null-terminated string for the email address.
+ * @param birthdate Null-terminated string for the birthdate in YYYY-MM-DD format.
+ * @return Pointer to a new account on success, or NULL on error.
  */
 account_t *account_create(const char *userid, const char *plaintext_password,
-                          const char *email, const char *birthdate
-                          )
+                          const char *email, const char *birthdate)
 {
-	// remove the contents of this function and replace it with your own code.
-	(void)userid;
-	(void)plaintext_password;
-	(void)email;
-	(void)birthdate;
+// Precondition: all pointers are non-null and strings are null-terminated.
+	if (len(userid) > USER_ID_LENGTH)
+	{
+		log_message(LOG_ERROR, "UserID too long.");
+		return(NULL);
+	}
+	
+	if (len(plaintext_password) >
+		PLAINTEXT_PASSWORD_MAX_LENGTH) // Depends on how we do hashing !! (might
+									// only care about hashlength??
+	{
+		log_message(LOG_ERROR, "Password too long.");
+		return(NULL);
+	}
 
-	return(NULL);
+	if (!(only_ASCII_printable_chars(email) && no_spaces(email))) // Brief says only the above checks occur here
+	{
+		log_message(LOG_ERROR, "Invalid email format.");
+		return(NULL);
+	}
+
+	bool birthdate_valid = date_correct_form(birthdate) && date_is_real(birthdate);
+
+	const char *final_birthdate = birthdate_valid ? birthdate : "0000-00-00";
+
+	if (!birthdate_valid) // Or log info?
+	{
+		log_message(LOG_WARN, "Invalid birthdate format. Using default '0000-00-00'.");
+	}
+
+	// Allocate memory
+	account_t *actptr = malloc(sizeof(account_t));
+
+	if (actptr == NULL)
+	{
+		log_message(LOG_ERROR, "Memory allocation failed.");
+		return(NULL);
+	}
+
+	// Assign account ID (Not sure how it happens)
+	actptr->account_id = generate_account_id();
+
+	// Copy values into struct (make sure to handle null-termination)
+	strncpy(actptr->userid, userid, USER_ID_LENGTH); //safe as userid is always valid & null-terminated according to precondtions, and actptr seems to be safe?
+	actptr->userid[USER_ID_LENGTH - 1] = '\0';
+
+	hash_password(plaintext_password, actptr->password_hash, HASH_LENGTH);
+	// Assuming hash_password writes the result into the buffer and handles
+	// null-termination
+
+	strncpy(actptr->email, email, EMAIL_LENGTH); //safe as email is valid & null-terminated according to precondtions, and actptr seems to be safe?
+	actptr->email[EMAIL_LENGTH - 1] = '\0';
+
+	strncpy(actptr->birthdate, final_birthdate, BIRTHDATE_LENGTH); //safe as birthdate is valid & null-terminated according to preconditions, and actptr seems to be safe?
+	actptr->birthdate[BIRTHDATE_LENGTH - 1] = '\0';
+
+	// Set defaults
+	actptr->unban_time		 = 0;
+	actptr->expiration_time	 = 0;
+	actptr->login_count		 = 0;
+	actptr->login_fail_count = 0;
+	actptr->last_login_time	 = 0;
+	actptr->last_ip			 = 0;
+
+	return(actptr);
 }
 
 /**
- * Free memory and resources used by the account
+ * @brief Free memory and resources used by the account.
  *
- * Clears and releases any memory associated with an account.
+ * Clears and releases any memory associated with an account, zeroing out
+ * the contents to prevent later access.
  *
- * @param acc A pointer returned by `account_create`, or `NULL`.
+ * @param acc Pointer to an account structure previously returned by `account_create`,
+ *            or NULL. If NULL, no action is taken.
  */
 void account_free(account_t *acc)
 {
@@ -55,6 +118,16 @@ void account_free(account_t *acc)
 	free(acc);
 }
 
+/**
+ * @brief Validate a plaintext password against the stored hash.
+ *
+ * Compares the given plaintext password with the stored password hash
+ * to verify if they match.
+ *
+ * @param acc Pointer to the account structure.
+ * @param plaintext_password Null-terminated string of the password to validate.
+ * @return true if the password matches, false otherwise.
+ */
 bool account_validate_password(const account_t *acc, const char *plaintext_password)
 {
 	// remove the contents of this function and replace it with your own code.
@@ -64,6 +137,15 @@ bool account_validate_password(const account_t *acc, const char *plaintext_passw
 	return(false);
 }
 
+/**
+ * @brief Update the account's password.
+ *
+ * Hashes the new plaintext password and updates the stored password hash.
+ *
+ * @param acc Pointer to the account structure to update.
+ * @param new_plaintext_password Null-terminated string of the new password.
+ * @return true if the update was successful, false otherwise.
+ */
 bool account_update_password(account_t *acc, const char *new_plaintext_password)
 {
 	// remove the contents of this function and replace it with your own code.
@@ -74,14 +156,14 @@ bool account_update_password(account_t *acc, const char *new_plaintext_password)
 }
 
 /**
- * Record a successful login.
+ * @brief Record a successful login for the account.
  *
- * Update account metadata following a successful login.
- * Sets the `last_login_time` using the current system time, sets the accounts `last_ip` to the last IP address connected from, updates the accounts `login_count` and sets teh accounts `login_fail_count` to zero
- * Whenever a user logs in successfully, their `login_fail_count` is reset to 0; it’s thus a measure of the number of _consecutive_ login failures.
+ * Updates the account's metadata following a successful login:
+ * sets the last login time to the current system time, updates the last IP address,
+ * increments the login count, and resets the login failure count to zero.
  *
- * @param acc Must be non-`NULL`.
- * @param ip Must be a valid IPv4 address.
+ * @param acc Pointer to the account structure (must be non-NULL).
+ * @param ip The IPv4 address from which the login occurred.
  */
 void account_record_login_success(account_t *acc, ip4_addr_t ip)
 {
@@ -99,14 +181,13 @@ void account_record_login_success(account_t *acc, ip4_addr_t ip)
 }
 
 /**
- * Record a failed login
+ * @brief Record a failed login attempt for the account.
  *
- * Update account metadata following a failed login.
- * Sets the `last_login_time` using the current system time, updates the accounts `login_fail_count` and sets the accounts `login_count` to zero
- * time, and the last IP address connected from be set correctly.
- * Whenever a user fails to log in successfully, their login_count is reset to 0.
+ * Updates the account's metadata following a failed login:
+ * sets the last login time to the current system time,
+ * increments the login failure count, and resets the login count to zero.
  *
- * @param acc Must be non-`NULL`.
+ * @param acc Pointer to the account structure (must be non-NULL).
  */
 void account_record_login_failure(account_t *acc)
 {
@@ -125,13 +206,13 @@ void account_record_login_failure(account_t *acc)
 }
 
 /**
- * Returns true if the account is currently banned
+ * @brief Check if the account is currently banned.
  *
- * Compares the current system time with the relevant field in the account structure.
+ * Compares the current system time with the account's unban time to determine
+ * if the account is still banned.
  *
- * @param acc Must be non-`NULL`.
- *
- * @return Boolean representing if the account is banned or not
+ * @param acc Pointer to the account structure (must be non-NULL).
+ * @return true if the account is banned, false otherwise.
  */
 bool account_is_banned(const account_t *acc)
 {
@@ -145,7 +226,6 @@ bool account_is_banned(const account_t *acc)
 	if (current_time == -1)
 	{
 		log_message(LOG_ERROR, "acc_banned: Failed to get the current time.");
-
 		return(true); // False positive probably better than false negative here
 	}
 
@@ -153,13 +233,13 @@ bool account_is_banned(const account_t *acc)
 }
 
 /**
- * Returns true if the account is currently expired
+ * @brief Check if the account is currently expired.
  *
- * Compares the current system time with the relevant field in the account structure.
+ * Compares the current system time with the account's expiration time to determine
+ * if the account has expired.
  *
- * @param acc Must be non-`NULL`.
- *
- * @return Boolean representing if the account is expired or not
+ * @param acc Pointer to the account structure (must be non-NULL).
+ * @return true if the account is expired, false otherwise.
  */
 bool account_is_expired(const account_t *acc)
 {
@@ -174,7 +254,6 @@ bool account_is_expired(const account_t *acc)
 	if (current_time == -1)
 	{
 		log_message(LOG_ERROR, "acc_expired: Failed to get the current time.");
-
 		return(true); // False positive probably better than false negative here
 	}
 
@@ -182,12 +261,12 @@ bool account_is_expired(const account_t *acc)
 }
 
 /**
- * Set a ban time.
+ * @brief Set the unban time for the account.
  *
- * Ban an account for a period of `t` time; The code in `account.h` details how this works.
+ * Specifies the time until which the account is banned.
  *
- * @param acc Must be non-`NULL`
- * @param t Ban the account up until this time (0 = no ban)
+ * @param acc Pointer to the account structure (must be non-NULL).
+ * @param t Time until which the account is banned (0 means no ban).
  */
 void account_set_unban_time(account_t *acc, time_t t)
 {
@@ -195,30 +274,89 @@ void account_set_unban_time(account_t *acc, time_t t)
 }
 
 /**
- * Set an account expiration time
+ * @brief Set the expiration time for the account.
  *
- * Sets the expiration time of an account until the account is no longer valid; More details in  `account.h`
+ * Specifies the time until which the account remains valid.
  *
- * @param acc  Must be non-`NULL`
- * @param t Account is only valid until this time (0 = unlimited)
+ * @param acc Pointer to the account structure (must be non-NULL).
+ * @param t Time until which the account is valid (0 means unlimited).
  */
 void account_set_expiration_time(account_t *acc, time_t t)
 {
 	acc->expiration_time = t; //ditto
 }
 
+
+/**
+ * @brief Safely update the account's email address.
+ *
+ * Validates the new email address for printable ASCII characters and absence of spaces,
+ * then updates the account's email field.
+ *
+ * @param acc Pointer to the account structure (must be non-NULL).
+ * @param new_email Null-terminated string containing the new email address.
+ */
 void account_set_email(account_t *acc, const char *new_email)
 {
-	// remove the contents of this function and replace it with your own code.
-	(void)acc;
-	(void)new_email;
+	// Preconds: both args are non-null & new-email has '\0'	  
+	if (!only_ASCII_printable_chars(new_email) || !no_spaces(new_email))
+	{
+		log_message(LOG_ERROR, "Invalid email format in account_set_email.");
+		return; // Not sure how to handle here?
+	}
+	// Safe copy into the email field
+	strncpy(acc->email, new_email, EMAIL_LENGTH);
+	acc->email[EMAIL_LENGTH - 1] =  '\0'; // Ensure null-termination
 }
 
+/**
+ * @brief Print a summary of the account information to a file descriptor.
+ *
+ * Formats the account ID, user ID, email, and login-related statistics 
+ * into a string and writes it to the given file descriptor.
+ *
+ * @param acct Pointer to the account structure (must be non-NULL).
+ * @param fd File descriptor to write the summary to.
+ * @return true if the summary was successfully written, false otherwise.
+ */
 bool account_print_summary(const account_t *acct, int fd)
 {
-	// remove the contents of this function and replace it with your own code.
-	(void)acct;
-	(void)fd;
+	// Caller is required to make sure fd is valid + writeable
+	char buffer[516]; // Buffer to hold the formatted string
+	char timebuf[64];
+	struct tm *tm_info = localtime(&(acct->last_login_time));
+	if (tm_info == NULL || strftime(timebuf, sizeof(timebuf), "%Y-%m-%d %H:%M:%S", tm_info)==0 )
+	{
+		strncpy(timebuf, "Invalid time", sizeof(timebuf));
+		timebuf[sizeof(timebuf) - 1] = '\0';
+	}
 
-	return(false);
+	int bytes_written = snprintf(buffer, sizeof(buffer),
+		"UserID: %.31s\n"
+		"Email: %.63s\n"
+		"Last Login Time: %s\n"
+		"Login Count: %u\n"
+		"Login Failures: %u\n"
+		"Last IP: %u\n",	// potentially format ip address...
+		acct->userid,
+		acct->email,
+		timebuf,
+		acct->login_count,
+		acct->login_fail_count,
+		acct->last_ip);
+
+	if (bytes_written < 0 || bytes_written >= sizeof(buffer))
+	{
+		log_message(LOG_ERROR, "account_print_summary: Failed to format summary.");
+		return(false);
+	}
+
+	ssize_t result = write(fd, buffer, bytes_written);
+	if (result == -1)
+	{
+		log_message(LOG_ERROR, "account_print_summary: Failed to write to file descriptor.");
+		return(false);
+	}
+
+	return(true);
 }

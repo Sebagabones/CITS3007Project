@@ -119,12 +119,31 @@ bool  account_is_expired(const account_t *acc){
 ```
 
 ### Printing Account Summary
-lots of freedom it looks like
+Complete freedom as to format, I've chosen to use `snprintf` to format the string and then write it to the file descriptor. 
 
 ```c
 bool account_print_summary(const account_t *acct, int fd)
 {	// Caller is required to make sure fd is valid + writeable
-	
+
+    char buffer[256]; // Buffer to hold the formatted string
+    char *string = "Account ID: %d\nUserID: %s\nEmail: %s\nBirthdate: %s\n";
+
+    int bytes_written = snprintf(buffer, sizeof(buffer), "%s", string);
+
+    if (bytes_written < 0 || bytes_written >= sizeof(buffer))
+    {
+        log_message(LOG_ERROR, "account_print_summary: Failed to format account summary.");
+        return false;
+    }
+
+    ssize_t result = write(fd, buffer, bytes_written);
+    if (result == -1)
+    {
+        log_message(LOG_ERROR, "account_print_summary: Failed to write to file descriptor.");
+        return false;
+    }
+
+    return true;
 }
 
 ```
