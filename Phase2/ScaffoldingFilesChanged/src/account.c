@@ -12,7 +12,7 @@
 //chat are we meant to do this?
 //also idk it wouldnt compile if i didnt add logging.h but i think im doing something wrong this so /shrug
 
-#define PLAINTEXT_PASSWORD_MAX_LENGTH 100	// very likely delete this, but its a reminder to check how our hashing function works
+#define PLAINTEXT_PASSWORD_MAX_LENGTH    100 // very likely delete this, but its a reminder to check how our hashing function works
 
 /**
  * @brief Create a new account with the specified parameters.
@@ -33,20 +33,23 @@ account_t *account_create(const char *userid, const char *plaintext_password,
 	if (len(userid) > USER_ID_LENGTH)
 	{
 		log_message(LOG_ERROR, "UserID too long.");
+
 		return(NULL);
 	}
-	
+
 	if (len(plaintext_password) >
-		PLAINTEXT_PASSWORD_MAX_LENGTH) // Depends on how we do hashing !! (might
-									// only care about hashlength??
+	    PLAINTEXT_PASSWORD_MAX_LENGTH) // Depends on how we do hashing !! (might
+	                                   // only care about hashlength??
 	{
 		log_message(LOG_ERROR, "Password too long.");
+
 		return(NULL);
 	}
 
 	if (!(only_ASCII_printable_chars(email) && no_spaces(email))) // Brief says only the above checks occur here
 	{
 		log_message(LOG_ERROR, "Invalid email format.");
+
 		return(NULL);
 	}
 
@@ -65,6 +68,7 @@ account_t *account_create(const char *userid, const char *plaintext_password,
 	if (actptr == NULL)
 	{
 		log_message(LOG_ERROR, "Memory allocation failed.");
+
 		return(NULL);
 	}
 
@@ -226,6 +230,7 @@ bool account_is_banned(const account_t *acc)
 	if (current_time == -1)
 	{
 		log_message(LOG_ERROR, "acc_banned: Failed to get the current time.");
+
 		return(true); // False positive probably better than false negative here
 	}
 
@@ -254,6 +259,7 @@ bool account_is_expired(const account_t *acc)
 	if (current_time == -1)
 	{
 		log_message(LOG_ERROR, "acc_expired: Failed to get the current time.");
+
 		return(true); // False positive probably better than false negative here
 	}
 
@@ -286,7 +292,6 @@ void account_set_expiration_time(account_t *acc, time_t t)
 	acc->expiration_time = t; //ditto
 }
 
-
 /**
  * @brief Safely update the account's email address.
  *
@@ -298,63 +303,71 @@ void account_set_expiration_time(account_t *acc, time_t t)
  */
 void account_set_email(account_t *acc, const char *new_email)
 {
-	// Preconds: both args are non-null & new-email has '\0'	  
+	// Preconds: both args are non-null & new-email has '\0'
 	if (!only_ASCII_printable_chars(new_email) || !no_spaces(new_email))
 	{
 		log_message(LOG_ERROR, "Invalid email format in account_set_email.");
+
 		return; // Not sure how to handle here?
 	}
+
 	// Safe copy into the email field
 	strncpy(acc->email, new_email, EMAIL_LENGTH);
-	acc->email[EMAIL_LENGTH - 1] =  '\0'; // Ensure null-termination
+	acc->email[EMAIL_LENGTH - 1] = '\0';  // Ensure null-termination
 }
 
 /**
  * @brief Print a summary of the account information to a file descriptor.
  *
- * Formats the account ID, user ID, email, and login-related statistics 
+ * Formats the account ID, user ID, email, and login-related statistics
  * into a string and writes it to the given file descriptor.
  *
  * @param acct Pointer to the account structure (must be non-NULL).
  * @param fd File descriptor to write the summary to.
  * @return true if the summary was successfully written, false otherwise.
  */
-bool account_print_summary(const account_t *acct, int fd)
+static bool account_print_summary(const account_t *acct, int fd)
 {
 	// Caller is required to make sure fd is valid + writeable
-	char buffer[516]; // Buffer to hold the formatted string
+	char buffer[516];       // Buffer to hold the formatted string
 	char timebuf[64];
-	struct tm *tm_info = localtime(&(acct->last_login_time));
-	if (tm_info == NULL || strftime(timebuf, sizeof(timebuf), "%Y-%m-%d %H:%M:%S", tm_info)==0 )
+
+	struct tm		 tm_result;
+	const struct tm *tm_info = localtime_r(&(acct->last_login_time), &tm_result);
+
+	if (tm_info == NULL || strftime(timebuf, sizeof(timebuf), "%Y-%m-%d %H:%M:%S", tm_info) == 0)
 	{
 		strncpy(timebuf, "Invalid time", sizeof(timebuf));
 		timebuf[sizeof(timebuf) - 1] = '\0';
 	}
 
 	int bytes_written = snprintf(buffer, sizeof(buffer),
-		"UserID: %.31s\n"
-		"Email: %.63s\n"
-		"Last Login Time: %s\n"
-		"Login Count: %u\n"
-		"Login Failures: %u\n"
-		"Last IP: %u\n",	// potentially format ip address...
-		acct->userid,
-		acct->email,
-		timebuf,
-		acct->login_count,
-		acct->login_fail_count,
-		acct->last_ip);
+	                             "UserID: %.31s\n"
+	                             "Email: %.63s\n"
+	                             "Last Login Time: %s\n"
+	                             "Login Count: %u\n"
+	                             "Login Failures: %u\n"
+	                             "Last IP: %u\n", // potentially format ip address...
+	                             acct->userid,
+	                             acct->email,
+	                             timebuf,
+	                             acct->login_count,
+	                             acct->login_fail_count,
+	                             acct->last_ip);
 
 	if (bytes_written < 0 || bytes_written >= sizeof(buffer))
 	{
 		log_message(LOG_ERROR, "account_print_summary: Failed to format summary.");
+
 		return(false);
 	}
 
 	ssize_t result = write(fd, buffer, bytes_written);
+
 	if (result == -1)
 	{
 		log_message(LOG_ERROR, "account_print_summary: Failed to write to file descriptor.");
+
 		return(false);
 	}
 
@@ -363,20 +376,28 @@ bool account_print_summary(const account_t *acct, int fd)
 
 /**
  * @brief Function to neutralise email inputs
- * 
+ *
  * c Printable ASCII = characters with decimal values from 32 (space) to 126 (~)
  * Excludes 32
- * 
+ *
  * @param s char pointer to be checked
  * @return true if the string is only ASCII printable characters, false otherwise.
  */
-bool only_ASCII_printable_chars(const char *s) {
-    while (*s) {
-        unsigned char c = (unsigned char)*s;
-        if (c < 33 || c > 126) {
-            return(false);
-        }
-        s++;
-    }
-    return(true);
+static bool only_ASCII_printable_chars(const char *s)
+{
+	while (*s)
+	{
+		unsigned char c = (unsigned char)*s;
+
+		if (c < 33 || c > 126)
+		{
+			return(false);
+		}
+
+		s++;
+	}
+
+	return(true);
 }
+
+//test
