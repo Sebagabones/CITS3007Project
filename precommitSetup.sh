@@ -43,7 +43,7 @@ echo "===== Installing Pre-commit Hook Dependencies ====="
 
 # Install C/C++ related tools
 echo "Installing C/C++ analysis tools..."
-sudo apt install -y flawfinder uncrustify cppcheck clang-tidy
+sudo apt install -y flawfinder uncrustify cppcheck clang-tidy bear
 
 # Install cpplint
 echo "Installing cpplint..."

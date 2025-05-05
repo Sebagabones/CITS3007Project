@@ -1,4 +1,5 @@
 #include "account.h"
+#include "banned.h"
 
 /**
  * Create a new account with the specified parameters.
@@ -21,7 +22,7 @@ account_t *account_create(const char *userid, const char *plaintext_password,
 	(void)birthdate;
 
 	return(NULL);
-}
+}//test
 
 void account_free(account_t *acc)
 {

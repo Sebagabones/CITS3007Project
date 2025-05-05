@@ -16,12 +16,14 @@ echo "Changed to directory: $(pwd)" >&2
 
 logicalCpuCount=$([ $(uname) = 'Darwin' ] && sysctl -n hw.logicalcpu_max || lscpu -p | grep -E -v '^#' | wc -l)
 
-if git diff --cached --name-only | grep -q -E '(Makefile|src/.*\.(c|cpp|h|hpp)|CMakeLists.txt)'; then
-  echo "Source files or build files changed, regenerating compile_commands.json"
-  make clean
-  bear -- make -j $logicalCpuCount
-  git add compile_commands.json
-  make clean
-else
-  echo "No relevant files changed, skipping compile_commands.json update"
+make clean
+if ! bear -- make -j "$logicalCpuCount"; then
+ echo "'bear -- make' failed, trying 'bear make' instead..." >&2
+if ! bear make -j "$logicalCpuCount"; then
+ echo "Both 'bear -- make' and 'bear make' failed." >&2
+exit 1
 fi
+fi
+
+git add compile_commands.json
+make clean
