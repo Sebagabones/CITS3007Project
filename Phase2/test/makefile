@@ -20,7 +20,7 @@ endif
 
 # CXX_AVAILABLE := $(shell $(CXX) --version 2>/dev/null)
 
-CFLAGS=-O2 -Wall -I../home/sexcandygirl/CITS3007/Project/CITS3007Project/Phase2/test -I. $(STATIC) $(COMPACT) $(NOCOLOR) $(DEBUG)
+CFLAGS=-O2 -Wall -I. $(STATIC) $(COMPACT) $(NOCOLOR) $(DEBUG)
 LIBS=
 
 TESTS_SRC_C=$(wildcard t_*.c)
@@ -48,8 +48,8 @@ MAKEFLAGS += --no-builtin-rules
 %.o: %.c
 	$(CC) $(CFLAGS) -o $*.o -c $<
 
-%: %.o functions.o
-	$(CC) -o $* $< functions.o -lm
+%: %.o
+	$(CC) -o $@ $< -lm
 
 .PRECIOUS: %.o
 
