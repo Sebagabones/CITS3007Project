@@ -7,12 +7,6 @@
 
 #include "account.h"
 #include "banned.h"
-#include "logging.h"
-//We may be meant to make our own .h file?
-//chat are we meant to do this?
-//also idk it wouldnt compile if i didnt add logging.h but i think im doing something wrong this so /shrug
-
-#define PLAINTEXT_PASSWORD_MAX_LENGTH    100 // very likely delete this, but its a reminder to check how our hashing function works
 
 /**
  * @brief Create a new account with the specified parameters.

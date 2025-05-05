@@ -1,22 +1,97 @@
 [
-  {
-    "arguments": [
-      "/usr/bin/gcc",
-      "-g",
-      "-fno-omit-frame-pointer",
-      "-std=c11",
-      "-pedantic-errors",
-      "-Wall",
-      "-Wextra",
-      "-Isrc",
-      "-Isrc",
-      "-c",
-      "-o",
-      "build/account.o",
-      "src/account.c"
-    ],
-    "directory": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/Phase2/ScaffoldingFilesChanged",
-    "file": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/Phase2/ScaffoldingFilesChanged/src/account.c",
-    "output": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/Phase2/ScaffoldingFilesChanged/build/account.o"
-  }
+    {
+        "arguments": [
+            "gcc",
+            "-c",
+            "-g",
+            "-fno-omit-frame-pointer",
+            "-std=c11",
+            "-pedantic-errors",
+            "-Wall",
+            "-Wextra",
+            "-Isrc",
+            "-Isrc",
+            "-o",
+            "build/bogus_main.o",
+            "src/bogus_main.c"
+        ],
+        "directory": "/home/vagrant/project/CITS3007Project/Phase2/ScaffoldingFilesChanged",
+        "file": "src/bogus_main.c"
+    },
+    {
+        "arguments": [
+            "gcc",
+            "-c",
+            "-g",
+            "-fno-omit-frame-pointer",
+            "-std=c11",
+            "-pedantic-errors",
+            "-Wall",
+            "-Wextra",
+            "-Isrc",
+            "-Isrc",
+            "-o",
+            "build/account.o",
+            "src/account.c"
+        ],
+        "directory": "/home/vagrant/project/CITS3007Project/Phase2/ScaffoldingFilesChanged",
+        "file": "src/account.c"
+    },
+    {
+        "arguments": [
+            "gcc",
+            "-c",
+            "-g",
+            "-fno-omit-frame-pointer",
+            "-std=c11",
+            "-pedantic-errors",
+            "-Wall",
+            "-Wextra",
+            "-Isrc",
+            "-Isrc",
+            "-o",
+            "build/stubs.o",
+            "src/stubs.c"
+        ],
+        "directory": "/home/vagrant/project/CITS3007Project/Phase2/ScaffoldingFilesChanged",
+        "file": "src/stubs.c"
+    },
+    {
+        "arguments": [
+            "gcc",
+            "-c",
+            "-g",
+            "-fno-omit-frame-pointer",
+            "-std=c11",
+            "-pedantic-errors",
+            "-Wall",
+            "-Wextra",
+            "-Isrc",
+            "-Isrc",
+            "-o",
+            "build/alternate_main.o",
+            "src/alternate_main.c"
+        ],
+        "directory": "/home/vagrant/project/CITS3007Project/Phase2/ScaffoldingFilesChanged",
+        "file": "src/alternate_main.c"
+    },
+    {
+        "arguments": [
+            "gcc",
+            "-c",
+            "-g",
+            "-fno-omit-frame-pointer",
+            "-std=c11",
+            "-pedantic-errors",
+            "-Wall",
+            "-Wextra",
+            "-Isrc",
+            "-Isrc",
+            "-o",
+            "build/login.o",
+            "src/login.c"
+        ],
+        "directory": "/home/vagrant/project/CITS3007Project/Phase2/ScaffoldingFilesChanged",
+        "file": "src/login.c"
+    }
 ]

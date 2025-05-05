@@ -13,17 +13,21 @@ cd "$REPO_ROOT/src" || {
 
 echo "Changed to directory: $(pwd)" >&2
 
+# Determine logical CPU count
+logicalCpuCount=$([ "$(uname)" = 'Darwin' ] && sysctl -n hw.logicalcpu_max || lscpu -p | grep -E -v '^#' | wc -l)
 
-logicalCpuCount=$([ $(uname) = 'Darwin' ] && sysctl -n hw.logicalcpu_max || lscpu -p | grep -E -v '^#' | wc -l)
+# Check if source or build files changed
 
-if git diff --cached --name-only | grep -q -E '(Makefile|src/.*\.(c|cpp|h|hpp)|CMakeLists.txt)'; then
-  echo "Source files or build files changed, regenerating compile_commands.json"
-  make clean
-  bear -- make all no-sanitize debug thread full -j $logicalCpuCount
-  git add compile_commands.json
-  make clean
-  exit 0
-else
-  echo "No relevant files changed, skipping compile_commands.json update"
+make clean
+
+
+if ! bear -- make all no-sanitize debug thread full -j "$logicalCpuCount"; then
+ echo "'bear -- make' failed, trying 'bear make' instead..." >&2
+if ! bear make all no-sanitize debug thread full -j "$logicalCpuCount"; then
+ echo "Both 'bear -- make' and 'bear make' failed." >&2
+exit 1
 fi
-exit 0
+fi
+
+git add compile_commands.json
+make clean
