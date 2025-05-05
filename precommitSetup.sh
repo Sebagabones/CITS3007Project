@@ -16,6 +16,10 @@ sudo apt install pipx -y
 echo "Installing Python venv support..."
 sudo apt install python3.8-venv -y
 
+# Install cpplint
+echo "Installing cpplint..."
+pipx install cpplint
+
 # Install pre-commit using pipx
 echo "Installing pre-commit..."
 pipx install pre-commit
@@ -45,9 +49,6 @@ echo "===== Installing Pre-commit Hook Dependencies ====="
 echo "Installing C/C++ analysis tools..."
 sudo apt install -y flawfinder uncrustify cppcheck clang-tidy bear
 
-# Install cpplint
-echo "Installing cpplint..."
-pipx install cpplint
 
 echo "Prerequisites installation complete!"
 echo "====================================="
