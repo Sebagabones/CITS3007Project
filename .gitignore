@@ -9,3 +9,6 @@ package.json
 .dir-locals.el
 Phase2/ScaffoldingFilesChanged/.ccls-root
 compile_commands.json
+
+# Temporary
+argon2test.c
