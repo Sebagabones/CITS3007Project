@@ -7,6 +7,9 @@
 
 #include "account.h"
 #include "banned.h"
+#include "logging.h"                         // This seemed to be breaking things
+
+#define PLAINTEXT_PASSWORD_MAX_LENGTH    100 // alter this for password hashing
 
 // -----------------Sanitization Prototypes---------------
 static bool only_ASCII_printable_chars(const char *s);

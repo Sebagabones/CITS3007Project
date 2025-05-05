@@ -7,16 +7,14 @@
 
 #include "account.h"
 #include "banned.h"
-#include "logging.h"
-//We may be meant to make our own .h file?
-//chat are we meant to do this?
-//also idk it wouldnt compile if i didnt add logging.h but i think im doing something wrong this so /shrug
+#include "logging.h" // This seemed to be breaking things
 
-#define PLAINTEXT_PASSWORD_MAX_LENGTH    100 // very likely delete this, but its a reminder to check how our hashing function works
+#define PLAINTEXT_PASSWORD_MAX_LENGTH 	100 // alter this for password hashing
 
 // -----------------Sanitization Prototypes---------------
 static bool only_ASCII_printable_chars(const char *s);
 static bool birthday_valid(const char *s);
+
 // -------------------------------------------------------
 
 /**
@@ -43,7 +41,7 @@ account_t *account_create(const char *userid, const char *plaintext_password,
 	}
 
 	if (strnlen(plaintext_password, PLAINTEXT_PASSWORD_MAX_LENGTH + 1) > PLAINTEXT_PASSWORD_MAX_LENGTH)
-		// Depends on how we do hashing !! (might only care about hashlength?)
+	// Depends on how we do hashing !! (might only care about hashlength?)
 	{
 		log_message(LOG_ERROR, "Password too long.");
 
@@ -315,7 +313,7 @@ void account_set_email(account_t *acc, const char *new_email)
 	{
 		log_message(LOG_ERROR, "Invalid email format.");
 
-		return(); // not sure how to handle
+		return; // not sure how to handle
 	}
 
 	// Safe copy into the email field
@@ -412,6 +410,5 @@ static bool only_ASCII_printable_chars(const char *s)
  */
 static bool birthday_valid(const char *s)
 {
-
 	return(false);
 }
