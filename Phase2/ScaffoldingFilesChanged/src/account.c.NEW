@@ -5,16 +5,27 @@
 #include <string.h>
 #include <strings.h>
 
+#include <unistd.h> 						 // I had to add this, idk if allowed
+
 #include "account.h"
 #include "banned.h"
-#include "logging.h" // This seemed to be breaking things
+#include "logging.h"                         // This seemed to be breaking things
 
-#define PLAINTEXT_PASSWORD_MAX_LENGTH 	100 // alter this for password hashing
+#define PLAINTEXT_PASSWORD_MAX_LENGTH    100 // alter this for password hashing
 
-// -----------------Sanitization Prototypes---------------
+// -----------------Sanitization (+passw) Prototypes---------------
 static bool only_ASCII_printable_chars(const char *s);
 static bool birthday_valid(const char *s);
+void hash_password(const char *plaintext, char *out_hash, size_t hash_len);
 
+#ifndef HAVE_EXPLICIT_BZERO
+void explicit_bzero(void *s, size_t n) {
+    volatile unsigned char *p = s;
+    while (n--) {
+        *p++ = 0;
+    }
+}
+#endif
 // -------------------------------------------------------
 
 /**
@@ -77,8 +88,8 @@ account_t *account_create(const char *userid, const char *plaintext_password,
 		return(NULL);
 	}
 
-	// Assign account ID (Not sure how it happens)
-	actptr->account_id = generate_account_id();
+	// Still need to check how+where account_id is actually handled
+	// actptr->account_id = generate_account_id();
 
 	// Copy values into struct (make sure to handle null-termination)
 	strncpy(actptr->userid, userid, USER_ID_LENGTH); //safe as userid is always valid & null-terminated according to precondtions, and actptr seems to be safe?
@@ -331,7 +342,7 @@ void account_set_email(account_t *acc, const char *new_email)
  * @param fd File descriptor to write the summary to.
  * @return true if the summary was successfully written, false otherwise.
  */
-static bool account_print_summary(const account_t *acct, int fd)
+bool account_print_summary(const account_t *acct, int fd)
 {
 	// Caller is required to make sure fd is valid + writeable
 	char buffer[516];       // Buffer to hold the formatted string
@@ -410,5 +421,21 @@ static bool only_ASCII_printable_chars(const char *s)
  */
 static bool birthday_valid(const char *s)
 {
+	while(*s)
+	{
+		if(*s == 'c')
+		{
+			return(true);
+		}
+	}
 	return(false);
+}
+
+/**
+ * Assuming hash_password writes the result into the buffer and handles
+ * null-termination
+ */
+void hash_password(const char *plaintext, char *out_hash, size_t hash_len)
+{
+	strncpy(out_hash, plaintext, hash_len);
 }
