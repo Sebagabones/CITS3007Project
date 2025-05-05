@@ -360,3 +360,23 @@ bool account_print_summary(const account_t *acct, int fd)
 
 	return(true);
 }
+
+/**
+ * @brief Function to neutralise email inputs
+ * 
+ * c Printable ASCII = characters with decimal values from 32 (space) to 126 (~)
+ * Excludes 32
+ * 
+ * @param s char pointer to be checked
+ * @return true if the string is only ASCII printable characters, false otherwise.
+ */
+bool only_ASCII_printable_chars(const char *s) {
+    while (*s) {
+        unsigned char c = (unsigned char)*s;
+        if (c < 33 || c > 126) {
+            return(false);
+        }
+        s++;
+    }
+    return(true);
+}
