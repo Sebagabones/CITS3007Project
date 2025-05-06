@@ -29,5 +29,5 @@ exit 1
 fi
 fi
 
-git add compile_commands.json
 make clean
+git add compile_commands.json
