@@ -30,6 +30,7 @@ void account_free(account_t *acc)
 	(void)acc;
 }
 
+//test
 bool account_validate_password(const account_t *acc, const char *plaintext_password)
 {
 	// remove the contents of this function and replace it with your own code.
