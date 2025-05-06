@@ -17,13 +17,9 @@ echo "Changed to directory: $(pwd)" >&2
 logicalCpuCount=$([ $(uname) = 'Darwin' ] && sysctl -n hw.logicalcpu_max || lscpu -p | grep -E -v '^#' | wc -l)
 
 make clean
-if ! bear -- make -j "$logicalCpuCount"; then
- echo "'bear -- make' failed, trying 'bear make' instead..." >&2
-if ! bear make -j "$logicalCpuCount"; then
- echo "Both 'bear -- make' and 'bear make' failed." >&2
-exit 1
-fi
-fi
+bear -- make -j "$logicalCpuCount"
+bear make -j "$logicalCpuCount"
+
 
 make clean
 git add compile_commands.json

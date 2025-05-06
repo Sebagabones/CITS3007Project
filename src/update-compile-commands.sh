@@ -20,14 +20,8 @@ logicalCpuCount=$([ "$(uname)" = 'Darwin' ] && sysctl -n hw.logicalcpu_max || ls
 
 make clean
 
-
-if ! bear -- make all no-sanitize debug thread full -j "$logicalCpuCount"; then
- echo "'bear -- make' failed, trying 'bear make' instead..." >&2
-if ! bear make all no-sanitize debug thread full -j "$logicalCpuCount"; then
- echo "Both 'bear -- make' and 'bear make' failed." >&2
-exit 1
-fi
-fi
+bear -- make all no-sanitize debug thread full -j "$logicalCpuCount"
+bear make all no-sanitize debug thread full -j "$logicalCpuCount"
 
 make clean
 git add compile_commands.json
