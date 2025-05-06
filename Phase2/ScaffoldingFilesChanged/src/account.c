@@ -17,7 +17,7 @@
 // -----------------Sanitization (+passw) Prototypes---------------
 static bool only_ASCII_printable_chars(const char *s);
 static bool birthday_valid(const char *s);
-void hash_password(const char *plaintext, char *out_hash, size_t hash_len);
+bool hash_password(const char *plaintext, char *out_hash, size_t hash_len);
 
 #ifndef HAVE_EXPLICIT_BZERO
 void explicit_bzero(void *s, size_t n)
@@ -154,9 +154,10 @@ void account_free(account_t *acc)
  */
 bool account_validate_password(const account_t *acc, const char *plaintext_password)
 {
-	// remove the contents of this function and replace it with your own code.
-	(void)acc;
-	(void)plaintext_password;
+	if (strncmp(acc->password_hash, plaintext_password, HASH_LENGTH) == 0)
+	{
+		return(true);
+	}
 
 	return(false);
 }
@@ -172,9 +173,10 @@ bool account_validate_password(const account_t *acc, const char *plaintext_passw
  */
 bool account_update_password(account_t *acc, const char *new_plaintext_password)
 {
-	// remove the contents of this function and replace it with your own code.
-	(void)acc;
-	(void)new_plaintext_password;
+	if (hash_password(new_plaintext_password, acc->password_hash, HASH_LENGTH))
+	{                               // Assuming hash_password writes the result into the buffer and handles
+		return(true);               // null-termination
+	}
 
 	return(false);
 }
@@ -221,11 +223,9 @@ void account_record_login_failure(account_t *acc)
 
 	time_t currentTime = time(NULL);
 
-	log_message(LOG_INFO, "time failed");
-
 	acc->last_login_time = currentTime;
 
-	acc->login_fail_count = acc->login_fail_count + 1;;
+	acc->login_fail_count = acc->login_fail_count + 1;
 	acc->login_count	  = 0;
 }
 
@@ -375,14 +375,14 @@ bool account_print_summary(const account_t *acct, int fd)
 	                             acct->login_fail_count,
 	                             acct->last_ip);
 
-	if (bytes_written < 0 || bytes_written >= sizeof(buffer))
+	if (bytes_written < 0 || (size_t)bytes_written >= sizeof(buffer))
 	{
 		log_message(LOG_ERROR, "account_print_summary: Failed to format summary.");
 
 		return(false);
 	}
 
-	ssize_t result = write(fd, buffer, bytes_written);
+	ssize_t result = write(fd, buffer, (size_t)bytes_written);
 
 	if (result == -1)
 	{
@@ -455,8 +455,17 @@ static bool birthday_valid(const char *s)
 /**
  * Assuming hash_password writes the result into the buffer and handles
  * null-termination
+ *
+ * @param plaintext
+ * @param out_hash
+ * @param hash_len
  */
-void hash_password(const char *plaintext, char *out_hash, size_t hash_len)
+bool hash_password(const char *plaintext, char *out_hash, size_t hash_len)
 {
-	strncpy(out_hash, plaintext, hash_len);
+	if (strncpy(out_hash, plaintext, hash_len) == NULL)
+	{
+		return(false); // Handle failure
+	}
+
+	return(true); // Handle success
 }
