@@ -14,7 +14,7 @@ repos:
     hooks:
     - id: generate-compile-commands-scaffoldingFilesChanged
       name: Generate compile_commands.json for /Phase2/ScaffoldingFilesChanged
-      entry: src/update-compile-commands.sh
+      entry: Phase2/ScaffoldingFilesChanged/update-compile-commands.sh
       language: script
       pass_filenames: false
 - repo: local
