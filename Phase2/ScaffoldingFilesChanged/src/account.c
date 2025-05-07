@@ -1,4 +1,5 @@
 #include "account.h"
+#include "banned.h"
 
 /**
  * Create a new account with the specified parameters.
