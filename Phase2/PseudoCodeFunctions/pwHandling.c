@@ -8,12 +8,14 @@
  * V1.0.0 (Just to keep track of my work. Not the project's version number.)
  */
 
-#include "pwHandling.h"
-#include <stdio.h>
-#include <string.h> // NOLINT
-#include <stdlib.h>
-#include <argon2.h>
-#include <sodium.h>
+ #include "pwHandling.h"
+ #include <stdio.h>
+ #include <string.h> // NOLINT
+ #include <stdlib.h>
+ #include <limits.h>
+ #include <stdint.h>
+ #include <argon2.h>
+ #include <sodium.h>
 
 // Define the account structure - People working on 3.3 please change as you need. But DO NOT TOUCH HASH_LENGTH!!!
 struct account
@@ -32,6 +34,12 @@ struct account
  */
 static bool generate_random_bytes(unsigned char *output, size_t length)
 {
+	// Validate parameters
+	if (output == NULL || length == 0)
+	{
+		return(false);
+	}
+
 	// Use libsodium for secure random number generation
 	if (sodium_init() < 0)
 	{
@@ -53,8 +61,24 @@ static bool generate_random_bytes(unsigned char *output, size_t length)
 static bool constant_compare(const char *a,
                              const char *b)
 {
-	// Use libsodium's constant-time comparison to prevent timing attacks (https://doc.libsodium.org/helpers#constant-time-test-for-equality)
-	return(sodium_memcmp(a, b, strlen(a)) == 0 && strlen(a) == strlen(b));
+	// Validate parameters
+	if (a == NULL || b == NULL)
+	{
+		return(false);
+	}
+
+	// Get lengths first to avoid multiple strlen calls
+	size_t len_a = strlen(a);
+	size_t len_b = strlen(b);
+
+	// If lengths are different, return false without doing comparison
+	if (len_a != len_b)
+	{
+		return(false);
+	}
+
+	// Use libsodium's constant-time comparison to prevent timing attacks
+	return(sodium_memcmp(a, b, len_a) == 0);
 }
 
 /**
@@ -71,8 +95,23 @@ static void format_argon2_hash(char *output, int t_cost, int m_cost, int paralle
                                const unsigned char *salt,
                                const unsigned char *raw_hash)
 {
+	// Validate parameters
+	if (output == NULL || salt == NULL || raw_hash == NULL)
+	{
+		if (output != NULL)
+		{
+			output[0] = '\0';  // Set to empty string on error
+		}
+
+		return;
+	}
+
 	char salt_b64[64];
 	char hash_b64[64];
+
+	// Initialize buffers to prevent uninitialized data
+	memset(salt_b64, 0, sizeof(salt_b64));
+	memset(hash_b64, 0, sizeof(hash_b64));
 
 	// Encode salt and hash to base64 (https://doc.libsodium.org/helpers#base64-encoding-decoding)
 	sodium_bin2base64(salt_b64, sizeof(salt_b64), salt, SALT_LENGTH, sodium_base64_VARIANT_ORIGINAL);
@@ -91,7 +130,7 @@ static void format_argon2_hash(char *output, int t_cost, int m_cost, int paralle
 	}
 	else
 	{
-		// Not enough space, indicate error by setting to empty string (May not be safe)
+		// Not enough space, indicate error by setting to empty string
 		output[0] = '\0';
 	}
 }
@@ -109,6 +148,13 @@ static void format_argon2_hash(char *output, int t_cost, int m_cost, int paralle
 static bool extract_hash_components(const char *hash_str, char *salt_output,
                                     int *t_cost_output, int *m_cost_output, int *parallelism_output)
 {
+	// Validate parameters
+	if (hash_str == NULL || salt_output == NULL ||
+	    t_cost_output == NULL || m_cost_output == NULL || parallelism_output == NULL)
+	{
+		return(false);
+	}
+
 	// Expected format: $argon2id$v=19$m=65536,t=3,p=4$[salt_base64]$[hash_base64]
 
 	// Check if the hash starts with the expected prefix
@@ -126,10 +172,17 @@ static bool extract_hash_components(const char *hash_str, char *salt_output,
 		return(false);
 	}
 
-	// Extract memory cost
-	*m_cost_output = atoi(params_start);
+	// Extract memory cost with validation
+	int32_t m_cost_value = atoi(params_start);
 
-	// Extract time cost
+	if (m_cost_value <= 0 || m_cost_value > INT_MAX)
+	{
+		return(false);   // Invalid value
+	}
+
+	*m_cost_output = (int)m_cost_value;
+
+	// Extract time cost with validation
 	char *t_cost_start = strstr(params_start, ",t=");
 
 	if (t_cost_start == NULL)
@@ -137,9 +190,16 @@ static bool extract_hash_components(const char *hash_str, char *salt_output,
 		return(false);
 	}
 
-	*t_cost_output = atoi(t_cost_start + 3);
+	int32_t t_cost_value = atoi(t_cost_start + 3);
 
-	// Extract parallelism
+	if (t_cost_value <= 0 || t_cost_value > INT_MAX)
+	{
+		return(false);   // Invalid value
+	}
+
+	*t_cost_output = (int)t_cost_value;
+
+	// Extract parallelism with validation
 	char *p_start = strstr(params_start, ",p=");
 
 	if (p_start == NULL)
@@ -147,7 +207,14 @@ static bool extract_hash_components(const char *hash_str, char *salt_output,
 		return(false);
 	}
 
-	*parallelism_output = atoi(p_start + 3);
+	int32_t p_value = atoi(p_start + 3);
+
+	if (p_value <= 0 || p_value > INT_MAX)
+	{
+		return(false);   // Invalid value
+	}
+
+	*parallelism_output = (int)p_value;
 
 	// Extract salt
 	char *salt_start = params_end + 1;
@@ -159,14 +226,22 @@ static bool extract_hash_components(const char *hash_str, char *salt_output,
 	}
 
 	size_t salt_b64_len = salt_end - salt_start;
-	char   salt_b64[64];
+
+	// Validate salt_b64_len is reasonable
+	if (salt_b64_len >= 64)
+	{
+		return(false);
+	}
+
+	char salt_b64[64];
+	memset(salt_b64, 0, sizeof(salt_b64));  // Initialize to zeros
 	strncpy(salt_b64, salt_start, salt_b64_len);
 	salt_b64[salt_b64_len] = '\0';
 
 	// Decode salt from base64 (https://doc.libsodium.org/helpers#base64-encoding-decoding
 	size_t salt_bin_len;
 
-	if (sodium_base642bin((unsigned char * )salt_output, SALT_LENGTH, salt_b64,
+	if (sodium_base642bin((unsigned char *)salt_output, SALT_LENGTH, salt_b64,
 	                      salt_b64_len, NULL, &salt_bin_len, NULL,
 	                      sodium_base64_VARIANT_ORIGINAL) != 0)
 	{
@@ -192,20 +267,35 @@ static bool generate_argon2_hash(const char *password,
                                  int t_cost, int m_cost, int parallelism,
                                  char *output)
 {
+	// Validate parameters
+	if (password == NULL || salt == NULL || output == NULL)
+	{
+		return(false);
+	}
+
+	// Validate costs are positive
+	if (t_cost <= 0 || m_cost <= 0 || parallelism <= 0)
+	{
+		return(false);
+	}
+
 	// Create a buffer for the raw hash
 	unsigned char raw_hash[HASH_RAW_LENGTH];
 
+	// Calculate password length safely
+	size_t password_len = strlen(password);
+
 	// Hashes a password with Argon2id, producing an encoded hash. For some reason the docs don't show up when I hover over the function name.
 	// This description is pulled from line 220 to 232 from https://github.com/jedisct1/libsodium/blob/master/src/libsodium/crypto_pwhash/argon2/argon2.h
-	int result = argon2id_hash_raw(t_cost,           // Time cost
-	                               m_cost,           // Memory cost
-	                               parallelism,      // Parallelism
-	                               password,         // Password
-	                               strlen(password), // Password length
-	                               salt,             // Salt
-	                               SALT_LENGTH,      // Salt length
-	                               raw_hash,         // Output hash
-	                               HASH_RAW_LENGTH); // Output hash length
+	int result = argon2id_hash_raw(t_cost,            // Time cost
+	                               m_cost,            // Memory cost
+	                               parallelism,       // Parallelism
+	                               password,          // Password
+	                               password_len,      // Password length
+	                               salt,              // Salt
+	                               SALT_LENGTH,       // Salt length
+	                               raw_hash,          // Output hash
+	                               HASH_RAW_LENGTH);  // Output hash length
 
 	if (result != ARGON2_OK)
 	{
@@ -214,6 +304,12 @@ static bool generate_argon2_hash(const char *password,
 
 	// Format the final hash string with parameters and salt
 	format_argon2_hash(output, t_cost, m_cost, parallelism, salt, raw_hash);
+
+	// Check if formatting was successful (empty string on error)
+	if (output[0] == '\0')
+	{
+		return(false);
+	}
 
 	return(true);
 }
@@ -232,7 +328,7 @@ bool account_validate_password(const account_t *acc,
 	int			  t_cost, m_cost, parallelism;
 
 	// Helper function to extract salt and parameters from stored format
-	if (!extract_hash_components(acc->password_hash, (char * )stored_salt, &t_cost, &
+	if (!extract_hash_components(acc->password_hash, (char *)stored_salt, &t_cost, &
 	                             m_cost, &parallelism))
 	{
 		return(false);
@@ -262,6 +358,7 @@ bool account_update_password(account_t *acc,
 
 	// Generate random salt
 	unsigned char salt[SALT_LENGTH];
+	memset(salt, 0, SALT_LENGTH);  // Initialize to zeros
 
 	if (!generate_random_bytes(salt, SALT_LENGTH))
 	{
@@ -270,6 +367,7 @@ bool account_update_password(account_t *acc,
 
 	// Hash the new password with Argon2id
 	char new_hash[HASH_LENGTH];
+	memset(new_hash, 0, HASH_LENGTH);  // Initialize to zeros
 
 	if (!generate_argon2_hash(new_plaintext_password, salt, T_COST, M_COST,
 	                          PARALLELISM, new_hash))
@@ -279,6 +377,6 @@ bool account_update_password(account_t *acc,
 
 	// Update the account's password hash
 	strncpy(acc->password_hash, new_hash, HASH_LENGTH - 1);
-	acc->password_hash[HASH_LENGTH - 1] = '\0';    // Ensure null termination
+	acc->password_hash[HASH_LENGTH - 1] = '\0';     // Ensure null termination
 	return(true);
 }
