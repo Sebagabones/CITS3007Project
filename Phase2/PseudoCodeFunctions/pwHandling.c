@@ -8,12 +8,12 @@
  * V1.0.0 (Just to keep track of my work. Not the project's version number.)
  */
 
- #include "pwHandling.h"
- #include <stdio.h>
- #include <stdlib.h>
- #include <string.h>
- #include <argon2.h>
- #include <sodium.h>
+#include "pwHandling.h"
+#include <stdio.h>
+#include <string.h> // NOLINT
+#include <stdlib.h>
+#include <argon2.h>
+#include <sodium.h>
 
 // Define the account structure - People working on 3.3 please change as you need. But DO NOT TOUCH HASH_LENGTH!!!
 struct account
@@ -50,7 +50,8 @@ static bool generate_random_bytes(unsigned char *output, size_t length)
  * @param b Second string to compare
  * @return true if strings are equal, false otherwise
  */
-static bool constant_compare(const char *a, const char *b)
+static bool constant_compare(const char *a,
+                             const char *b)
 {
 	// Use libsodium's constant-time comparison to prevent timing attacks (https://doc.libsodium.org/helpers#constant-time-test-for-equality)
 	return(sodium_memcmp(a, b, strlen(a)) == 0 && strlen(a) == strlen(b));
@@ -67,7 +68,8 @@ static bool constant_compare(const char *a, const char *b)
  * @param raw_hash Raw hash output from Argon2
  */
 static void format_argon2_hash(char *output, int t_cost, int m_cost, int parallelism,
-                               const unsigned char *salt, const unsigned char *raw_hash)
+                               const unsigned char *salt,
+                               const unsigned char *raw_hash)
 {
 	char salt_b64[64];
 	char hash_b64[64];
@@ -164,7 +166,7 @@ static bool extract_hash_components(const char *hash_str, char *salt_output,
 	// Decode salt from base64 (https://doc.libsodium.org/helpers#base64-encoding-decoding
 	size_t salt_bin_len;
 
-	if (sodium_base642bin((unsigned char *)salt_output, SALT_LENGTH, salt_b64,
+	if (sodium_base642bin((unsigned char * )salt_output, SALT_LENGTH, salt_b64,
 	                      salt_b64_len, NULL, &salt_bin_len, NULL,
 	                      sodium_base64_VARIANT_ORIGINAL) != 0)
 	{
@@ -185,7 +187,8 @@ static bool extract_hash_components(const char *hash_str, char *salt_output,
  * @param output Buffer to store the formatted hash output
  * @return true if hashing was successful, false otherwise
  */
-static bool generate_argon2_hash(const char *password, const unsigned char *salt,
+static bool generate_argon2_hash(const char *password,
+                                 const unsigned char *salt,
                                  int t_cost, int m_cost, int parallelism,
                                  char *output)
 {
@@ -202,8 +205,7 @@ static bool generate_argon2_hash(const char *password, const unsigned char *salt
 	                               salt,             // Salt
 	                               SALT_LENGTH,      // Salt length
 	                               raw_hash,         // Output hash
-	                               HASH_RAW_LENGTH   // Output hash length
-	                               );
+	                               HASH_RAW_LENGTH); // Output hash length
 
 	if (result != ARGON2_OK)
 	{
@@ -216,7 +218,8 @@ static bool generate_argon2_hash(const char *password, const unsigned char *salt
 	return(true);
 }
 
-bool account_validate_password(const account_t *acc, const char *plaintext_password)
+bool account_validate_password(const account_t *acc,
+                               const char *plaintext_password)
 {
 	// Validate preconditions as per requirement
 	if (acc == NULL || plaintext_password == NULL)
@@ -229,8 +232,8 @@ bool account_validate_password(const account_t *acc, const char *plaintext_passw
 	int			  t_cost, m_cost, parallelism;
 
 	// Helper function to extract salt and parameters from stored format
-	if (!extract_hash_components(acc->password_hash, (char *)stored_salt, &t_cost,
-	                             &m_cost, &parallelism))
+	if (!extract_hash_components(acc->password_hash, (char * )stored_salt, &t_cost, &
+	                             m_cost, &parallelism))
 	{
 		return(false);
 	}
@@ -248,7 +251,8 @@ bool account_validate_password(const account_t *acc, const char *plaintext_passw
 	return(constant_compare(computed_hash, acc->password_hash));
 }
 
-bool account_update_password(account_t *acc, const char *new_plaintext_password)
+bool account_update_password(account_t *acc,
+                             const char *new_plaintext_password)
 {
 	// Validate preconditions
 	if (acc == NULL || new_plaintext_password == NULL)
@@ -275,6 +279,6 @@ bool account_update_password(account_t *acc, const char *new_plaintext_password)
 
 	// Update the account's password hash
 	strncpy(acc->password_hash, new_hash, HASH_LENGTH - 1);
-	acc->password_hash[HASH_LENGTH - 1] = '\0';  // Ensure null termination
+	acc->password_hash[HASH_LENGTH - 1] = '\0';    // Ensure null termination
 	return(true);
 }

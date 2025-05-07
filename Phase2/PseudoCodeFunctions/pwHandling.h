@@ -9,18 +9,18 @@
  * V1.0.0 (Just to keep track of my work. Not the project's version number.)
  */
 
- #ifndef PW_HANDLING_H
- #define PW_HANDLING_H
+#ifndef PHASE2_PSEUDOCODEFUNCTIONS_PWHANDLING_H_
+#define PHASE2_PSEUDOCODEFUNCTIONS_PWHANDLING_H_
 
- #include <stdbool.h>
+#include <stdbool.h>
 
 // Define constants for password hashing
- #define SALT_LENGTH		16
- #define HASH_LENGTH		128
- #define HASH_RAW_LENGTH	32
- #define T_COST				3     // Time cost parameter
- #define M_COST				65536 // Memory cost parameter (64 MB)
- #define PARALLELISM		4     // Parallelism parameter
+#define SALT_LENGTH		   16
+#define HASH_LENGTH		   128
+#define HASH_RAW_LENGTH	   32
+#define T_COST			   3     // Time cost parameter
+#define M_COST			   65536 // Memory cost parameter (64 MB)
+#define PARALLELISM		   4     // Parallelism parameter
 
 // Forward declaration of account structure
 typedef struct account account_t;
@@ -36,7 +36,8 @@ typedef struct account account_t;
  * @param plaintext_password The plaintext password to validate
  * @return true if the password matches, false otherwise
  */
-bool account_validate_password(const account_t *acc, const char *plaintext_password);
+bool account_validate_password(const account_t *acc,
+                               const char *plaintext_password);
 
 /**
  * @brief Updates an account's password with a new plaintext password
@@ -49,6 +50,7 @@ bool account_validate_password(const account_t *acc, const char *plaintext_passw
  * @param new_plaintext_password The new plaintext password
  * @return true if the password was updated successfully, false otherwise
  */
-bool account_update_password(account_t *acc, const char *new_plaintext_password);
+bool account_update_password(account_t *acc,
+                             const char *new_plaintext_password);
 
- #endif
+#endif  // PHASE2_PSEUDOCODEFUNCTIONS_PWHANDLING_H_
