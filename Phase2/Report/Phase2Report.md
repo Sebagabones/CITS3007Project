@@ -29,3 +29,8 @@ TOCTOU *(/tɒk ˈtuːə/)*
     - We used explicit_bzero when freeing account struct
     - What tests?
     - How tests were made?
+4. Invalid Birthdate Handling
+    - Prevents fraudulent accounts (May not necessarily be a security issue in terms of the system)
+    - Defaults date to 0000-00-00
+    - What tests?
+    - How tests were made?
