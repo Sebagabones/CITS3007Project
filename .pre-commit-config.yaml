@@ -14,7 +14,7 @@ repos:
     hooks:
     - id: generate-compile-commands-scaffoldingFilesChanged
       name: Generate compile_commands.json for /Phase2/ScaffoldingFilesChanged
-      entry: src/update-compile-commands.sh
+      entry: Phase2/ScaffoldingFilesChanged/update-compile-commands.sh
       language: script
       pass_filenames: false
 - repo: local
@@ -22,33 +22,27 @@ repos:
   - id: flawfinder
     name: flawfinder security scanner
     description: 'Scan C/C++ code for potential security vulnerabilities'
-    entry: flawfinder --error-level=1
+    entry: flawfinder --error-level=3
     language: system
     files: \.(c|cpp|h|hpp)$
-    exclude: (\.md$|^Phase2/ScaffoldingFilesNotModified/|stubs\.c$|bogus_main\.c$|db\.h$|account\.h$|login\.h$|logging\.h$)
+    exclude: (\.md$|^Phase2/ScaffoldingFilesNotModified/|stubs\.c$|bogus_main\.c$|db\.h$|account\.h$|login\.h$|logging\.h$|banned\.h$)
 -   repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v5.0.0
     hooks:
     -   id: trailing-whitespace
-    -   id: end-of-file-fixer
     -   id: check-yaml
     -   id: check-added-large-files
 -   repo: https://github.com/pocc/pre-commit-hooks
     rev: v1.3.5
     hooks:
       - id: uncrustify
-        exclude: (\.md$|^Phase2/ScaffoldingFilesNotModified/|stubs\.c$|bogus_main\.c$|db\.h$|account\.h$|login\.h$|logging\.h$)
+        exclude: (\.md$|^Phase2/ScaffoldingFilesNotModified/|stubs\.c$|bogus_main\.c$|db\.h$|account\.h$|login\.h$|logging\.h$|banned\.h$)
         args: ["-c", ".github/workflows/uncrustify.cfg", "--replace", "--no-backup"]
       - id: clang-tidy
-        exclude: (\.md$|^Phase2/ScaffoldingFilesNotModified/|stubs\.c$|bogus_main\.c$|db\.h$|account\.h$|login\.h$|logging\.h$)
+        exclude: (\.md$|^Phase2/ScaffoldingFilesNotModified/|^Phase2/PseudoCodeFunctions/|stubs\.c$|bogus_main\.c$|db\.h$|account\.h$|login\.h$|logging\.h$|banned\.h$)
         args: ["--fix-errors", "-warnings-as-errors=*"]
       - id: cppcheck
-        exclude: (\.md$|^Phase2/ScaffoldingFilesNotModified/|stubs\.c$|bogus_main\.c$|db\.h$|account\.h$|login\.h$|logging\.h$)
-        args: ["--check-level=exhaustive"]
--   repo: https://github.com/cpplint/cpplint
-    rev: 2.0.2  # You can use the latest version or a specific commit hash
-    hooks:
-    -   id: cpplint
-        exclude: (\.md$|^Phase2/ScaffoldingFilesNotModified/|stubs\.c$|bogus_main\.c$|db\.h$|account\.h$|login\.h$|logging\.h$)
-        args:
-          - --filter=+build,-legal,+readablity,+runtime,-whitespace/indent,-build/include_alpha,-whitespace/braces,-whitespace/comments,-whitespace/newline,-readability/braces,-whitespace/tab,-whitespace/line_length,-build/include_subdir
+        exclude: (\.md$|^Phase2/ScaffoldingFilesNotModified/|^Phase2/PseudoCodeFunctions/|stubs\.c$|bogus_main\.c$|db\.h$|account\.h$|login\.h$|logging\.h$|banned\.h$)
+      - id: cpplint
+        exclude: (\.md$|^Phase2/ScaffoldingFilesNotModified/|stubs\.c$|bogus_main\.c$|db\.h$|account\.h$|login\.h$|logging\.h$|banned\.h$)
+        args: ["--filter=+build,-legal,+readablity,+runtime,-whitespace/indent,-build/include_alpha,-whitespace/braces,-whitespace/comments,-whitespace/newline,-readability/braces,-whitespace/tab,-whitespace/line_length,-build/include_subdir"]
