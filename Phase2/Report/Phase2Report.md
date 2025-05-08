@@ -68,3 +68,12 @@ TOCTOU *(/tɒk ˈtuːə/)*
     - If statements just check imports from 3.4 therfore should have all the previously said features
     - What tests?
     - How tests were made?
+3. File Descriptor
+
+### 3.6 Coding Standards
+1. We are using C11
+
+### 3.7 Test Code
+1. We have used tst testing code from github
+2. Simple and easy to use
+3. Simply use the function and add the input + expected output
