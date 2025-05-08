@@ -19,3 +19,8 @@ TOCTOU *(/tɒk ˈtuːə/)*
     - It was done by using strncpy()
     - What tests?
     - How tests were made?
+2. Neutralisation over Sanitisation
+    - Instead of fixing inputs by deleting weird characters we just didn't allow the program to make the input at all. This prevents invalid data whilst also making sure users don't have an issue with accounts having the wrong credentials
+    - Email, userid and birthday are all validated
+    - What tests?
+    - How tests were made?
