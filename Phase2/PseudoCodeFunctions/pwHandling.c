@@ -5,7 +5,7 @@
  * This file implements the functions for password hashing and validation using the Argon2id
  * algorithm, with the sodium salt generation and constant-time comparison.
  *
- * V1.0.0 (Just to keep track of my work. Not the project's version number.)
+ * V1.0.1 (Just to keep track of my work. Not the project's version number.)
  */
 
  #include "pwHandling.h"

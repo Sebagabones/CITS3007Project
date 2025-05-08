@@ -6,7 +6,7 @@
  * using the goated Argon2id algorithm, which provides strong protection against both
  * side-channel attacks and GPU-based attacks. (textbook definition pulled from their website)
  *
- * V1.0.0 (Just to keep track of my work. Not the project's version number.)
+ * V1.0.1 (Just to keep track of my work. Not the project's version number.)
  */
 
 #ifndef PHASE2_PSEUDOCODEFUNCTIONS_PWHANDLING_H_

@@ -12,25 +12,6 @@
             "-Isrc",
             "-Isrc",
             "-o",
-            "build/login.o",
-            "src/login.c"
-        ],
-        "directory": "/home/vagrant/CITS3007Project/Phase2/ScaffoldingFilesChanged",
-        "file": "src/login.c"
-    },
-    {
-        "arguments": [
-            "gcc",
-            "-c",
-            "-g",
-            "-fno-omit-frame-pointer",
-            "-std=c11",
-            "-pedantic-errors",
-            "-Wall",
-            "-Wextra",
-            "-Isrc",
-            "-Isrc",
-            "-o",
             "build/stubs.o",
             "src/stubs.c"
         ],
@@ -55,6 +36,25 @@
         ],
         "directory": "/home/vagrant/CITS3007Project/Phase2/ScaffoldingFilesChanged",
         "file": "src/account.c"
+    },
+    {
+        "arguments": [
+            "gcc",
+            "-c",
+            "-g",
+            "-fno-omit-frame-pointer",
+            "-std=c11",
+            "-pedantic-errors",
+            "-Wall",
+            "-Wextra",
+            "-Isrc",
+            "-Isrc",
+            "-o",
+            "build/login.o",
+            "src/login.c"
+        ],
+        "directory": "/home/vagrant/CITS3007Project/Phase2/ScaffoldingFilesChanged",
+        "file": "src/login.c"
     },
     {
         "arguments": [
