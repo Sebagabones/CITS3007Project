@@ -12,12 +12,12 @@
       "-Isrc",
       "-c",
       "-o",
-      "build/login.o",
-      "src/login.c"
+      "build/alternate_main.o",
+      "src/alternate_main.c"
     ],
-    "directory": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/Phase2/ScaffoldingFilesChanged",
-    "file": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/Phase2/ScaffoldingFilesChanged/src/login.c",
-    "output": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/Phase2/ScaffoldingFilesChanged/build/login.o"
+    "directory": "/home/sexcandygirl/CITS3007/Project/CITS3007Project/Phase2/ScaffoldingFilesChanged",
+    "file": "/home/sexcandygirl/CITS3007/Project/CITS3007Project/Phase2/ScaffoldingFilesChanged/src/alternate_main.c",
+    "output": "/home/sexcandygirl/CITS3007/Project/CITS3007Project/Phase2/ScaffoldingFilesChanged/build/alternate_main.o"
   },
   {
     "arguments": [
@@ -35,9 +35,9 @@
       "build/bogus_main.o",
       "src/bogus_main.c"
     ],
-    "directory": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/Phase2/ScaffoldingFilesChanged",
-    "file": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/Phase2/ScaffoldingFilesChanged/src/bogus_main.c",
-    "output": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/Phase2/ScaffoldingFilesChanged/build/bogus_main.o"
+    "directory": "/home/sexcandygirl/CITS3007/Project/CITS3007Project/Phase2/ScaffoldingFilesChanged",
+    "file": "/home/sexcandygirl/CITS3007/Project/CITS3007Project/Phase2/ScaffoldingFilesChanged/src/bogus_main.c",
+    "output": "/home/sexcandygirl/CITS3007/Project/CITS3007Project/Phase2/ScaffoldingFilesChanged/build/bogus_main.o"
   },
   {
     "arguments": [
@@ -52,32 +52,12 @@
       "-Isrc",
       "-c",
       "-o",
-      "build/alternate_main.o",
-      "src/alternate_main.c"
+      "build/login.o",
+      "src/login.c"
     ],
-    "directory": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/Phase2/ScaffoldingFilesChanged",
-    "file": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/Phase2/ScaffoldingFilesChanged/src/alternate_main.c",
-    "output": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/Phase2/ScaffoldingFilesChanged/build/alternate_main.o"
-  },
-  {
-    "arguments": [
-      "/usr/bin/gcc",
-      "-g",
-      "-fno-omit-frame-pointer",
-      "-std=c11",
-      "-pedantic-errors",
-      "-Wall",
-      "-Wextra",
-      "-Isrc",
-      "-Isrc",
-      "-c",
-      "-o",
-      "build/account.o",
-      "src/account.c"
-    ],
-    "directory": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/Phase2/ScaffoldingFilesChanged",
-    "file": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/Phase2/ScaffoldingFilesChanged/src/account.c",
-    "output": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/Phase2/ScaffoldingFilesChanged/build/account.o"
+    "directory": "/home/sexcandygirl/CITS3007/Project/CITS3007Project/Phase2/ScaffoldingFilesChanged",
+    "file": "/home/sexcandygirl/CITS3007/Project/CITS3007Project/Phase2/ScaffoldingFilesChanged/src/login.c",
+    "output": "/home/sexcandygirl/CITS3007/Project/CITS3007Project/Phase2/ScaffoldingFilesChanged/build/login.o"
   },
   {
     "arguments": [
@@ -95,8 +75,28 @@
       "build/stubs.o",
       "src/stubs.c"
     ],
-    "directory": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/Phase2/ScaffoldingFilesChanged",
-    "file": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/Phase2/ScaffoldingFilesChanged/src/stubs.c",
-    "output": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/Phase2/ScaffoldingFilesChanged/build/stubs.o"
+    "directory": "/home/sexcandygirl/CITS3007/Project/CITS3007Project/Phase2/ScaffoldingFilesChanged",
+    "file": "/home/sexcandygirl/CITS3007/Project/CITS3007Project/Phase2/ScaffoldingFilesChanged/src/stubs.c",
+    "output": "/home/sexcandygirl/CITS3007/Project/CITS3007Project/Phase2/ScaffoldingFilesChanged/build/stubs.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-g",
+      "-fno-omit-frame-pointer",
+      "-std=c11",
+      "-pedantic-errors",
+      "-Wall",
+      "-Wextra",
+      "-Isrc",
+      "-Isrc",
+      "-c",
+      "-o",
+      "build/account.o",
+      "src/account.c"
+    ],
+    "directory": "/home/sexcandygirl/CITS3007/Project/CITS3007Project/Phase2/ScaffoldingFilesChanged",
+    "file": "/home/sexcandygirl/CITS3007/Project/CITS3007Project/Phase2/ScaffoldingFilesChanged/src/account.c",
+    "output": "/home/sexcandygirl/CITS3007/Project/CITS3007Project/Phase2/ScaffoldingFilesChanged/build/account.o"
   }
 ]
