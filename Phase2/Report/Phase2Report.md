@@ -46,3 +46,8 @@ TOCTOU *(/tɒk ˈtuːə/)*
     - t_cost, m_cost, parallelism is used to salt the hash
     - What tests?
     - How tests were made?
+3. Secure Comparisom
+    - Prevents attackers from using timing attacks
+    - secure_compare was used
+    - What tests?
+    - How tests were made?
