@@ -51,3 +51,8 @@ TOCTOU *(/tɒk ˈtuːə/)*
     - secure_compare was used
     - What tests?
     - How tests were made?
+4. Returning False
+    - Prevents insecure states
+    - Returns false when there is a fail case is met
+    - What tests?
+    - How tests were made?
