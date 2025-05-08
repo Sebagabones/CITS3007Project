@@ -24,3 +24,8 @@ TOCTOU *(/tɒk ˈtuːə/)*
     - Email, userid and birthday are all validated
     - What tests?
     - How tests were made?
+3. Safe Memory Allocation
+    - This stops credentials from leaking
+    - We used explicit_bzero when freeing account struct
+    - What tests?
+    - How tests were made?
