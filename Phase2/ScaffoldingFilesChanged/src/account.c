@@ -17,19 +17,20 @@
 // -----------------Sanitization (+passw) Prototypes---------------
 static bool only_ASCII_printable_chars(const char *s);
 static bool birthday_valid(const char *s);
-bool hash_password(const char *plaintext, char *out_hash, size_t hash_len);
+static bool hash_password(const char *plaintext, char *out_hash, size_t hash_len);
 
-#ifndef HAVE_EXPLICIT_BZERO
-void explicit_bzero(void *s, size_t n)
-{
-	volatile unsigned char *p = s;
-	while (n--)
-	{
-		*p++ = 0;
-	}
-}
-
-#endif
+//#ifndef HAVE_EXPLICIT_BZERO
+//void explicit_bzero(void *s, size_t n)
+//{
+//	volatile unsigned char *p = s;
+//
+//	while (n--)
+//	{
+//		*p++ = 0;
+//	}
+//}
+//
+//#endif
 // -------------------------------------------------------
 
 /**
@@ -96,17 +97,40 @@ account_t *account_create(const char *userid, const char *plaintext_password,
 	// actptr->account_id = generate_account_id();
 
 	// Copy values into struct (make sure to handle null-termination)
-	strncpy(actptr->userid, userid, USER_ID_LENGTH); //safe as userid is always valid & null-terminated according to precondtions, and actptr seems to be safe?
+	if (strlcpy(actptr->userid, userid, USER_ID_LENGTH) >= USER_ID_LENGTH)
+	{
+		log_message(LOG_ERROR, "strlcpy tried to create a string larger than USER_ID_LENGTH.");
+		account_free(actptr); //prevent memory leak
+
+		return(NULL);
+	}
+
 	actptr->userid[USER_ID_LENGTH - 1] = '\0';
 
 	hash_password(plaintext_password, actptr->password_hash, HASH_LENGTH);
 	// Assuming hash_password writes the result into the buffer and handles
 	// null-termination
 
-	strncpy(actptr->email, email, EMAIL_LENGTH); //safe as email is valid & null-terminated according to precondtions, and actptr seems to be safe?
+	// strncpy(actptr->email, email, EMAIL_LENGTH); //safe as email is valid & null-terminated according to precondtions, and actptr seems to be safe? */
+	if (strlcpy(actptr->email, email, EMAIL_LENGTH) >= EMAIL_LENGTH)
+	{
+		log_message(LOG_ERROR, "strlcpy tried to create a string larger than EMAIL_LENGTH.");
+		account_free(actptr); //prevent memory leak
+
+		return(NULL);
+	}
+
 	actptr->email[EMAIL_LENGTH - 1] = '\0';
 
-	strncpy(actptr->birthdate, final_birthdate, BIRTHDATE_LENGTH); //safe as birthdate is valid & null-terminated according to preconditions, and actptr seems to be safe?
+	// strncpy(actptr->birthdate, final_birthdate, BIRTHDATE_LENGTH); //safe as birthdate is valid & null-terminated according to preconditions, and actptr seems to be safe?
+	if (strlcpy(actptr->birthdate, final_birthdate, BIRTHDATE_LENGTH) >= BIRTHDATE_LENGTH)
+	{
+		log_message(LOG_ERROR, "strlcpy tried to create a string larger than BIRTHDAY_LENGTH.");
+		account_free(actptr); //prevent memory leak
+
+		return(NULL);
+	}
+
 	actptr->birthdate[BIRTHDATE_LENGTH - 1] = '\0';
 
 	// Set defaults
@@ -129,7 +153,7 @@ account_t *account_create(const char *userid, const char *plaintext_password,
  * @param acc Pointer to an account structure previously returned by `account_create`,
  *            or NULL. If NULL, no action is taken.
  */
-void account_free(account_t *acc)
+void account_free(account_t *acc) //cppcheck-suppress staticFunction
 {
 // as we are not using pointers in account_t struct, we don't need to free each item in the struct (I think, feel free to fact check) - https://stackoverflow.com/a/13590879
 // however, since this this will be freeing user accounts, we probably want to do more than just free the memory, instead zeroing it out so that it cannot be accessed later on - probaly explicit_bzero or similar (if we use C23 then we should use memset_explict)
@@ -331,8 +355,7 @@ void account_set_email(account_t *acc, const char *new_email)
 		return; // not sure how to handle
 	}
 
-	// Safe copy into the email field
-	strncpy(acc->email, new_email, EMAIL_LENGTH);
+	strlcpy(acc->email, new_email, EMAIL_LENGTH);
 	acc->email[EMAIL_LENGTH - 1] = '\0';  // Ensure null-termination
 }
 
@@ -349,19 +372,27 @@ void account_set_email(account_t *acc, const char *new_email)
 bool account_print_summary(const account_t *acct, int fd)
 {
 	// Caller is required to make sure fd is valid + writeable
-	char buffer[516];       // Buffer to hold the formatted string
-	char timebuf[64];
+	// char buffer[516];       // Buffer to hold the formatted string //  switching to asprintf which will allocate the buffer for us
+	char *buffer;
+	char  timebuf[64];
 
 	struct tm		 tm_result;
 	const struct tm *tm_info = localtime_r(&(acct->last_login_time), &tm_result);
 
 	if (tm_info == NULL || strftime(timebuf, sizeof(timebuf), "%Y-%m-%d %H:%M:%S", tm_info) == 0)
 	{
-		strncpy(timebuf, "Invalid time", sizeof(timebuf));
+		if (strlcpy(timebuf, "Invalid time", sizeof(timebuf)) >= sizeof(timebuf))
+		{
+			log_message(LOG_ERROR, "account_print_summary: strlcpy tried to create a string larger than sizeof(timebuf).");
+
+			return(false);
+		}
+
+		/* strncpy(timebuf, "Invalid time", sizeof(timebuf)); */
 		timebuf[sizeof(timebuf) - 1] = '\0';
 	}
 
-	int bytes_written = snprintf(buffer, sizeof(buffer),
+	int bytes_written = asprintf(&buffer,
 	                             "UserID: %.31s\n"
 	                             "Email: %.63s\n"
 	                             "Last Login Time: %s\n"
@@ -373,7 +404,7 @@ bool account_print_summary(const account_t *acct, int fd)
 	                             timebuf,
 	                             acct->login_count,
 	                             acct->login_fail_count,
-	                             acct->last_ip);
+	                             acct->last_ip); //switched from snprintf to asprintf https://stackoverflow.com/questions/12746885/why-use-asprintf-instead-of-sprintf
 
 	if (bytes_written < 0 || (size_t)bytes_written >= sizeof(buffer))
 	{
@@ -390,6 +421,8 @@ bool account_print_summary(const account_t *acct, int fd)
 
 		return(false);
 	}
+
+	free(buffer); //need to free it after allocating it with asprintf
 
 	return(true);
 }
@@ -460,11 +493,13 @@ static bool birthday_valid(const char *s)
  * @param out_hash
  * @param hash_len
  */
-bool hash_password(const char *plaintext, char *out_hash, size_t hash_len)
+static bool hash_password(const char *plaintext, char *out_hash, size_t hash_len)
 {
-	if (strncpy(out_hash, plaintext, hash_len) == NULL)
+	if (strlcpy(out_hash, plaintext, hash_len) >= hash_len)
 	{
-		return(false); // Handle failure
+		log_message(LOG_ERROR, "strlcpy tried to create a string larger than hash_len.");
+
+		return(false);         // Handle failure
 	}
 
 	return(true); // Handle success
