@@ -34,3 +34,10 @@ TOCTOU *(/tɒk ˈtuːə/)*
     - Defaults date to 0000-00-00
     - What tests?
     - How tests were made?
+
+### 3.4 Password Handling
+1. Argon2id Hashing Algorithm
+    - Used to hash paswords so that they are safe from exposure. A modern hashing algorithm that's much harder to crack than things such as bcrypt, MD5 or SHA. Combines Argon2d + Argon2i.
+    - 64MB Memory, 2 Iterations
+    - No tests were done for this
+    - It would take far too long to try and crack as password
