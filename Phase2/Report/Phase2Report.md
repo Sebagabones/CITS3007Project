@@ -56,3 +56,10 @@ TOCTOU *(/tɒk ˈtuːə/)*
     - Returns false when there is a fail case is met
     - What tests?
     - How tests were made?
+
+### 3.5 Login Handling
+1. If statement use
+    - Separate every check so that attackers can't use a input that tricks a singular If statement that tries to cover all issues
+    - Separate If statement for each precondition
+    - What tests?
+    - How tests were made?
