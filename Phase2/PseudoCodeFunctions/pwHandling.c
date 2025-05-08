@@ -378,5 +378,6 @@ bool account_update_password(account_t *acc,
 	// Update the account's password hash
 	strncpy(acc->password_hash, new_hash, HASH_LENGTH - 1);
 	acc->password_hash[HASH_LENGTH - 1] = '\0';     // Ensure null termination
+
 	return(true);
 }
