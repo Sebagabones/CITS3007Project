@@ -41,3 +41,8 @@ TOCTOU *(/tɒk ˈtuːə/)*
     - 64MB Memory, 2 Iterations
     - No tests were done for this
     - It would take far too long to try and crack as password
+2. Salting Hashes
+    - Salting a hash allows for ease of verification in the future
+    - t_cost, m_cost, parallelism is used to salt the hash
+    - What tests?
+    - How tests were made?
