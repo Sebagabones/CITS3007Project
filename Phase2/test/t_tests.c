@@ -1,8 +1,23 @@
 #include "tst.h"
 
-tstsuite("Factorials") {
-    tstcheck(fact_0(1) == 1);
-    tstcheck(fact_0(2) == 2);
-    tstcheck(fact_0(3) == 6);
-    tstcheck(fact_0(5) == 120);
+tstsuite("handle_login") {
+    tstcase("Username Empty") {
+        tstcheck(handle_login("", "Bankai2", 0, 3) == LOGIN_FAIL_INTERNAL_ERROR)
+    }
+
+    tstcase("Username Empty") {
+        tstcheck(handle_login("", "Bankai2", 0, 3) == LOGIN_FAIL_INTERNAL_ERROR)
+    }
+
+    tstcase("Username Empty") {
+        tstcheck(handle_login("", "Bankai2", 0, 3) == LOGIN_FAIL_INTERNAL_ERROR)
+    }
+
+    tstcase("Username Empty") {
+        tstcheck(handle_login("", "Bankai2", 0, 3) == LOGIN_FAIL_INTERNAL_ERROR)
+    }
+
+    tstcase("Username Empty") {
+        tstcheck(handle_login("", "Bankai2", 0, 3) == LOGIN_FAIL_INTERNAL_ERROR)
+    }
 }

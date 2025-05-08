@@ -19,7 +19,7 @@ OBJ_FILES := $(SRC_FILES:.c=.o)
 OBJ_FILES := $(subst $(SRC_DIR),$(BUILD_DIR),$(OBJ_FILES))
 OBJ_FILES := $(shell echo $(OBJ_FILES) | tr ' ' '\n' | sort | uniq)
 
-PKG_DEPS := $(shell cat libraries.txt | grep -v '^#' | xargs)
+PKG_DEPS := $(shell cat libraries.txt | grep -v '^\#' | xargs)
 PKG_CFLAGS := $(if $(strip $(PKG_DEPS)),$(shell pkg-config --cflags $(PKG_DEPS)))
 PKG_LDFLAGS := $(if $(strip $(PKG_DEPS)),$(shell pkg-config --libs $(PKG_DEPS)))
 
