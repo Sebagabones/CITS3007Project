@@ -63,3 +63,8 @@ TOCTOU *(/tɒk ˈtuːə/)*
     - Separate If statement for each precondition
     - What tests?
     - How tests were made?
+2. Use of 3.4
+    - Constant security feature
+    - If statements just check imports from 3.4 therfore should have all the previously said features
+    - What tests?
+    - How tests were made?
