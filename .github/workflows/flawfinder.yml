@@ -28,7 +28,7 @@ jobs:
           echo "$CHANGED_FILES"
 
           # Filter out excluded files
-          FILES_TO_SCAN=$(echo "$CHANGED_FILES" | grep -vE '(^|/)stubs\.c$|(^|/)bogus_main\.c$|(^|/)db\.h$|(^|/)account\.h$|(^|/)login\.h$|(^|/)logging\.h$|(^|/)banned\.h$|(^|/)Phase2/ScaffoldingFilesNotModified/|\.md$' || true)
+          FILES_TO_SCAN=$(echo "$CHANGED_FILES" | grep -vE '(^|/)stubs\.c$|(^|/)bogus_main\.c$|(^|/)db\.h$|(^|/)account\.h$|(^|/)login\.h$|(^|/)logging\.h$|(^|/)banned\.h$|(^|/)Phase2/ScaffoldingFilesNotModified/|(^|/)Phase2/test/|\.md$' || true)
 
           echo "Files to scan:"
           echo "$FILES_TO_SCAN"

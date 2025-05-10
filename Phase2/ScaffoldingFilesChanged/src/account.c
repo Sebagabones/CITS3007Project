@@ -22,7 +22,7 @@ account_t *account_create(const char *userid, const char *plaintext_password,
 	(void)birthdate;
 
 	return(NULL);
-}
+}//test
 
 void account_free(account_t *acc)
 {
