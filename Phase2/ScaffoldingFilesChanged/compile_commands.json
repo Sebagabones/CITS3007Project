@@ -12,12 +12,21 @@
       "-Isrc",
       "-c",
       "-o",
+<<<<<<< HEAD
       "build/bogus_main.o",
       "src/bogus_main.c"
     ],
     "directory": "/home/sexcandygirl/CITS3007/Project/CITS3007Project/Phase2/ScaffoldingFilesChanged",
     "file": "/home/sexcandygirl/CITS3007/Project/CITS3007Project/Phase2/ScaffoldingFilesChanged/src/bogus_main.c",
     "output": "/home/sexcandygirl/CITS3007/Project/CITS3007Project/Phase2/ScaffoldingFilesChanged/build/bogus_main.o"
+=======
+      "build/alternate_main.o",
+      "src/alternate_main.c"
+    ],
+    "directory": "/home/sexcandygirl/CITS3007/Project/CITS3007Project/Phase2/ScaffoldingFilesChanged",
+    "file": "/home/sexcandygirl/CITS3007/Project/CITS3007Project/Phase2/ScaffoldingFilesChanged/src/alternate_main.c",
+    "output": "/home/sexcandygirl/CITS3007/Project/CITS3007Project/Phase2/ScaffoldingFilesChanged/build/alternate_main.o"
+>>>>>>> bac116c2242b59b1b033f1b28e41f7dce07c1994
   },
   {
     "arguments": [
@@ -32,12 +41,21 @@
       "-Isrc",
       "-c",
       "-o",
+<<<<<<< HEAD
       "build/account.o",
       "src/account.c"
     ],
     "directory": "/home/sexcandygirl/CITS3007/Project/CITS3007Project/Phase2/ScaffoldingFilesChanged",
     "file": "/home/sexcandygirl/CITS3007/Project/CITS3007Project/Phase2/ScaffoldingFilesChanged/src/account.c",
     "output": "/home/sexcandygirl/CITS3007/Project/CITS3007Project/Phase2/ScaffoldingFilesChanged/build/account.o"
+=======
+      "build/bogus_main.o",
+      "src/bogus_main.c"
+    ],
+    "directory": "/home/sexcandygirl/CITS3007/Project/CITS3007Project/Phase2/ScaffoldingFilesChanged",
+    "file": "/home/sexcandygirl/CITS3007/Project/CITS3007Project/Phase2/ScaffoldingFilesChanged/src/bogus_main.c",
+    "output": "/home/sexcandygirl/CITS3007/Project/CITS3007Project/Phase2/ScaffoldingFilesChanged/build/bogus_main.o"
+>>>>>>> bac116c2242b59b1b033f1b28e41f7dce07c1994
   },
   {
     "arguments": [
@@ -72,12 +90,21 @@
       "-Isrc",
       "-c",
       "-o",
+<<<<<<< HEAD
       "build/alternate_main.o",
       "src/alternate_main.c"
     ],
     "directory": "/home/sexcandygirl/CITS3007/Project/CITS3007Project/Phase2/ScaffoldingFilesChanged",
     "file": "/home/sexcandygirl/CITS3007/Project/CITS3007Project/Phase2/ScaffoldingFilesChanged/src/alternate_main.c",
     "output": "/home/sexcandygirl/CITS3007/Project/CITS3007Project/Phase2/ScaffoldingFilesChanged/build/alternate_main.o"
+=======
+      "build/account.o",
+      "src/account.c"
+    ],
+    "directory": "/home/sexcandygirl/CITS3007/Project/CITS3007Project/Phase2/ScaffoldingFilesChanged",
+    "file": "/home/sexcandygirl/CITS3007/Project/CITS3007Project/Phase2/ScaffoldingFilesChanged/src/account.c",
+    "output": "/home/sexcandygirl/CITS3007/Project/CITS3007Project/Phase2/ScaffoldingFilesChanged/build/account.o"
+>>>>>>> bac116c2242b59b1b033f1b28e41f7dce07c1994
   },
   {
     "arguments": [
