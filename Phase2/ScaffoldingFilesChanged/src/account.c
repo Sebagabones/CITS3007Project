@@ -92,31 +92,30 @@ account_t *account_create(const char *userid, const char *plaintext_password,
 		return(NULL);
 	}
 
-	// Still need to check how+where account_id is actually handled
-	// actptr->account_id = generate_account_id();
-
+	
 	// Copy values into struct (make sure to handle null-termination)
 	strncpy(actptr->userid, userid, USER_ID_LENGTH); //safe as userid is always valid & null-terminated according to precondtions, and actptr seems to be safe?
 	actptr->userid[USER_ID_LENGTH - 1] = '\0';
-
+	
 	hash_password(plaintext_password, actptr->password_hash, HASH_LENGTH);
 	// Assuming hash_password writes the result into the buffer and handles
 	// null-termination
-
+	
 	strncpy(actptr->email, email, EMAIL_LENGTH); //safe as email is valid & null-terminated according to precondtions, and actptr seems to be safe?
 	actptr->email[EMAIL_LENGTH - 1] = '\0';
-
+	
 	strncpy(actptr->birthdate, final_birthdate, BIRTHDATE_LENGTH); //safe as birthdate is valid & null-terminated according to preconditions, and actptr seems to be safe?
 	actptr->birthdate[BIRTHDATE_LENGTH - 1] = '\0';
-
+	
 	// Set defaults
+	actptr->account_id 		 = 0; 
 	actptr->unban_time		 = 0;
 	actptr->expiration_time	 = 0;
 	actptr->login_count		 = 0;
 	actptr->login_fail_count = 0;
 	actptr->last_login_time	 = 0;
 	actptr->last_ip			 = 0;
-
+	
 	return(actptr);
 }
 
