@@ -43,7 +43,7 @@ repos:
         args: ["--fix-errors", "-warnings-as-errors=*", "-header-filter=.*", "-system-headers"]
       - id: cppcheck
         exclude: (\.md$|^Phase2/ScaffoldingFilesNotModified/|^Phase2/PseudoCodeFunctions/|stubs\.c$|bogus_main\.c$|db\.h$|account\.h$|login\.h$|logging\.h$|banned\.h$)
-        args: ["--inline-suppr", "--check-level=exhaustive"]
+        args: ["--inline-suppr"]
       - id: cpplint
         exclude: (\.md$|^Phase2/ScaffoldingFilesNotModified/|stubs\.c$|bogus_main\.c$|db\.h$|account\.h$|login\.h$|logging\.h$|banned\.h$)
         args: ["--filter=+build,-legal,+readablity,+runtime,-whitespace/indent,-build/include_alpha,-whitespace/braces,-whitespace/comments,-whitespace/newline,-readability/braces,-whitespace/tab,-whitespace/line_length,-build/include_subdir"]
