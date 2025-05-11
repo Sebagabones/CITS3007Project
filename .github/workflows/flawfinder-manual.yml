@@ -16,8 +16,7 @@ jobs:
     - name: Run Flawfinder on all source files
       continue-on-error: true
       run: |
-        FILES_TO_SCAN=$(find . -type f \( -name "*.c" -o -name "*.h" \) | \
-          grep -vE '(^|/)stubs\.c$|(^|/)bogus_main\.c$|(^|/)db\.h$|(^|/)account\.h$|(^|/)login\.h$|(^|/)logging\.h$|(^|/)|(^|/)banned\.h$|(^|/)Phase2/ScaffoldingFilesNotModified/|\.md$' || true)
+        FILES_TO_SCAN=$(echo "$CHANGED_FILES" | grep -vE '(^|/)stubs\.c$|(^|/)bogus_main\.c$|(^|/)db\.h$|(^|/)account\.h$|(^|/)login\.h$|(^|/)logging\.h$|(^|/)banned\.h$|(^|/)Phase2/ScaffoldingFilesNotModified/|\.md$|(^|/)Phase2/PseudoCodeFunctions$' || true)
 
         if [ -z "$FILES_TO_SCAN" ]; then
           echo "No relevant source files found. Skipping flawfinder."
