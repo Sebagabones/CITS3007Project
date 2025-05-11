@@ -10,6 +10,13 @@
 #include "banned.h"
 #include "logging.h"
 
+/**
+ * @file   login.c
+ *
+ * @brief Implementation of the functions that handle user login
+ *
+ */
+
 static void send_client_and_log(int client_fd, log_level_t level, const char *username, const char *client_msg, const char *log_fmt)
 {
 	if (client_msg)
@@ -23,6 +30,24 @@ static void send_client_and_log(int client_fd, log_level_t level, const char *us
 	}
 }
 
+/**
+ * login_result_t  handles the login process
+ *
+ * @param username		The username of the account logging in
+ * @param password		The password being entered
+ * @param ip			The IP address of user logging in
+ * @param login_time	The server time currently
+ * @param output		The file descriptor for message sent to client/user
+ * @param session		The Pointer to the session structure. Used to populate when login successfule
+ *
+ * @return login_result_t
+ *		- LOGIN_SUCCESS: Login successful
+ *		- LOGIN_FAIL_USER_NOT_FOUND: Account not found
+ *		- LOGIN_FAIL_ACCOUNT_BANNED: Account is banned
+ *		- LOGIN_FAIL_ACCOUNT_EXPIRED: Account is expired
+ *		- LOGIN_FAIL_BAD_PASSWORD: Password is incorrect
+ *		- LOGIN_FAIL_INTERNAL_ERROR: Too many login tries or Memory allocation failure
+ */
 login_result_t handle_login(const char *username, const char *password,
                             ip4_addr_t client_ip, time_t login_time,
                             int client_output_fd,
