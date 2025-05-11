@@ -12,12 +12,12 @@
       "-Isrc",
       "-c",
       "-o",
-      "build/login.o",
-      "src/login.c"
+      "build/stubs.o",
+      "src/stubs.c"
     ],
     "directory": "/Users/alech/Desktop/uwa/year3/sem1/cits3007/CITS3007Project/Phase2/ScaffoldingFilesChanged",
-    "file": "/Users/alech/Desktop/uwa/year3/sem1/cits3007/CITS3007Project/Phase2/ScaffoldingFilesChanged/src/login.c",
-    "output": "/Users/alech/Desktop/uwa/year3/sem1/cits3007/CITS3007Project/Phase2/ScaffoldingFilesChanged/build/login.o"
+    "file": "/Users/alech/Desktop/uwa/year3/sem1/cits3007/CITS3007Project/Phase2/ScaffoldingFilesChanged/src/stubs.c",
+    "output": "/Users/alech/Desktop/uwa/year3/sem1/cits3007/CITS3007Project/Phase2/ScaffoldingFilesChanged/build/stubs.o"
   },
   {
     "arguments": [
@@ -92,11 +92,11 @@
       "-Isrc",
       "-c",
       "-o",
-      "build/stubs.o",
-      "src/stubs.c"
+      "build/login.o",
+      "src/login.c"
     ],
     "directory": "/Users/alech/Desktop/uwa/year3/sem1/cits3007/CITS3007Project/Phase2/ScaffoldingFilesChanged",
-    "file": "/Users/alech/Desktop/uwa/year3/sem1/cits3007/CITS3007Project/Phase2/ScaffoldingFilesChanged/src/stubs.c",
-    "output": "/Users/alech/Desktop/uwa/year3/sem1/cits3007/CITS3007Project/Phase2/ScaffoldingFilesChanged/build/stubs.o"
+    "file": "/Users/alech/Desktop/uwa/year3/sem1/cits3007/CITS3007Project/Phase2/ScaffoldingFilesChanged/src/login.c",
+    "output": "/Users/alech/Desktop/uwa/year3/sem1/cits3007/CITS3007Project/Phase2/ScaffoldingFilesChanged/build/login.o"
   }
 ]
