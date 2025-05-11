@@ -10,13 +10,14 @@
 #include "banned.h"
 #include "logging.h"
 
+#define DEFAULT_SESSION_LENGTH    86400
+
 /**
  * @file   login.c
  *
  * @brief Implementation of the functions that handle user login
  *
  */
-
 static void send_client_and_log(int client_fd, log_level_t level, const char *username, const char *client_msg, const char *log_fmt)
 {
 	if (client_msg)
@@ -129,9 +130,17 @@ login_result_t handle_login(const char *username, const char *password,
 	                    "User %s logged in successfully");
 
 	//populate session struct with username, login time and session end time
-	session->account_id		 = (int)user->account_id;
-	session->session_start	 = login_time;
-	session->expiration_time = login_time + 86400;  //Maximum session length 24 hours, usually session closes when closing game
+	session->account_id	   = (int)user->account_id;
+	session->session_start = login_time;
+
+	if (user->expiration_time == 0)
+	{   // If no expiration time, set to 24hrs
+		session->expiration_time = login_time + DEFAULT_SESSION_LENGTH;
+	}
+	else
+	{
+		session->expiration_time = user->expiration_time;
+	}
 
 	free(user);
 
