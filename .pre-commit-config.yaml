@@ -2,7 +2,7 @@
 # See https://pre-commit.com/hooks.html for more hooks
 # fail_fast: true
 exclude: ^Phase2/ScaffoldingFilesNotModified/$|^Phase2/PseudoCodeFunctions/$
-exclude_types: [".ts"]
+exclude_types: [ts]
 repos:
 -   repo: local
     hooks:
