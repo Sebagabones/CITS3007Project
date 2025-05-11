@@ -7,6 +7,7 @@
 
 #include <unistd.h>
 #include <ctype.h>
+#include <arpa/inet.h>
 
 #include "account.h"
 #include "banned.h"
@@ -22,23 +23,166 @@
  *
  */
 
-// -----------------Sanitization (+passw) Prototypes---------------
-static bool only_ASCII_printable_chars(const char *s);
-static bool birthday_valid(const char *s);
-static bool hash_password(const char *plaintext, char *out_hash, size_t hash_len);
+// -----------------Sanitization (+passw) Prototypes-----------------------------------------
 
-//#ifndef HAVE_EXPLICIT_BZERO
-//void explicit_bzero(void *s, size_t n)
-//{
-//	volatile unsigned char *p = s;
-//
-//	while (n--)
-//	{
-//		*p++ = 0;
-//	}
-//}
-//
-//#endif
+/**
+ * @brief Function to neutralise email inputs
+ *
+ * c Printable ASCII = characters with decimal values from 32 (space) to 126 (~)
+ * Excludes 32
+ *
+ * @param s char pointer to be checked
+ * @return true if the string is only ASCII printable characters, false otherwise.
+ */
+static bool only_ASCII_printable_chars(const char *s)
+{
+	while (*s)
+	{
+		unsigned char c = (unsigned char)*s;
+
+		if (c < 33 || c > 126)
+		{
+			return(false);
+		}
+
+		s++;
+	}
+
+	return(true);
+}
+
+/**
+ * @brief needs to check is_real and is_valid_format
+ */
+static bool birthday_valid(const char *s)
+{
+	// Expected format: YYYY-MM-DD
+	if (strlen(s) != 10)
+	{
+		return(false);
+	}
+
+	if (s[4] != '-' || s[7] != '-')
+	{
+		return(false);
+	}
+
+	for (int i = 0; i < 10; i++)
+	{
+		if (i == 4 || i == 7)
+		{
+			continue;
+		}
+
+		if (!isdigit(s[i]))
+		{
+			return(false);
+		}
+	}
+
+	return(true);
+}
+
+/**
+ * Assuming hash_password writes the result into the buffer and handles
+ * null-termination
+ *
+ * @param plaintext
+ * @param out_hash
+ * @param hash_len
+ */
+static bool hash_password(const char *plaintext, char *out_hash, size_t hash_len)
+{
+	if (strlcpy(out_hash, plaintext, hash_len) >= hash_len)
+	{
+		log_message(LOG_ERROR, "strlcpy tried to create a string larger than hash_len.");
+
+		return(false);         // Handle failure
+	}
+
+	return(true); // Handle success
+}
+
+/**
+ * @brief Copies full input up to FIELD_SIZE. Adds '\0' only if input is shorter
+ *
+ * @param field where in account the char pointer will be stored
+ * @param input null-terminated input string to be stored
+ * @param FIELD_SIZE maximum size of field, given by constants in account.h
+ */
+static bool pseudo_string_copy(char *field, const char *input, size_t FIELD_SIZE)
+{
+	size_t len = strlen(input);
+
+	if (len > FIELD_SIZE)
+	{
+		return(false);
+	}
+
+	memcpy(field, input, len);
+
+	if (len < FIELD_SIZE)
+	{
+		field[len] = '\0';
+	}
+
+	return(true);
+}
+
+/**
+ * @brief Changes the 'partial pseudo-strings' in acc struct to valid null-terminated char*
+ *
+ *
+ */
+static void buffer_to_cstring(const char *field, size_t field_len, char *out_buf, size_t out_buf_size)
+{
+	size_t copy_len = 0;
+
+	// Scan for null or reach end of field
+	while (copy_len < field_len && field[copy_len] != '\0')
+	{
+		copy_len++;
+	}
+
+	// Limit copy to fit in out_buf (leave space for null terminator)
+	if (copy_len >= out_buf_size)
+	{
+		copy_len = out_buf_size - 1;
+	}
+
+	memcpy(out_buf, field, copy_len);
+	out_buf[copy_len] = '\0';
+}
+
+static bool ip_to_cstring(const ip4_addr_t ip, char *out_buf, size_t out_buf_size)
+{
+	struct in_addr ip_addr;
+	ip_addr.s_addr = ip;
+
+	if (inet_ntop(AF_INET, &ip_addr, out_buf, (unsigned int)out_buf_size) == NULL)
+	{
+		log_message(LOG_ERROR, "ip_to_cstring: Failed to convert IP to string.");
+
+		return(false);
+	}
+
+	return(true);
+}
+
+// ----------------------------------------------------------------------------------
+
+#ifndef HAVE_EXPLICIT_BZERO
+void explicit_bzero(void *s, size_t n)
+{
+	volatile unsigned char *p = s;
+
+	while (n--)
+	{
+		*p++ = 0;
+	}
+}
+
+#endif
 // -------------------------------------------------------
 
 /**
@@ -72,6 +216,13 @@ account_t *account_create(const char *userid, const char *plaintext_password,
 		return(NULL);
 	}
 
+	if (strnlen(email, EMAIL_LENGTH + 1) > EMAIL_LENGTH)
+	{
+		log_message(LOG_ERROR, "Email too long.");
+
+		return(NULL);
+	}
+
 	if (!(only_ASCII_printable_chars(email)))
 	{
 		log_message(LOG_ERROR, "Invalid email format.");
@@ -101,51 +252,45 @@ account_t *account_create(const char *userid, const char *plaintext_password,
 		return(NULL);
 	}
 
-	
 	// Copy values into struct (make sure to handle null-termination)
-	if (strlcpy(actptr->userid, userid, USER_ID_LENGTH) >= USER_ID_LENGTH)
+
+	if (!pseudo_string_copy(actptr->userid, userid, USER_ID_LENGTH))
 	{
-		log_message(LOG_ERROR, "strlcpy tried to create a string larger than USER_ID_LENGTH.");
+		log_message(LOG_ERROR, "pseudo_string_copy failed, tried to create a *char larger than USER_ID_LENGTH.");
 		account_free(actptr); //prevent memory leak
 
 		return(NULL);
 	}
 
-	actptr->userid[USER_ID_LENGTH - 1] = '\0';
-	
 	hash_password(plaintext_password, actptr->password_hash, HASH_LENGTH);
 	// Assuming hash_password writes the result into the buffer and handles
 	// null-termination
 
-	if (strlcpy(actptr->email, email, EMAIL_LENGTH) >= EMAIL_LENGTH)
+	if (!pseudo_string_copy(actptr->email, email, EMAIL_LENGTH))
 	{
-		log_message(LOG_ERROR, "strlcpy tried to create a string larger than EMAIL_LENGTH.");
+		log_message(LOG_ERROR, "pseudo_string_copy failed, tried to create a *char larger than EMAIL_LENGTH.");
 		account_free(actptr); //prevent memory leak
 
 		return(NULL);
 	}
 
-	actptr->email[EMAIL_LENGTH - 1] = '\0';
-
-	if (strlcpy(actptr->birthdate, final_birthdate, BIRTHDATE_LENGTH) >= BIRTHDATE_LENGTH)
+	if (!pseudo_string_copy(actptr->birthdate, final_birthdate, BIRTHDATE_LENGTH))
 	{
-		log_message(LOG_ERROR, "strlcpy tried to create a string larger than BIRTHDAY_LENGTH.");
+		log_message(LOG_ERROR, "pseudo_string_copy failed, tried to create a *char larger than BIRTHDATE_LENGTH.");
 		account_free(actptr); //prevent memory leak
 
 		return(NULL);
 	}
 
-	actptr->birthdate[BIRTHDATE_LENGTH - 1] = '\0';
-	
 	// Set defaults
-	actptr->account_id 		 = 0; 
+	actptr->account_id		 = 0;
 	actptr->unban_time		 = 0;
 	actptr->expiration_time	 = 0;
 	actptr->login_count		 = 0;
 	actptr->login_fail_count = 0;
 	actptr->last_login_time	 = 0;
 	actptr->last_ip			 = 0;
-	
+
 	return(actptr);
 }
 
@@ -349,8 +494,12 @@ void account_set_email(account_t *acc, const char *new_email)
 		return; // not sure how to handle
 	}
 
-	strlcpy(acc->email, new_email, EMAIL_LENGTH);
-	acc->email[EMAIL_LENGTH - 1] = '\0';  // Ensure null-termination
+	if (!pseudo_string_copy(acc->email, new_email, EMAIL_LENGTH))
+	{
+		log_message(LOG_ERROR, "account_set_email: pseudo_string_copy failed — email too long.");
+
+		return;
+	}
 }
 
 /**
@@ -386,21 +535,36 @@ bool account_print_summary(const account_t *acct, int fd)
 		timebuf[sizeof(timebuf) - 1] = '\0';
 	}
 
+	char printableUID[USER_ID_LENGTH + 1];
+	char printableEmail[EMAIL_LENGTH + 1];
+
+	buffer_to_cstring(acct->userid, USER_ID_LENGTH, printableUID, sizeof(printableUID));
+	buffer_to_cstring(acct->email, EMAIL_LENGTH, printableEmail, sizeof(printableEmail));
+
+	char printableIP[INET_ADDRSTRLEN];  // typically 16 bytes
+
+	if (!ip_to_cstring(acct->last_ip, printableIP, sizeof(printableIP)))
+	{
+		log_message(LOG_ERROR, "account_print_summary: Failed to convert IP.");
+
+		return(false);
+	}
+
 	int bytes_written = asprintf(&buffer,
-	                             "UserID: %.31s\n"
-	                             "Email: %.63s\n"
+	                             "UserID: %.101s\n"
+	                             "Email: %.101s\n"
 	                             "Last Login Time: %s\n"
 	                             "Login Count: %u\n"
 	                             "Login Failures: %u\n"
-	                             "Last IP: %u\n", // potentially format ip address...
-	                             acct->userid,
-	                             acct->email,
+	                             "Last IP: %.16s\n", // potentially format ip address...
+	                             printableUID,
+	                             printableEmail,
 	                             timebuf,
 	                             acct->login_count,
 	                             acct->login_fail_count,
-	                             acct->last_ip); //switched from snprintf to asprintf https://stackoverflow.com/questions/12746885/why-use-asprintf-instead-of-sprintf
+	                             printableIP); //switched from snprintf to asprintf https://stackoverflow.com/questions/12746885/why-use-asprintf-instead-of-sprintf
 
-	if (bytes_written < 0 || (size_t)bytes_written >= sizeof(buffer))
+	if (bytes_written < 0)
 	{
 		log_message(LOG_ERROR, "account_print_summary: Failed to format summary.");
 
@@ -419,82 +583,4 @@ bool account_print_summary(const account_t *acct, int fd)
 	free(buffer); //need to free it after allocating it with asprintf
 
 	return(true);
-}
-
-/**
- * @brief Function to neutralise email inputs
- *
- * c Printable ASCII = characters with decimal values from 32 (space) to 126 (~)
- * Excludes 32
- *
- * @param s char pointer to be checked
- * @return true if the string is only ASCII printable characters, false otherwise.
- */
-static bool only_ASCII_printable_chars(const char *s)
-{
-	while (*s)
-	{
-		unsigned char c = (unsigned char)*s;
-
-		if (c < 33 || c > 126)
-		{
-			return(false);
-		}
-
-		s++;
-	}
-
-	return(true);
-}
-
-/**
- * @brief needs to check is_real and is_valid_format
- */
-static bool birthday_valid(const char *s)
-{
-	// Expected format: YYYY-MM-DD
-	if (strlen(s) != 10)
-	{
-		return(false);
-	}
-
-	if (s[4] != '-' || s[7] != '-')
-	{
-		return(false);
-	}
-
-	for (int i = 0; i < 10; i++)
-	{
-		if (i == 4 || i == 7)
-		{
-			continue;
-		}
-
-		if (!isdigit(s[i]))
-		{
-			return(false);
-		}
-	}
-
-	return(true);
-}
-
-/**
- * Assuming hash_password writes the result into the buffer and handles
- * null-termination
- *
- * @param plaintext
- * @param out_hash
- * @param hash_len
- */
-static bool hash_password(const char *plaintext, char *out_hash, size_t hash_len)
-{
-	if (strlcpy(out_hash, plaintext, hash_len) >= hash_len)
-	{
-		log_message(LOG_ERROR, "strlcpy tried to create a string larger than hash_len.");
-
-		return(false);         // Handle failure
-	}
-
-	return(true); // Handle success
 }

@@ -129,7 +129,7 @@ login_result_t handle_login(const char *username, const char *password,
 	                    "User %s logged in successfully");
 
 	//populate session struct with username, login time and session end time
-	session->account_id		 = user->account_id;
+	session->account_id		 = (int)user->account_id;
 	session->session_start	 = login_time;
 	session->expiration_time = login_time + 86400;  //Maximum session length 24 hours, usually session closes when closing game
 
