@@ -12,6 +12,84 @@
       "-fstack-protector-all",
       "-mshstk",
       "-Isrc",
+      "-O",
+      "-g",
+      "-c",
+      "-o",
+      "build/no-sanitize/alternate_main.o",
+      "src/alternate_main.c"
+    ],
+    "directory": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/src",
+    "file": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/src/src/alternate_main.c",
+    "output": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/src/build/no-sanitize/alternate_main.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-std=c11",
+      "-pedantic-errors",
+      "-Wall",
+      "-Wextra",
+      "-Wshadow",
+      "-Wconversion",
+      "-funsigned-char",
+      "-fstack-protector-all",
+      "-mshstk",
+      "-Isrc",
+      "-fsanitize=undefined,address,leak",
+      "-fno-sanitize-recover=signed-integer-overflow",
+      "-fno-omit-frame-pointer",
+      "-O",
+      "-g",
+      "-c",
+      "-o",
+      "build/bogus_main.o",
+      "src/bogus_main.c"
+    ],
+    "directory": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/src",
+    "file": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/src/src/bogus_main.c",
+    "output": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/src/build/bogus_main.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-std=c11",
+      "-pedantic-errors",
+      "-Wall",
+      "-Wextra",
+      "-Wshadow",
+      "-Wconversion",
+      "-funsigned-char",
+      "-fstack-protector-all",
+      "-mshstk",
+      "-Isrc",
+      "-fsanitize=undefined,address,leak",
+      "-fno-sanitize-recover=signed-integer-overflow",
+      "-fno-omit-frame-pointer",
+      "-O",
+      "-g",
+      "-c",
+      "-o",
+      "build/alternate_main.o",
+      "src/alternate_main.c"
+    ],
+    "directory": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/src",
+    "file": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/src/src/alternate_main.c",
+    "output": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/src/build/alternate_main.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-std=c11",
+      "-pedantic-errors",
+      "-Wall",
+      "-Wextra",
+      "-Wshadow",
+      "-Wconversion",
+      "-funsigned-char",
+      "-fstack-protector-all",
+      "-mshstk",
+      "-Isrc",
       "-fsanitize=undefined,address,leak",
       "-fno-sanitize-recover=signed-integer-overflow",
       "-fno-omit-frame-pointer",
@@ -39,16 +117,19 @@
       "-fstack-protector-all",
       "-mshstk",
       "-Isrc",
+      "-fsanitize=undefined,address,leak",
+      "-fno-sanitize-recover=signed-integer-overflow",
+      "-fno-omit-frame-pointer",
       "-O",
       "-g",
       "-c",
       "-o",
-      "build/no-sanitize/alternate_main.o",
-      "src/alternate_main.c"
+      "build/stubs.o",
+      "src/stubs.c"
     ],
     "directory": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/src",
-    "file": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/src/src/alternate_main.c",
-    "output": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/src/build/no-sanitize/alternate_main.o"
+    "file": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/src/src/stubs.c",
+    "output": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/src/build/stubs.o"
   },
   {
     "arguments": [
@@ -118,87 +199,6 @@
       "-g",
       "-c",
       "-o",
-      "build/bogus_main.o",
-      "src/bogus_main.c"
-    ],
-    "directory": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/src",
-    "file": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/src/src/bogus_main.c",
-    "output": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/src/build/bogus_main.o"
-  },
-  {
-    "arguments": [
-      "/usr/bin/gcc",
-      "-std=c11",
-      "-pedantic-errors",
-      "-Wall",
-      "-Wextra",
-      "-Wshadow",
-      "-Wconversion",
-      "-funsigned-char",
-      "-fstack-protector-all",
-      "-mshstk",
-      "-Isrc",
-      "-fsanitize=undefined,address,leak",
-      "-fno-sanitize-recover=signed-integer-overflow",
-      "-fno-omit-frame-pointer",
-      "-O",
-      "-g",
-      "-c",
-      "-o",
-      "build/stubs.o",
-      "src/stubs.c"
-    ],
-    "directory": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/src",
-    "file": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/src/src/stubs.c",
-    "output": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/src/build/stubs.o"
-  },
-  {
-    "arguments": [
-      "/usr/bin/gcc",
-      "-std=c11",
-      "-pedantic-errors",
-      "-Wall",
-      "-Wextra",
-      "-Wshadow",
-      "-Wconversion",
-      "-funsigned-char",
-      "-fstack-protector-all",
-      "-mshstk",
-      "-Isrc",
-      "-fsanitize=undefined,address,leak",
-      "-fno-sanitize-recover=signed-integer-overflow",
-      "-fno-omit-frame-pointer",
-      "-O",
-      "-g",
-      "-c",
-      "-o",
-      "build/alternate_main.o",
-      "src/alternate_main.c"
-    ],
-    "directory": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/src",
-    "file": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/src/src/alternate_main.c",
-    "output": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/src/build/alternate_main.o"
-  },
-  {
-    "arguments": [
-      "/usr/bin/gcc",
-      "-std=c11",
-      "-pedantic-errors",
-      "-Wall",
-      "-Wextra",
-      "-Wshadow",
-      "-Wconversion",
-      "-funsigned-char",
-      "-fstack-protector-all",
-      "-mshstk",
-      "-Isrc",
-      "-fsanitize=undefined,address,leak",
-      "-fno-sanitize-recover=signed-integer-overflow",
-      "-fno-omit-frame-pointer",
-      "-O",
-      "-g",
-      "-c",
-      "-o",
       "build/login.o",
       "src/login.c"
     ],
@@ -243,17 +243,16 @@
       "-fstack-protector-all",
       "-mshstk",
       "-Isrc",
-      "-g3",
-      "-ggdb",
-      "-O0",
+      "-O",
+      "-g",
       "-c",
       "-o",
-      "build/debug/account.o",
-      "src/account.c"
+      "build/no-sanitize/stubs.o",
+      "src/stubs.c"
     ],
     "directory": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/src",
-    "file": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/src/src/account.c",
-    "output": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/src/build/debug/account.o"
+    "file": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/src/src/stubs.c",
+    "output": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/src/build/no-sanitize/stubs.o"
   },
   {
     "arguments": [
@@ -268,16 +267,17 @@
       "-fstack-protector-all",
       "-mshstk",
       "-Isrc",
-      "-O",
-      "-g",
+      "-g3",
+      "-ggdb",
+      "-O0",
       "-c",
       "-o",
-      "build/no-sanitize/stubs.o",
-      "src/stubs.c"
+      "build/debug/account.o",
+      "src/account.c"
     ],
     "directory": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/src",
-    "file": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/src/src/stubs.c",
-    "output": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/src/build/no-sanitize/stubs.o"
+    "file": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/src/src/account.c",
+    "output": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/src/build/debug/account.o"
   },
   {
     "arguments": [
@@ -347,12 +347,12 @@
       "-O0",
       "-c",
       "-o",
-      "build/debug/login.o",
-      "src/login.c"
+      "build/debug/stubs.o",
+      "src/stubs.c"
     ],
     "directory": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/src",
-    "file": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/src/src/login.c",
-    "output": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/src/build/debug/login.o"
+    "file": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/src/src/stubs.c",
+    "output": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/src/build/debug/stubs.o"
   },
   {
     "arguments": [
@@ -372,12 +372,12 @@
       "-O0",
       "-c",
       "-o",
-      "build/debug/stubs.o",
-      "src/stubs.c"
+      "build/debug/login.o",
+      "src/login.c"
     ],
     "directory": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/src",
-    "file": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/src/src/stubs.c",
-    "output": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/src/build/debug/stubs.o"
+    "file": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/src/src/login.c",
+    "output": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/src/build/debug/login.o"
   },
   {
     "arguments": [
@@ -476,12 +476,12 @@
       "-g",
       "-c",
       "-o",
-      "build/thread/stubs.o",
-      "src/stubs.c"
+      "build/thread/login.o",
+      "src/login.c"
     ],
     "directory": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/src",
-    "file": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/src/src/stubs.c",
-    "output": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/src/build/thread/stubs.o"
+    "file": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/src/src/login.c",
+    "output": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/src/build/thread/login.o"
   },
   {
     "arguments": [
@@ -502,12 +502,12 @@
       "-g",
       "-c",
       "-o",
-      "build/thread/login.o",
-      "src/login.c"
+      "build/thread/stubs.o",
+      "src/stubs.c"
     ],
     "directory": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/src",
-    "file": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/src/src/login.c",
-    "output": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/src/build/thread/login.o"
+    "file": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/src/src/stubs.c",
+    "output": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/src/build/thread/stubs.o"
   },
   {
     "arguments": [
