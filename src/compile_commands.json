@@ -12,16 +12,46 @@
       "-fstack-protector-all",
       "-mshstk",
       "-Isrc",
+      "-fsanitize=undefined,address,leak",
+      "-fno-sanitize-recover=signed-integer-overflow",
+      "-fno-omit-frame-pointer",
       "-O",
       "-g",
       "-c",
       "-o",
-      "build/no-sanitize/bogus_main.o",
-      "src/bogus_main.c"
+      "build/alternate_main.o",
+      "src/alternate_main.c"
     ],
     "directory": "/Users/alech/Desktop/uwa/year3/sem1/cits3007/CITS3007Project/src",
-    "file": "/Users/alech/Desktop/uwa/year3/sem1/cits3007/CITS3007Project/src/src/bogus_main.c",
-    "output": "/Users/alech/Desktop/uwa/year3/sem1/cits3007/CITS3007Project/src/build/no-sanitize/bogus_main.o"
+    "file": "/Users/alech/Desktop/uwa/year3/sem1/cits3007/CITS3007Project/src/src/alternate_main.c",
+    "output": "/Users/alech/Desktop/uwa/year3/sem1/cits3007/CITS3007Project/src/build/alternate_main.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-std=c11",
+      "-pedantic-errors",
+      "-Wall",
+      "-Wextra",
+      "-Wshadow",
+      "-Wconversion",
+      "-funsigned-char",
+      "-fstack-protector-all",
+      "-mshstk",
+      "-Isrc",
+      "-fsanitize=undefined,address,leak",
+      "-fno-sanitize-recover=signed-integer-overflow",
+      "-fno-omit-frame-pointer",
+      "-O",
+      "-g",
+      "-c",
+      "-o",
+      "build/account.o",
+      "src/account.c"
+    ],
+    "directory": "/Users/alech/Desktop/uwa/year3/sem1/cits3007/CITS3007Project/src",
+    "file": "/Users/alech/Desktop/uwa/year3/sem1/cits3007/CITS3007Project/src/src/account.c",
+    "output": "/Users/alech/Desktop/uwa/year3/sem1/cits3007/CITS3007Project/src/build/account.o"
   },
   {
     "arguments": [
@@ -67,66 +97,39 @@
       "-g",
       "-c",
       "-o",
-      "build/login.o",
-      "src/login.c"
-    ],
-    "directory": "/Users/alech/Desktop/uwa/year3/sem1/cits3007/CITS3007Project/src",
-    "file": "/Users/alech/Desktop/uwa/year3/sem1/cits3007/CITS3007Project/src/src/login.c",
-    "output": "/Users/alech/Desktop/uwa/year3/sem1/cits3007/CITS3007Project/src/build/login.o"
-  },
-  {
-    "arguments": [
-      "/usr/bin/gcc",
-      "-std=c11",
-      "-pedantic-errors",
-      "-Wall",
-      "-Wextra",
-      "-Wshadow",
-      "-Wconversion",
-      "-funsigned-char",
-      "-fstack-protector-all",
-      "-mshstk",
-      "-Isrc",
-      "-fsanitize=undefined,address,leak",
-      "-fno-sanitize-recover=signed-integer-overflow",
-      "-fno-omit-frame-pointer",
-      "-O",
-      "-g",
-      "-c",
-      "-o",
-      "build/account.o",
-      "src/account.c"
-    ],
-    "directory": "/Users/alech/Desktop/uwa/year3/sem1/cits3007/CITS3007Project/src",
-    "file": "/Users/alech/Desktop/uwa/year3/sem1/cits3007/CITS3007Project/src/src/account.c",
-    "output": "/Users/alech/Desktop/uwa/year3/sem1/cits3007/CITS3007Project/src/build/account.o"
-  },
-  {
-    "arguments": [
-      "/usr/bin/gcc",
-      "-std=c11",
-      "-pedantic-errors",
-      "-Wall",
-      "-Wextra",
-      "-Wshadow",
-      "-Wconversion",
-      "-funsigned-char",
-      "-fstack-protector-all",
-      "-mshstk",
-      "-Isrc",
-      "-fsanitize=undefined,address,leak",
-      "-fno-sanitize-recover=signed-integer-overflow",
-      "-fno-omit-frame-pointer",
-      "-O",
-      "-g",
-      "-c",
-      "-o",
       "build/bogus_main.o",
       "src/bogus_main.c"
     ],
     "directory": "/Users/alech/Desktop/uwa/year3/sem1/cits3007/CITS3007Project/src",
     "file": "/Users/alech/Desktop/uwa/year3/sem1/cits3007/CITS3007Project/src/src/bogus_main.c",
     "output": "/Users/alech/Desktop/uwa/year3/sem1/cits3007/CITS3007Project/src/build/bogus_main.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-std=c11",
+      "-pedantic-errors",
+      "-Wall",
+      "-Wextra",
+      "-Wshadow",
+      "-Wconversion",
+      "-funsigned-char",
+      "-fstack-protector-all",
+      "-mshstk",
+      "-Isrc",
+      "-fsanitize=undefined,address,leak",
+      "-fno-sanitize-recover=signed-integer-overflow",
+      "-fno-omit-frame-pointer",
+      "-O",
+      "-g",
+      "-c",
+      "-o",
+      "build/login.o",
+      "src/login.c"
+    ],
+    "directory": "/Users/alech/Desktop/uwa/year3/sem1/cits3007/CITS3007Project/src",
+    "file": "/Users/alech/Desktop/uwa/year3/sem1/cits3007/CITS3007Project/src/src/login.c",
+    "output": "/Users/alech/Desktop/uwa/year3/sem1/cits3007/CITS3007Project/src/build/login.o"
   },
   {
     "arguments": [
@@ -192,18 +195,15 @@
       "-fstack-protector-all",
       "-mshstk",
       "-Isrc",
-      "-fsanitize=undefined,address,leak",
-      "-fno-sanitize-recover=signed-integer-overflow",
-      "-fno-omit-frame-pointer",
       "-O",
       "-g",
       "-c",
       "-o",
-      "build/alternate_main.o",
-      "src/alternate_main.c"
+      "build/no-sanitize/bogus_main.o",
+      "src/bogus_main.c"
     ],
     "directory": "/Users/alech/Desktop/uwa/year3/sem1/cits3007/CITS3007Project/src",
-    "file": "/Users/alech/Desktop/uwa/year3/sem1/cits3007/CITS3007Project/src/src/alternate_main.c",
-    "output": "/Users/alech/Desktop/uwa/year3/sem1/cits3007/CITS3007Project/src/build/alternate_main.o"
+    "file": "/Users/alech/Desktop/uwa/year3/sem1/cits3007/CITS3007Project/src/src/bogus_main.c",
+    "output": "/Users/alech/Desktop/uwa/year3/sem1/cits3007/CITS3007Project/src/build/no-sanitize/bogus_main.o"
   }
 ]
