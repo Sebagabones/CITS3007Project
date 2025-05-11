@@ -14,6 +14,14 @@
 
 #define PLAINTEXT_PASSWORD_MAX_LENGTH    100 // alter this for password hashing
 
+/**
+ * @file account.c
+ *
+ * @brief Implementation of functions used for user account management/creation
+ *
+ *
+ */
+
 // -----------------Sanitization (+passw) Prototypes---------------
 static bool only_ASCII_printable_chars(const char *s);
 static bool birthday_valid(const char *s);
@@ -111,7 +119,6 @@ account_t *account_create(const char *userid, const char *plaintext_password,
 	// Assuming hash_password writes the result into the buffer and handles
 	// null-termination
 
-	// strncpy(actptr->email, email, EMAIL_LENGTH); //safe as email is valid & null-terminated according to precondtions, and actptr seems to be safe? */
 	if (strlcpy(actptr->email, email, EMAIL_LENGTH) >= EMAIL_LENGTH)
 	{
 		log_message(LOG_ERROR, "strlcpy tried to create a string larger than EMAIL_LENGTH.");
@@ -122,7 +129,6 @@ account_t *account_create(const char *userid, const char *plaintext_password,
 
 	actptr->email[EMAIL_LENGTH - 1] = '\0';
 
-	// strncpy(actptr->birthdate, final_birthdate, BIRTHDATE_LENGTH); //safe as birthdate is valid & null-terminated according to preconditions, and actptr seems to be safe?
 	if (strlcpy(actptr->birthdate, final_birthdate, BIRTHDATE_LENGTH) >= BIRTHDATE_LENGTH)
 	{
 		log_message(LOG_ERROR, "strlcpy tried to create a string larger than BIRTHDAY_LENGTH.");
@@ -155,12 +161,9 @@ account_t *account_create(const char *userid, const char *plaintext_password,
  */
 void account_free(account_t *acc) //cppcheck-suppress staticFunction
 {
-// as we are not using pointers in account_t struct, we don't need to free each item in the struct (I think, feel free to fact check) - https://stackoverflow.com/a/13590879
-// however, since this this will be freeing user accounts, we probably want to do more than just free the memory, instead zeroing it out so that it cannot be accessed later on - probaly explicit_bzero or similar (if we use C23 then we should use memset_explict)
-
-	if (acc) //only run explicit_bzero when not null
+	if (acc)
 	{
-		explicit_bzero(acc, sizeof(*acc));
+		explicit_bzero(acc, sizeof(*acc)); //ensures the compiler does not optimise clearing the account memory before freeing it
 	}
 
 	free(acc);
@@ -217,10 +220,6 @@ bool account_update_password(account_t *acc, const char *new_plaintext_password)
  */
 void account_record_login_success(account_t *acc, ip4_addr_t ip)
 {
-	//NOTE: We will need to add this to doxygen, but as this didnt specify what to do with errors, im going to do what account_create does -
-	// On error, logs an appropriate error message using log_message - doesnt return anything as void - does not update the last login time, but does update other values.
-	// but check on the help forum first
-
 	time_t currentTime = time(NULL);
 
 	acc->last_login_time = currentTime;
@@ -241,10 +240,6 @@ void account_record_login_success(account_t *acc, ip4_addr_t ip)
  */
 void account_record_login_failure(account_t *acc)
 {
-	//NOTE: We will need to add this to doxygen, but as this didnt specify what to do with errors, im going to do what account_create does -
-	// On error, logs an appropriate error message using log_message - doesnt return anything as void - does not update the last login time, but does update other values.
-	// but check on the help forum first
-
 	time_t currentTime = time(NULL);
 
 	acc->last_login_time = currentTime;
