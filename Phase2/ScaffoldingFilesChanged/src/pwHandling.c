@@ -3,29 +3,16 @@
  * @brief Implementation of password hashing and validation functions
  *
  * This file implements the functions for password hashing and validation using the Argon2id
- * algorithm, with the sodium salt generation and constant-time comparison.
- *
- * V1.0.1 (Just to keep track of my work. Not the project's version number.)
+ * algorithm, with sodium for salt generation and constant-time comparison.
  */
-#include "banned.h"
 #include "pwHandling.h"
 #include <stdio.h>
-#include <string.h> // NOLINT
+#include <string.h>
 #include <stdlib.h>
 #include <limits.h>
 #include <stdint.h>
 #include <argon2.h>
 #include <sodium.h>
-#include "banned.h"
-
-// Define the account structure - People working on 3.3 please change as you need. But DO NOT TOUCH HASH_LENGTH!!!
-
-/*struct account
- * {
- *  char username[32];
- *  char password_hash[HASH_LENGTH];
- *  // Other fields only if needed
- * };*/
 
 /**
  * @brief Generates cryptographically secure random bytes
@@ -60,8 +47,7 @@ static bool generate_random_bytes(unsigned char *output, size_t length)
  * @param b Second string to compare
  * @return true if strings are equal, false otherwise
  */
-static bool constant_compare(const char *a,
-                             const char *b)
+static bool constant_compare(const char *a, const char *b)
 {
 	// Validate parameters
 	if (a == NULL || b == NULL)
@@ -115,7 +101,7 @@ static void format_argon2_hash(char *output, int t_cost, int m_cost, int paralle
 	memset(salt_b64, 0, sizeof(salt_b64));
 	memset(hash_b64, 0, sizeof(hash_b64));
 
-	// Encode salt and hash to base64 (https://doc.libsodium.org/helpers#base64-encoding-decoding)
+	// Encode salt and hash to base64
 	sodium_bin2base64(salt_b64, sizeof(salt_b64), salt, SALT_LENGTH, sodium_base64_VARIANT_ORIGINAL);
 	sodium_bin2base64(hash_b64, sizeof(hash_b64), raw_hash, HASH_RAW_LENGTH, sodium_base64_VARIANT_ORIGINAL);
 
@@ -147,8 +133,7 @@ static void format_argon2_hash(char *output, int t_cost, int m_cost, int paralle
  * @param parallelism_output Pointer to store the parallelism parameter
  * @return true if extraction was successful, false otherwise
  */
-
-static bool extract_hash_components(const char *hash_str, char *salt_output,
+static bool extract_hash_components(const char *hash_str, unsigned char *salt_output,
                                     int *t_cost_output, int *m_cost_output, int *parallelism_output)
 {
 	// Validate parameters
@@ -176,7 +161,6 @@ static bool extract_hash_components(const char *hash_str, char *salt_output,
 	}
 
 	// Extract memory cost with validation
-
 	size_t m_cost_value = strtol(params_start, NULL, 10);
 
 	if (m_cost_value <= 0 || m_cost_value > INT_MAX)
@@ -218,7 +202,7 @@ static bool extract_hash_components(const char *hash_str, char *salt_output,
 		return(false);  // Invalid value
 	}
 
-	*parallelism_output = (int)p_value;
+	*parallelism_output = p_value;
 
 	// Extract salt
 	char *salt_start = params_end + 1;
@@ -232,7 +216,7 @@ static bool extract_hash_components(const char *hash_str, char *salt_output,
 	long salt_b64_len = salt_end - salt_start;
 
 	// Validate salt_b64_len is reasonable
-	if (salt_b64_len >= 64)
+	if (salt_b64_len <= 0 || salt_b64_len >= 64)
 	{
 		return(false);
 	}
@@ -242,10 +226,10 @@ static bool extract_hash_components(const char *hash_str, char *salt_output,
 	strncpy(salt_b64, salt_start, salt_b64_len);
 	salt_b64[salt_b64_len] = '\0';
 
-	// Decode salt from base64 (https://doc.libsodium.org/helpers#base64-encoding-decoding
+	// Decode salt from base64
 	size_t salt_bin_len;
 
-	if (sodium_base642bin((unsigned char *)salt_output, SALT_LENGTH, salt_b64,
+	if (sodium_base642bin(salt_output, SALT_LENGTH, salt_b64,
 	                      salt_b64_len, NULL, &salt_bin_len, NULL,
 	                      sodium_base64_VARIANT_ORIGINAL) != 0)
 	{
@@ -289,8 +273,7 @@ static bool generate_argon2_hash(const char *password,
 	// Calculate password length safely
 	size_t password_len = strlen(password);
 
-	// Hashes a password with Argon2id, producing an encoded hash. For some reason the docs don't show up when I hover over the function name.
-	// This description is pulled from line 220 to 232 from https://github.com/jedisct1/libsodium/blob/master/src/libsodium/crypto_pwhash/argon2/argon2.h
+	// Hash the password with Argon2id
 	int result = argon2id_hash_raw(t_cost,           // Time cost
 	                               m_cost,           // Memory cost
 	                               parallelism,      // Parallelism
@@ -315,15 +298,22 @@ static bool generate_argon2_hash(const char *password,
 		return(false);
 	}
 
+	// Securely wipe the raw hash from memory
 	sodium_memzero(raw_hash, HASH_RAW_LENGTH);
 
 	return(true);
 }
 
-bool account_validate_password(const account_t *acc,
-                               const char *plaintext_password)
+/**
+ * @brief Validates a plaintext password against the stored hash in an account
+ *
+ * @param acc Pointer to the account structure containing the stored hash
+ * @param plaintext_password The plaintext password to validate
+ * @return true if the password matches, false otherwise
+ */
+bool account_validate_password(const account_t *acc, const char *plaintext_password)
 {
-	// Validate preconditions as per requirement
+	// Validate preconditions
 	if (acc == NULL || plaintext_password == NULL)
 	{
 		return(false);
@@ -333,8 +323,8 @@ bool account_validate_password(const account_t *acc,
 	unsigned char stored_salt[SALT_LENGTH];
 	int			  t_cost, m_cost, parallelism;
 
-	// Helper function to extract salt and parameters from stored format
-	if (!extract_hash_components(acc->password_hash, (char *)stored_salt, &t_cost, &m_cost, &parallelism))
+	// Extract salt and parameters from stored format
+	if (!extract_hash_components(acc->password_hash, stored_salt, &t_cost, &m_cost, &parallelism))
 	{
 		return(false);
 	}
@@ -352,8 +342,14 @@ bool account_validate_password(const account_t *acc,
 	return(constant_compare(computed_hash, acc->password_hash));
 }
 
-bool account_update_password(account_t *acc,
-                             const char *new_plaintext_password)
+/**
+ * @brief Updates an account's password with a new plaintext password
+ *
+ * @param acc Pointer to the account structure to update
+ * @param new_plaintext_password The new plaintext password
+ * @return true if the password was updated successfully, false otherwise
+ */
+bool account_update_password(account_t *acc, const char *new_plaintext_password)
 {
 	// Validate preconditions
 	if (acc == NULL || new_plaintext_password == NULL)
@@ -371,18 +367,14 @@ bool account_update_password(account_t *acc,
 	}
 
 	// Hash the new password with Argon2id
-	char new_hash[HASH_LENGTH];
-	memset(new_hash, 0, HASH_LENGTH); // Initialize to zeros
-
 	if (!generate_argon2_hash(new_plaintext_password, salt, T_COST, M_COST,
-	                          PARALLELISM, new_hash))
+	                          PARALLELISM, acc->password_hash))
 	{
 		return(false);
 	}
 
-	// Update the account's password hash
-	strncpy(acc->password_hash, new_hash, HASH_LENGTH - 1);
-	acc->password_hash[HASH_LENGTH - 1] = '\0'; // Ensure null termination
+	// Securely wipe the salt from memory
+	sodium_memzero(salt, SALT_LENGTH);
 
 	return(true);
 }
