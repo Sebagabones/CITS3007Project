@@ -1,3 +1,8 @@
+#include "account.h"
+#include "logging.h"
+//#include "banned.h"
+#include "db.h"
+
 /**
  * @file pwHandling.h
  * @brief Secure password hashing and validation using Argon2id
@@ -23,7 +28,7 @@
 #define PARALLELISM		   4     // Parallelism parameter
 
 // Forward declaration of account structure
-typedef struct account account_t;
+//typedef struct account account_t;
 
 /**
  * @brief Validates a plaintext password against the stored hash

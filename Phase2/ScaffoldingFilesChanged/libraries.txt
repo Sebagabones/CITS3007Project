@@ -5,3 +5,5 @@
 
 libbsd-overlay
 check
+argon2
+libsodium
