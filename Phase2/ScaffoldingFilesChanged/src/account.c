@@ -157,6 +157,7 @@ static void buffer_to_cstring(const char *field, size_t field_len, char *out_buf
 static bool ip_to_cstring(const ip4_addr_t ip, char *out_buf, size_t out_buf_size)
 {
 	struct in_addr ip_addr;
+
 	ip_addr.s_addr = ip;
 
 	if (inet_ntop(AF_INET, &ip_addr, out_buf, (unsigned int)out_buf_size) == NULL)
@@ -323,15 +324,15 @@ void account_free(account_t *acc) //cppcheck-suppress staticFunction
  * @param plaintext_password Null-terminated string of the password to validate.
  * @return true if the password matches, false otherwise.
  */
-bool account_validate_password(const account_t *acc, const char *plaintext_password)
-{
-	if (strncmp(acc->password_hash, plaintext_password, HASH_LENGTH) == 0)
-	{
-		return(true);
-	}
+/* bool account_validate_password(const account_t *acc, const char *plaintext_password) */
+/* { */
+/* 	if (strncmp(acc->password_hash, plaintext_password, HASH_LENGTH) == 0) */
+/* 	{ */
+/* 		return(true); */
+/* 	} */
 
-	return(false);
-}
+/* 	return(false); */
+/* } */
 
 /**
  * @brief Update the account's password.
@@ -342,15 +343,15 @@ bool account_validate_password(const account_t *acc, const char *plaintext_passw
  * @param new_plaintext_password Null-terminated string of the new password.
  * @return true if the update was successful, false otherwise.
  */
-bool account_update_password(account_t *acc, const char *new_plaintext_password)
-{
-	if (hash_password(new_plaintext_password, acc->password_hash, HASH_LENGTH))
-	{                               // Assuming hash_password writes the result into the buffer and handles
-		return(true);               // null-termination
-	}
+/* bool account_update_password(account_t *acc, const char *new_plaintext_password) */
+/* { */
+/* 	if (hash_password(new_plaintext_password, acc->password_hash, HASH_LENGTH)) */
+/* 	{                               // Assuming hash_password writes the result into the buffer and handles */
+/* 		return(true);               // null-termination */
+/* 	} */
 
-	return(false);
-}
+/* 	return(false); */
+/* } */
 
 /**
  * @brief Record a successful login for the account.
