@@ -19,12 +19,12 @@
       "-g",
       "-c",
       "-o",
-      "build/account.o",
-      "src/account.c"
+      "build/stubs.o",
+      "src/stubs.c"
     ],
     "directory": "/home/sexcandygirl/CITS3007Project/src",
-    "file": "/home/sexcandygirl/CITS3007Project/src/src/account.c",
-    "output": "/home/sexcandygirl/CITS3007Project/src/build/account.o"
+    "file": "/home/sexcandygirl/CITS3007Project/src/src/stubs.c",
+    "output": "/home/sexcandygirl/CITS3007Project/src/build/stubs.o"
   },
   {
     "arguments": [
@@ -73,12 +73,66 @@
       "-g",
       "-c",
       "-o",
-      "build/stubs.o",
-      "src/stubs.c"
+      "build/login.o",
+      "src/login.c"
     ],
     "directory": "/home/sexcandygirl/CITS3007Project/src",
-    "file": "/home/sexcandygirl/CITS3007Project/src/src/stubs.c",
-    "output": "/home/sexcandygirl/CITS3007Project/src/build/stubs.o"
+    "file": "/home/sexcandygirl/CITS3007Project/src/src/login.c",
+    "output": "/home/sexcandygirl/CITS3007Project/src/build/login.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-std=c11",
+      "-pedantic-errors",
+      "-Wall",
+      "-Wextra",
+      "-Wshadow",
+      "-Wconversion",
+      "-funsigned-char",
+      "-fstack-protector-all",
+      "-mshstk",
+      "-Isrc",
+      "-fsanitize=undefined,address,leak",
+      "-fno-sanitize-recover=signed-integer-overflow",
+      "-fno-omit-frame-pointer",
+      "-O",
+      "-g",
+      "-c",
+      "-o",
+      "build/alternate_main.o",
+      "src/alternate_main.c"
+    ],
+    "directory": "/home/sexcandygirl/CITS3007Project/src",
+    "file": "/home/sexcandygirl/CITS3007Project/src/src/alternate_main.c",
+    "output": "/home/sexcandygirl/CITS3007Project/src/build/alternate_main.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-std=c11",
+      "-pedantic-errors",
+      "-Wall",
+      "-Wextra",
+      "-Wshadow",
+      "-Wconversion",
+      "-funsigned-char",
+      "-fstack-protector-all",
+      "-mshstk",
+      "-Isrc",
+      "-fsanitize=undefined,address,leak",
+      "-fno-sanitize-recover=signed-integer-overflow",
+      "-fno-omit-frame-pointer",
+      "-O",
+      "-g",
+      "-c",
+      "-o",
+      "build/account.o",
+      "src/account.c"
+    ],
+    "directory": "/home/sexcandygirl/CITS3007Project/src",
+    "file": "/home/sexcandygirl/CITS3007Project/src/src/account.c",
+    "output": "/home/sexcandygirl/CITS3007Project/src/build/account.o"
   },
   {
     "arguments": [
@@ -151,60 +205,6 @@
     "directory": "/home/sexcandygirl/CITS3007Project/src",
     "file": "/home/sexcandygirl/CITS3007Project/src/src/bogus_main.c",
     "output": "/home/sexcandygirl/CITS3007Project/src/build/no-sanitize/bogus_main.o"
-  },
-  {
-    "arguments": [
-      "/usr/bin/gcc",
-      "-std=c11",
-      "-pedantic-errors",
-      "-Wall",
-      "-Wextra",
-      "-Wshadow",
-      "-Wconversion",
-      "-funsigned-char",
-      "-fstack-protector-all",
-      "-mshstk",
-      "-Isrc",
-      "-fsanitize=undefined,address,leak",
-      "-fno-sanitize-recover=signed-integer-overflow",
-      "-fno-omit-frame-pointer",
-      "-O",
-      "-g",
-      "-c",
-      "-o",
-      "build/alternate_main.o",
-      "src/alternate_main.c"
-    ],
-    "directory": "/home/sexcandygirl/CITS3007Project/src",
-    "file": "/home/sexcandygirl/CITS3007Project/src/src/alternate_main.c",
-    "output": "/home/sexcandygirl/CITS3007Project/src/build/alternate_main.o"
-  },
-  {
-    "arguments": [
-      "/usr/bin/gcc",
-      "-std=c11",
-      "-pedantic-errors",
-      "-Wall",
-      "-Wextra",
-      "-Wshadow",
-      "-Wconversion",
-      "-funsigned-char",
-      "-fstack-protector-all",
-      "-mshstk",
-      "-Isrc",
-      "-fsanitize=undefined,address,leak",
-      "-fno-sanitize-recover=signed-integer-overflow",
-      "-fno-omit-frame-pointer",
-      "-O",
-      "-g",
-      "-c",
-      "-o",
-      "build/login.o",
-      "src/login.c"
-    ],
-    "directory": "/home/sexcandygirl/CITS3007Project/src",
-    "file": "/home/sexcandygirl/CITS3007Project/src/src/login.c",
-    "output": "/home/sexcandygirl/CITS3007Project/src/build/login.o"
   },
   {
     "arguments": [
@@ -322,6 +322,31 @@
       "-O0",
       "-c",
       "-o",
+      "build/debug/bogus_main.o",
+      "src/bogus_main.c"
+    ],
+    "directory": "/home/sexcandygirl/CITS3007Project/src",
+    "file": "/home/sexcandygirl/CITS3007Project/src/src/bogus_main.c",
+    "output": "/home/sexcandygirl/CITS3007Project/src/build/debug/bogus_main.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-std=c11",
+      "-pedantic-errors",
+      "-Wall",
+      "-Wextra",
+      "-Wshadow",
+      "-Wconversion",
+      "-funsigned-char",
+      "-fstack-protector-all",
+      "-mshstk",
+      "-Isrc",
+      "-g3",
+      "-ggdb",
+      "-O0",
+      "-c",
+      "-o",
       "build/debug/login.o",
       "src/login.c"
     ],
@@ -353,31 +378,6 @@
     "directory": "/home/sexcandygirl/CITS3007Project/src",
     "file": "/home/sexcandygirl/CITS3007Project/src/src/stubs.c",
     "output": "/home/sexcandygirl/CITS3007Project/src/build/debug/stubs.o"
-  },
-  {
-    "arguments": [
-      "/usr/bin/gcc",
-      "-std=c11",
-      "-pedantic-errors",
-      "-Wall",
-      "-Wextra",
-      "-Wshadow",
-      "-Wconversion",
-      "-funsigned-char",
-      "-fstack-protector-all",
-      "-mshstk",
-      "-Isrc",
-      "-g3",
-      "-ggdb",
-      "-O0",
-      "-c",
-      "-o",
-      "build/debug/bogus_main.o",
-      "src/bogus_main.c"
-    ],
-    "directory": "/home/sexcandygirl/CITS3007Project/src",
-    "file": "/home/sexcandygirl/CITS3007Project/src/src/bogus_main.c",
-    "output": "/home/sexcandygirl/CITS3007Project/src/build/debug/bogus_main.o"
   },
   {
     "arguments": [
@@ -470,18 +470,19 @@
       "-fstack-protector-all",
       "-mshstk",
       "-Isrc",
-      "-fsanitize=thread",
+      "-fsanitize=undefined,float-divide-by-zero,float-cast-overflow,bounds,null,return,vptr",
+      "-fno-sanitize-recover=all",
       "-fno-omit-frame-pointer",
       "-O1",
       "-g",
       "-c",
       "-o",
-      "build/thread/login.o",
-      "src/login.c"
+      "build/full/alternate_main.o",
+      "src/alternate_main.c"
     ],
     "directory": "/home/sexcandygirl/CITS3007Project/src",
-    "file": "/home/sexcandygirl/CITS3007Project/src/src/login.c",
-    "output": "/home/sexcandygirl/CITS3007Project/src/build/thread/login.o"
+    "file": "/home/sexcandygirl/CITS3007Project/src/src/alternate_main.c",
+    "output": "/home/sexcandygirl/CITS3007Project/src/build/full/alternate_main.o"
   },
   {
     "arguments": [
@@ -508,6 +509,32 @@
     "directory": "/home/sexcandygirl/CITS3007Project/src",
     "file": "/home/sexcandygirl/CITS3007Project/src/src/stubs.c",
     "output": "/home/sexcandygirl/CITS3007Project/src/build/thread/stubs.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-std=c11",
+      "-pedantic-errors",
+      "-Wall",
+      "-Wextra",
+      "-Wshadow",
+      "-Wconversion",
+      "-funsigned-char",
+      "-fstack-protector-all",
+      "-mshstk",
+      "-Isrc",
+      "-fsanitize=thread",
+      "-fno-omit-frame-pointer",
+      "-O1",
+      "-g",
+      "-c",
+      "-o",
+      "build/thread/login.o",
+      "src/login.c"
+    ],
+    "directory": "/home/sexcandygirl/CITS3007Project/src",
+    "file": "/home/sexcandygirl/CITS3007Project/src/src/login.c",
+    "output": "/home/sexcandygirl/CITS3007Project/src/build/thread/login.o"
   },
   {
     "arguments": [
@@ -562,33 +589,6 @@
     "directory": "/home/sexcandygirl/CITS3007Project/src",
     "file": "/home/sexcandygirl/CITS3007Project/src/src/bogus_main.c",
     "output": "/home/sexcandygirl/CITS3007Project/src/build/full/bogus_main.o"
-  },
-  {
-    "arguments": [
-      "/usr/bin/gcc",
-      "-std=c11",
-      "-pedantic-errors",
-      "-Wall",
-      "-Wextra",
-      "-Wshadow",
-      "-Wconversion",
-      "-funsigned-char",
-      "-fstack-protector-all",
-      "-mshstk",
-      "-Isrc",
-      "-fsanitize=undefined,float-divide-by-zero,float-cast-overflow,bounds,null,return,vptr",
-      "-fno-sanitize-recover=all",
-      "-fno-omit-frame-pointer",
-      "-O1",
-      "-g",
-      "-c",
-      "-o",
-      "build/full/alternate_main.o",
-      "src/alternate_main.c"
-    ],
-    "directory": "/home/sexcandygirl/CITS3007Project/src",
-    "file": "/home/sexcandygirl/CITS3007Project/src/src/alternate_main.c",
-    "output": "/home/sexcandygirl/CITS3007Project/src/build/full/alternate_main.o"
   },
   {
     "arguments": [

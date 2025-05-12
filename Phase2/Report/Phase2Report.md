@@ -88,8 +88,114 @@ Threat Modelling:
     11. Make sure people can't inject stuff into log files and manipulate data
     12. Properly restrict access to files to prevent unauthorised users from accessing high level accounts
 
-Above is a list of threats that could pose an issue to our code. For testing we used this to generate possible input values that fit those criteria (e.g. Null/empty inputs causing buffer overflows).
+Above is a list of threats that could pose an issue to our code. For testing we used this to generate possible input values that fit those criteria (e.g. Null/empty inputs causing buffer overflows). Below are examples of each.
+    1.  Input:
+            Username: aaaaaaa(x100000)
+            Password: bbbbb(x100000)
+            Email: cccccc(x10000) @gmail.com
+        Reason: Making sure overly large inputs can't cause Buffer Overflow
+    2.  Input:
+            Username: AAA\x00\xFF\xAA
+            Email: user\xFF@mail.com
+        Reason: Checking that invalid strange inputs can't cause corruption by editing internal memory
+    3.  Input:
+            Username:
+            Password: LO L
+            Email: email.com
+        Reason: Making sure NULL values, whitespace and invalid inputs can't cause undefined behaviour
+    4.  Input:
+            Username: admin'; DROP TABLE users--
+            email: <script>alert('XSS');</script>
+        Reason: Ensuring SQLinjection and XSS are not possible
+    5.  Input:
+            Password: P@ssw0rd123
+            Password: 1234
+        Reason: Testing that passwords come out as hashed argon2
+    6.  Input:
+            Password: 1234
+            Password: password
+            Password: qwerty
+        Reason: Weak passwords should still be accepted as they will be hashed
+    7.  Input:
+            Many failed login
+        Reason: Check the account gets banned or locked after 10 tries to prevent DoS
+    8.  Input:
+            Username: Expired_User
+        Reason: Make sure expired user cannot login to check that accounts are disabled
+    9.  Input:
+            Trying to access file descriptor
+        Reason: Ensure users can't get into file descriptor
+    10. Input:
+            Failed login attempts + Checking lofg files
+        Reason: Check that users can't manipulate and look into the log files
+    11. Input:
+            Username: admin'; DROP TABLE users--
+        Reason: Make sure users can't inject into log files and manipulate stuff
+    12. Input:
+            Try to access restricted files
+        Reason: Make sure users don't have access to admin privileges
+
+We also had to test inputs for login.c which was just making sure the inputs had corresponding outputs. Each of these just check for the error output.
+    1.  Input:
+            NULL
+        Output:
+            LOGIN_FAIL_INTERNAL_ERROR
+        Reason: Ensures that the code doesn't crash but also gracefully handle failed memory allocation
+    2.  Input:
+            Username: non-existent
+        Output:
+            LOGIN_FAIL_USER_NOT_FOUND
+        Reason: Ensures system handles a non existent account gracefully without crashing
+    3.  Input:
+            Username: banned-user
+        Output:
+            LOGIN_FAIL_ACCOUNT_BANNED
+        Reason: Ensures system handles banned accounts and prevents login
+    4.  Input:
+            Username: expired-account
+        Output:
+            LOGIN_FAIL_ACCOUNT_EXPIRES
+        Reason: Prevents expired accounts from logging in gracefully with the error
+    5.  Input:
+            10 Login Failed Logins
+        Output:
+            LOGIN_FAIL_INTERNAL_ERROR
+        Reason: Ensures people aren't able to brute-force passwords by giving error after too many attempts
+    6.  Input:
+            Password: Wrong Password
+        Output:
+            LOGIN_FAIL_BAD_PASSWORD
+        Reason: Ensures wromg passwords are not given access to the account for security
+    7.  Input:
+            Username: Valid-Account
+            Password: Correct-Password
+        Output:
+            LOGIN_SUCCESS
+            Tries reset
+        Reason: Ensure the login handles account login correctly. Reset tries and everything.
 
 Then using the tst testing code we had it run unit tests to make sure that the output/error handling working properly based on the inputs given.
 
 tst takes simple inputs and allows us to define the correct output as well as adding our own output to show messages that describe what went wrong with our code.
+
+The reason we went with tst is because it is simple and clear.
+You can split tst into tstsuite which can contain many tstcases and then a tstcheck:
+
+tstsuite(){
+    tstcase(1) {
+        tstcheck(1);
+        tstcheck(2);
+        .
+        .
+        .
+    }
+    .
+    .
+}
+
+You can split suite for each function that requires testing. Then have cases for all the different errors to be tested. Within you can have many checks for multiple values that check the case.
+tstcheck also has simple functionality:
+
+tstcase(function(values) == Correct_Output, Message);
+
+This will give a message if the output is not correct based on boolean.

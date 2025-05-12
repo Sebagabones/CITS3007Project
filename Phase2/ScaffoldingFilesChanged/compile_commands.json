@@ -72,12 +72,12 @@
       "-Isrc",
       "-c",
       "-o",
-      "build/account.o",
-      "src/account.c"
+      "build/stubs.o",
+      "src/stubs.c"
     ],
     "directory": "/home/sexcandygirl/CITS3007Project/Phase2/ScaffoldingFilesChanged",
-    "file": "/home/sexcandygirl/CITS3007Project/Phase2/ScaffoldingFilesChanged/src/account.c",
-    "output": "/home/sexcandygirl/CITS3007Project/Phase2/ScaffoldingFilesChanged/build/account.o"
+    "file": "/home/sexcandygirl/CITS3007Project/Phase2/ScaffoldingFilesChanged/src/stubs.c",
+    "output": "/home/sexcandygirl/CITS3007Project/Phase2/ScaffoldingFilesChanged/build/stubs.o"
   },
   {
     "arguments": [
@@ -92,11 +92,11 @@
       "-Isrc",
       "-c",
       "-o",
-      "build/stubs.o",
-      "src/stubs.c"
+      "build/account.o",
+      "src/account.c"
     ],
     "directory": "/home/sexcandygirl/CITS3007Project/Phase2/ScaffoldingFilesChanged",
-    "file": "/home/sexcandygirl/CITS3007Project/Phase2/ScaffoldingFilesChanged/src/stubs.c",
-    "output": "/home/sexcandygirl/CITS3007Project/Phase2/ScaffoldingFilesChanged/build/stubs.o"
+    "file": "/home/sexcandygirl/CITS3007Project/Phase2/ScaffoldingFilesChanged/src/account.c",
+    "output": "/home/sexcandygirl/CITS3007Project/Phase2/ScaffoldingFilesChanged/build/account.o"
   }
 ]
