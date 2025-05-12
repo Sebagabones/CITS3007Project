@@ -16,6 +16,7 @@
  #include <stdint.h>
  #include <argon2.h>
  #include <sodium.h>
+#include "banned.h"
 
 // Define the account structure - People working on 3.3 please change as you need. But DO NOT TOUCH HASH_LENGTH!!!
 struct account
@@ -173,7 +174,8 @@ static bool extract_hash_components(const char *hash_str, char *salt_output,
 	}
 
 	// Extract memory cost with validation
-	int32_t m_cost_value = atoi(params_start);
+
+	size_t m_cost_value = (size_t)strtol(params_start, (char **)NULL, 10);
 
 	if (m_cost_value <= 0 || m_cost_value > INT_MAX)
 	{
@@ -190,7 +192,7 @@ static bool extract_hash_components(const char *hash_str, char *salt_output,
 		return(false);
 	}
 
-	int32_t t_cost_value = atoi(t_cost_start + 3);
+	int t_cost_value = (int)strtol(t_cost_start + 3, (char **)NULL, 10);
 
 	if (t_cost_value <= 0 || t_cost_value > INT_MAX)
 	{
@@ -207,7 +209,7 @@ static bool extract_hash_components(const char *hash_str, char *salt_output,
 		return(false);
 	}
 
-	int32_t p_value = atoi(p_start + 3);
+	int p_value = (int)strtol(p_start + 3, (char **)NULL, 10);
 
 	if (p_value <= 0 || p_value > INT_MAX)
 	{
