@@ -1,4 +1,4 @@
-/** lol
+/**
  * login_result_t  handles the login process
  *
  * @param username		The username of the account logging in
