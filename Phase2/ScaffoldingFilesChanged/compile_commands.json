@@ -12,12 +12,12 @@
       "-Isrc",
       "-c",
       "-o",
-      "build/bogus_main.o",
-      "src/bogus_main.c"
+      "build/login.o",
+      "src/login.c"
     ],
     "directory": "/home/sexcandygirl/CITS3007Project/Phase2/ScaffoldingFilesChanged",
-    "file": "/home/sexcandygirl/CITS3007Project/Phase2/ScaffoldingFilesChanged/src/bogus_main.c",
-    "output": "/home/sexcandygirl/CITS3007Project/Phase2/ScaffoldingFilesChanged/build/bogus_main.o"
+    "file": "/home/sexcandygirl/CITS3007Project/Phase2/ScaffoldingFilesChanged/src/login.c",
+    "output": "/home/sexcandygirl/CITS3007Project/Phase2/ScaffoldingFilesChanged/build/login.o"
   },
   {
     "arguments": [
@@ -52,12 +52,12 @@
       "-Isrc",
       "-c",
       "-o",
-      "build/login.o",
-      "src/login.c"
+      "build/bogus_main.o",
+      "src/bogus_main.c"
     ],
     "directory": "/home/sexcandygirl/CITS3007Project/Phase2/ScaffoldingFilesChanged",
-    "file": "/home/sexcandygirl/CITS3007Project/Phase2/ScaffoldingFilesChanged/src/login.c",
-    "output": "/home/sexcandygirl/CITS3007Project/Phase2/ScaffoldingFilesChanged/build/login.o"
+    "file": "/home/sexcandygirl/CITS3007Project/Phase2/ScaffoldingFilesChanged/src/bogus_main.c",
+    "output": "/home/sexcandygirl/CITS3007Project/Phase2/ScaffoldingFilesChanged/build/bogus_main.o"
   },
   {
     "arguments": [
