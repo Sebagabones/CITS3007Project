@@ -175,7 +175,7 @@ static bool extract_hash_components(const char *hash_str, char *salt_output,
 
 	// Extract memory cost with validation
 
-	size_t m_cost_value = (size_t)strtol(params_start, (char **)NULL, 10);
+	size_t m_cost_value = strtol(params_start, NULL, 10);
 
 	if (m_cost_value <= 0 || m_cost_value > INT_MAX)
 	{
@@ -192,24 +192,24 @@ static bool extract_hash_components(const char *hash_str, char *salt_output,
 		return(false);
 	}
 
-	int t_cost_value = (int)strtol(t_cost_start + 3, (char **)NULL, 10);
+	int t_cost_value = (int)strtol(t_cost_start + 3, NULL, 10);
 
 	if (t_cost_value <= 0 || t_cost_value > INT_MAX)
 	{
 		return(false);   // Invalid value
 	}
 
-	*t_cost_output = (int)t_cost_value;
+	*t_cost_output = t_cost_value;
 
 	// Extract parallelism with validation
-	char *p_start = strstr(params_start, ",p=");
+	const char *p_start = strstr(params_start, ",p=");
 
 	if (p_start == NULL)
 	{
 		return(false);
 	}
 
-	int p_value = (int)strtol(p_start + 3, (char **)NULL, 10);
+	int p_value = (int)strtol(p_start + 3, NULL, 10);
 
 	if (p_value <= 0 || p_value > INT_MAX)
 	{
@@ -227,7 +227,7 @@ static bool extract_hash_components(const char *hash_str, char *salt_output,
 		return(false);
 	}
 
-	size_t salt_b64_len = salt_end - salt_start;
+	long salt_b64_len = salt_end - salt_start;
 
 	// Validate salt_b64_len is reasonable
 	if (salt_b64_len >= 64)
