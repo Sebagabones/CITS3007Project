@@ -122,7 +122,7 @@ static void format_argon2_hash(char *output, int t_cost, int m_cost, int paralle
 	int required_length = snprintf(NULL, 0, "$argon2id$v=19$m=%d,t=%d,p=%d$%s$%s",
 	                               m_cost, t_cost, parallelism, salt_b64, hash_b64);
 
-	if (required_length < HASH_LENGTH)
+	if (required_length < HASH_LENGTH - 1)
 	{
 		// We have enough space, format the final string
 		snprintf(output, HASH_LENGTH,
@@ -146,6 +146,7 @@ static void format_argon2_hash(char *output, int t_cost, int m_cost, int paralle
  * @param parallelism_output Pointer to store the parallelism parameter
  * @return true if extraction was successful, false otherwise
  */
+
 static bool extract_hash_components(const char *hash_str, char *salt_output,
                                     int *t_cost_output, int *m_cost_output, int *parallelism_output)
 {
@@ -312,6 +313,8 @@ static bool generate_argon2_hash(const char *password,
 	{
 		return(false);
 	}
+
+	sodium_memzero(raw_hash, HASH_RAW_LENGTH);
 
 	return(true);
 }
