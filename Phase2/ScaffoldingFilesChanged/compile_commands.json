@@ -16,12 +16,12 @@
       "-Isrc",
       "-c",
       "-o",
-      "build/bogus_main.o",
-      "src/bogus_main.c"
+      "build/login.o",
+      "src/login.c"
     ],
     "directory": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/Phase2/ScaffoldingFilesChanged",
-    "file": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/Phase2/ScaffoldingFilesChanged/src/bogus_main.c",
-    "output": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/Phase2/ScaffoldingFilesChanged/build/bogus_main.o"
+    "file": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/Phase2/ScaffoldingFilesChanged/src/login.c",
+    "output": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/Phase2/ScaffoldingFilesChanged/build/login.o"
   },
   {
     "arguments": [
@@ -40,12 +40,36 @@
       "-Isrc",
       "-c",
       "-o",
-      "build/login.o",
-      "src/login.c"
+      "build/pwHandling_test.o",
+      "src/pwHandling_test.c"
     ],
     "directory": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/Phase2/ScaffoldingFilesChanged",
-    "file": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/Phase2/ScaffoldingFilesChanged/src/login.c",
-    "output": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/Phase2/ScaffoldingFilesChanged/build/login.o"
+    "file": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/Phase2/ScaffoldingFilesChanged/src/pwHandling_test.c",
+    "output": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/Phase2/ScaffoldingFilesChanged/build/pwHandling_test.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-g",
+      "-fno-omit-frame-pointer",
+      "-std=c11",
+      "-pedantic-errors",
+      "-Wall",
+      "-Wextra",
+      "-Isrc",
+      "-isystem",
+      "/usr/include/bsd",
+      "-DLIBBSD_OVERLAY",
+      "-pthread",
+      "-Isrc",
+      "-c",
+      "-o",
+      "build/pwHandling.o",
+      "src/pwHandling.c"
+    ],
+    "directory": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/Phase2/ScaffoldingFilesChanged",
+    "file": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/Phase2/ScaffoldingFilesChanged/src/pwHandling.c",
+    "output": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/Phase2/ScaffoldingFilesChanged/build/pwHandling.o"
   },
   {
     "arguments": [
@@ -112,12 +136,12 @@
       "-Isrc",
       "-c",
       "-o",
-      "build/pwHandling.o",
-      "src/pwHandling.c"
+      "build/bogus_main.o",
+      "src/bogus_main.c"
     ],
     "directory": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/Phase2/ScaffoldingFilesChanged",
-    "file": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/Phase2/ScaffoldingFilesChanged/src/pwHandling.c",
-    "output": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/Phase2/ScaffoldingFilesChanged/build/pwHandling.o"
+    "file": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/Phase2/ScaffoldingFilesChanged/src/bogus_main.c",
+    "output": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/Phase2/ScaffoldingFilesChanged/build/bogus_main.o"
   },
   {
     "arguments": [
@@ -142,29 +166,5 @@
     "directory": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/Phase2/ScaffoldingFilesChanged",
     "file": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/Phase2/ScaffoldingFilesChanged/src/stubs.c",
     "output": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/Phase2/ScaffoldingFilesChanged/build/stubs.o"
-  },
-  {
-    "arguments": [
-      "/usr/bin/gcc",
-      "-g",
-      "-fno-omit-frame-pointer",
-      "-std=c11",
-      "-pedantic-errors",
-      "-Wall",
-      "-Wextra",
-      "-Isrc",
-      "-isystem",
-      "/usr/include/bsd",
-      "-DLIBBSD_OVERLAY",
-      "-pthread",
-      "-Isrc",
-      "-c",
-      "-o",
-      "build/main.o",
-      "src/main.c"
-    ],
-    "directory": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/Phase2/ScaffoldingFilesChanged",
-    "file": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/Phase2/ScaffoldingFilesChanged/src/main.c",
-    "output": "/home/bones/Storage/Uniwork/2025S1Projects/CITS3007Project/Phase2/ScaffoldingFilesChanged/build/main.o"
   }
 ]
