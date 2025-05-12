@@ -24,7 +24,16 @@ PKG_CFLAGS := $(if $(strip $(PKG_DEPS)),$(shell pkg-config --cflags $(PKG_DEPS))
 PKG_LDFLAGS := $(if $(strip $(PKG_DEPS)),$(shell pkg-config --libs $(PKG_DEPS)))
 
 CFLAGS_COMMON = -std=c11 -pedantic-errors -Wall -Wextra -Wshadow -Wconversion \
-        -funsigned-char -fstack-protector-all -mshstk $(INC_FLAGS) $(PKG_CFLAGS)
+        -funsigned-char -fstack-protector-all $(INC_FLAGS) $(PKG_CFLAGS)
+
+# ALECS MAC STUFF -- IGNORE
+ifeq ($(shell uname), Darwin)
+CFLAGS_COMMON += -I/opt/homebrew/include
+# comment out dynamic flags
+#LDFLAGS += -L/opt/homebrew/lib -largon2
+LDFLAGS += /opt/homebrew/lib/libargon2.a /opt/homebrew/lib/libsodium.a
+endif
+# MAC SUPREMACY ------------- DELETE THIS IF ALEC IS SILLY AND PUSHES IT
 
 SANITIZE_FLAGS = -fsanitize=undefined,address,leak \
         -fno-sanitize-recover=signed-integer-overflow -fno-omit-frame-pointer
