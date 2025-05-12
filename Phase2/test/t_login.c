@@ -66,6 +66,11 @@ tstsuite("handle_login")
 		tstcheck(handle_login("", "Bankai2", testip, testtime, -1, &testsession) == LOGIN_FAIL_USER_NOT_FOUND)
 	}
 
+	tstcase("Correct Username and Password")
+	{
+		tstcheck(handle_login("Ichigo", "Bankai2", testip, testtime, -1, &testsession) == LOGIN_SUCCESS)
+	}
+
 	tstcase("Username Not Found Login")
 	{
 		tstcheck(handle_login("Non-existent", "Bankai2", testip, testtime, -1, &testsession) == LOGIN_FAIL_USER_NOT_FOUND)
