@@ -1,4 +1,3 @@
-// flawfinder: ignore
 /**
  * @file pwHandling_test.c
  * @brief Test cases for password hashing and validation functions
