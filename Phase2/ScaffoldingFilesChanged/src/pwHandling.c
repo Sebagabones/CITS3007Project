@@ -7,7 +7,6 @@
  *
  * V1.0.1 (Just to keep track of my work. Not the project's version number.)
  */
-#include "banned.h"
 #include "pwHandling.h"
 #include <stdio.h>
 #include <string.h> // NOLINT

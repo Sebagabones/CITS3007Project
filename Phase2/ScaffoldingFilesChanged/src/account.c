@@ -10,8 +10,8 @@
 #include <arpa/inet.h>
 
 #include "account.h"
-#include "banned.h"
 #include "logging.h"
+#include "banned.h"
 
 #define PLAINTEXT_PASSWORD_MAX_LENGTH    100 // alter this for password hashing
 
