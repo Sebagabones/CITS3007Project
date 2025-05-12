@@ -1,4 +1,4 @@
-/**
+/** lol
  * login_result_t  handles the login process
  *
  * @param username		The username of the account logging in
@@ -23,9 +23,12 @@ login_result_t handle_login(const char *username, const char *password, ip_t ip,
 
 	if (user == NULL)
 	{
-		log_message(LOG_ERROR, "Memory allocation failed for user");
+		SS
+		{
+			log_message(LOG_ERROR, "Memory allocation failed for user");
 
-		return(LOGIN_FAIL_INTERNAL_ERROR);
+			return(LOGIN_FAIL_INTERNAL_ERROR);
+		}
 	}
 
 	//Retrieve account information for the username
@@ -40,7 +43,6 @@ login_result_t handle_login(const char *username, const char *password, ip_t ip,
 
 	// === Banned or Expired Accounts ===
 
-	
 	//Check if the account for the user is banned
 	if (account_is_banned(user))
 	{
@@ -72,7 +74,6 @@ login_result_t handle_login(const char *username, const char *password, ip_t ip,
 
 	// === Password Check ===
 
-	
 	//Checks if the password is correct
 	//If password wrong increment count for attempts
 	if (!account_validate_password(user, password))
