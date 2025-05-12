@@ -7,9 +7,9 @@
 
 #include "db.h"
 #include "login.h"
-#include "banned.h"
 #include "logging.h"
 #include "pwHandling.h"
+#include "banned.h"
 
 #define DEFAULT_SESSION_LENGTH    86400
 
@@ -71,7 +71,7 @@ login_result_t handle_login(const char *username, const char *password,
 		send_client_and_log(client_output_fd, LOG_INFO, username,
 		                    "Login failed: User account doesn't exist\n",
 		                    "User %s not found");
-		free(user);
+		account_free(user);
 
 		return(LOGIN_FAIL_USER_NOT_FOUND);
 	}
@@ -84,7 +84,7 @@ login_result_t handle_login(const char *username, const char *password,
 		send_client_and_log(client_output_fd, LOG_INFO, username,
 		                    "Login failed: User account is banned\n",
 		                    "User %s is banned");
-		free(user);
+		/* account_free(user); */
 
 		return(LOGIN_FAIL_ACCOUNT_BANNED);
 	}
@@ -95,7 +95,7 @@ login_result_t handle_login(const char *username, const char *password,
 		send_client_and_log(client_output_fd, LOG_INFO, username,
 		                    "Login failed: User account is expired\n",
 		                    "User %s's account is expired");
-		free(user);
+		/* account_free(user); */
 
 		return(LOGIN_FAIL_ACCOUNT_EXPIRED);
 	}
@@ -106,7 +106,7 @@ login_result_t handle_login(const char *username, const char *password,
 		send_client_and_log(client_output_fd, LOG_WARN, username,
 		                    "Login failed: too many failed password attempts\n",
 		                    "Too many login attempts for user %s");
-		free(user);
+		/* account_free(user); */
 
 		return(LOGIN_FAIL_INTERNAL_ERROR);
 	}
@@ -119,7 +119,7 @@ login_result_t handle_login(const char *username, const char *password,
 		send_client_and_log(client_output_fd, LOG_INFO, username,
 		                    "Login failed: Wrong password\n",
 		                    "User %s entered wrong password");
-		free(user);
+		/* account_free(user); */
 
 		return(LOGIN_FAIL_BAD_PASSWORD);
 	}
@@ -143,7 +143,7 @@ login_result_t handle_login(const char *username, const char *password,
 		session->expiration_time = user->expiration_time;
 	}
 
-	free(user);
+	/* account_free(user); */
 
 	return(LOGIN_SUCCESS);
 }

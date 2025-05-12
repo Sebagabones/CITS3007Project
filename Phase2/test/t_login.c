@@ -16,11 +16,16 @@ bool account_lookup_by_userid(const char *userid, account_t *acc)
 	if (strcmp(userid, "Ichigo") == 0)
 	{
 		strcpy(acc->userid, "Ichigo");
-		strcpy(acc->password_hash, "Bankai2");
+		/* strcpy(acc->password_hash, "Bankai2"); */
 		acc->account_id		  = 1;
 		acc->unban_time		  = 0;
 		acc->expiration_time  = 0;
 		acc->login_fail_count = 0;
+
+		if (!account_update_password(acc, "Bankai2"))
+		{
+			return(false);
+		}
 
 		return(true);
 	}
@@ -66,11 +71,6 @@ tstsuite("handle_login")
 		tstcheck(handle_login("", "Bankai2", testip, testtime, -1, &testsession) == LOGIN_FAIL_USER_NOT_FOUND)
 	}
 
-	tstcase("Correct Username and Password")
-	{
-		tstcheck(handle_login("Ichigo", "Bankai2", testip, testtime, -1, &testsession) == LOGIN_SUCCESS)
-	}
-
 	tstcase("Username Not Found Login")
 	{
 		tstcheck(handle_login("Non-existent", "Bankai2", testip, testtime, -1, &testsession) == LOGIN_FAIL_USER_NOT_FOUND)
@@ -107,6 +107,14 @@ tstsuite("handle_login")
 	}
 
 	tstcase("Correct Password Login + Session Check")
+	{
+		tstcheck(handle_login("Ichigo", "Bankai2", testip, testtime, -1, &testsession) == LOGIN_SUCCESS)
+		tstcheck(testsession.account_id == 1)
+		tstcheck(testsession.session_start == testtime)
+		tstcheck(testsession.expiration_time == testtime + 86400)
+	}
+	testtime = time(NULL); //this needs to be updated because successful login
+	tstcase("Correct Username and Password")
 	{
 		tstcheck(handle_login("Ichigo", "Bankai2", testip, testtime, -1, &testsession) == LOGIN_SUCCESS)
 		tstcheck(testsession.account_id == 1)

@@ -19,9 +19,10 @@ STATIC=
 endif
 
 SRC_DIR=../ScaffoldingFilesChanged/src
+TEST_DIR=.
 # CXX_AVAILABLE := $(shell $(CXX) --version 2>/dev/null)
 
-CFLAGS=-O2 -Wall -I$(SRC_DIR)/ $(STATIC) $(COMPACT) $(NOCOLOR) $(DEBUG)
+CFLAGS=-O2 -Wall -I$(SRC_DIR)/ $(STATIC) $(COMPACT) $(DEBUG) -DCITS3007_PROJECT_TESTING
 LIBS=
 
 TESTS_SRC_C=$(wildcard t_*.c)
@@ -36,7 +37,7 @@ endif
 TESTS_SRC=$(TST_SRC_C) $(TST_SRC_CPP)
 TESTS=$(TESTS_C) $(TESTS_CPP)
 
-SRC_OBJS=$(SRC_DIR)/login.o $(SRC_DIR)/account.o $(SRC_DIR)/stubs.o $(SRC_DIR)/pwHandling.o
+SRC_OBJS=$(SRC_DIR)/login.o $(SRC_DIR)/account.o $(TEST_DIR)/stubs.o $(SRC_DIR)/pwHandling.o
 
 LIBS = -lbsd -lsodium -largon2
 CFLAGS += -DHAVE_STRLCPY
@@ -54,6 +55,9 @@ MAKEFLAGS += --no-builtin-rules
 
 %: %.o $(SRC_OBJS)
 	$(CC) -o $@ $^ $(LIBS)
+# Specific rule for compiling test stubs
+$(TEST_DIR)/stubs.o: $(TEST_DIR)/stubs.c
+	$(CC) $(CFLAGS) -c $< -o $@
 
 $(SRC_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
