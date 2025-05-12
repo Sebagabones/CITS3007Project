@@ -7,7 +7,9 @@
  *
  * V1.0.1 (Just to keep track of my work. Not the project's version number.)
  */
-#include "banned.h"
+
+
+// if we include banned here – shit explodes
 #include "pwHandling.h"
 #include <stdio.h>
 #include <string.h> // NOLINT
@@ -18,14 +20,8 @@
 #include <sodium.h>
 #include "banned.h"
 
-// Define the account structure - People working on 3.3 please change as you need. But DO NOT TOUCH HASH_LENGTH!!!
-
-/*struct account
- * {
- *  char username[32];
- *  char password_hash[HASH_LENGTH];
- *  // Other fields only if needed
- * };*/
+//  DO NOT TOUCH HASH_LENGTH
+//  char password_hash[HASH_LENGTH];
 
 /**
  * @brief Generates cryptographically secure random bytes
@@ -176,14 +172,18 @@ static bool extract_hash_components(const char *hash_str, char *salt_output,
 
 	// Extract memory cost with validation
 
-	size_t m_cost_value = strtol(params_start, NULL, 10);
+	long long raw = strtoll(params_start, NULL, 10);
 
-	if (m_cost_value <= 0 || m_cost_value > INT_MAX)
+	if (raw <= 0 || raw > INT_MAX)
 	{
 		return(false);  // Invalid value
 	}
+	else if (raw == 0)
+	{	// stroll returns 0 on error
+		return(false);
+	}
 
-	*m_cost_output = (int)m_cost_value;
+	size_t m_cost_value  = (size_t)raw;
 
 	// Extract time cost with validation
 	char *t_cost_start = strstr(params_start, ",t=");
@@ -228,7 +228,7 @@ static bool extract_hash_components(const char *hash_str, char *salt_output,
 		return(false);
 	}
 
-	long salt_b64_len = salt_end - salt_start;
+	size_t salt_b64_len = salt_end - salt_start;
 
 	// Validate salt_b64_len is reasonable
 	if (salt_b64_len >= 64)
