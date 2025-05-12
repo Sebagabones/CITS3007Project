@@ -16,6 +16,7 @@
  #include <stdint.h>
  #include <argon2.h>
  #include <sodium.h>
+#include "banned.h"
 
 // Define the account structure - People working on 3.3 please change as you need. But DO NOT TOUCH HASH_LENGTH!!!
 struct account
