@@ -10,8 +10,8 @@
 #include <arpa/inet.h>
 
 #include "account.h"
-#include "banned.h"
 #include "logging.h"
+#include "banned.h"
 
 #define PLAINTEXT_PASSWORD_MAX_LENGTH    100 // alter this for password hashing
 
@@ -43,6 +43,7 @@ static bool only_ASCII_printable_chars(const char *s)
 		if (c < 33 || c > 126)
 		{
 			log_message(LOG_DEBUG, "only_ASCII_printable_chars: Non-printable ASCII character found: %d", c);
+
 			return(false);
 		}
 
@@ -50,6 +51,7 @@ static bool only_ASCII_printable_chars(const char *s)
 	}
 
 	log_message(LOG_DEBUG, "only_ASCII_printable_chars: All characters are printable ASCII.");
+
 	return(true);
 }
 
@@ -62,12 +64,14 @@ static bool birthday_valid(const char *s)
 	if (strlen(s) != 10)
 	{
 		log_message(LOG_DEBUG, "birthday_valid: Incorrect length (%zu).", strlen(s));
+
 		return(false);
 	}
 
 	if (s[4] != '-' || s[7] != '-')
 	{
 		log_message(LOG_DEBUG, "birthday_valid: Dashes not in correct positions.");
+
 		return(false);
 	}
 
@@ -81,11 +85,13 @@ static bool birthday_valid(const char *s)
 		if (!isdigit(s[i]))
 		{
 			log_message(LOG_DEBUG, "birthday_valid: Non-digit character at position %d.", i);
+
 			return(false);
 		}
 	}
 
 	log_message(LOG_DEBUG, "birthday_valid: Format is valid.");
+
 	return(true);
 }
 
@@ -100,6 +106,7 @@ static bool birthday_valid(const char *s)
 static bool hash_password(const char *plaintext, char *out_hash, size_t hash_len)
 {
 	log_message(LOG_DEBUG, "hash_password: Attempting to copy password to hash buffer.");
+
 	if (strlcpy(out_hash, plaintext, hash_len) >= hash_len)
 	{
 		log_message(LOG_ERROR, "strlcpy tried to create a string larger than hash_len.");
@@ -108,6 +115,7 @@ static bool hash_password(const char *plaintext, char *out_hash, size_t hash_len
 	}
 
 	log_message(LOG_DEBUG, "hash_password: Password hash operation succeeded.");
+
 	return(true); // Handle success
 }
 
@@ -214,6 +222,7 @@ account_t *account_create(const char *userid, const char *plaintext_password,
 	if (strnlen(userid, USER_ID_LENGTH + 1) > USER_ID_LENGTH)
 	{
 		log_message(LOG_ERROR, "UserID too long.");
+
 		return(NULL);
 	}
 
@@ -221,18 +230,21 @@ account_t *account_create(const char *userid, const char *plaintext_password,
 	// Depends on how we do hashing !! (might only care about hashlength?)
 	{
 		log_message(LOG_ERROR, "Password too long.");
+
 		return(NULL);
 	}
 
 	if (strnlen(email, EMAIL_LENGTH + 1) > EMAIL_LENGTH)
 	{
 		log_message(LOG_ERROR, "Email too long.");
+
 		return(NULL);
 	}
 
 	if (!(only_ASCII_printable_chars(email)))
 	{
 		log_message(LOG_ERROR, "Invalid email format.");
+
 		return(NULL);
 	}
 
@@ -254,6 +266,7 @@ account_t *account_create(const char *userid, const char *plaintext_password,
 	if (actptr == NULL)
 	{
 		log_message(LOG_ERROR, "Memory allocation failed.");
+
 		return(NULL);
 	}
 
@@ -262,8 +275,10 @@ account_t *account_create(const char *userid, const char *plaintext_password,
 	{
 		log_message(LOG_ERROR, "pseudo_string_copy failed, tried to create a *char larger than USER_ID_LENGTH.");
 		account_free(actptr); //prevent memory leak
+
 		return(NULL);
 	}
+
 	log_message(LOG_DEBUG, "account_create: UserID copy succeeded.");
 
 	//hash_password(plaintext_password, actptr->password_hash, HASH_LENGTH);
@@ -272,21 +287,24 @@ account_t *account_create(const char *userid, const char *plaintext_password,
 	//---------------------------
 	log_message(LOG_DEBUG, "account_create: Password hash stored.");
 
-
 	if (!pseudo_string_copy(actptr->email, email, EMAIL_LENGTH))
 	{
 		log_message(LOG_ERROR, "pseudo_string_copy failed, tried to create a *char larger than EMAIL_LENGTH.");
 		account_free(actptr); //prevent memory leak
+
 		return(NULL);
 	}
+
 	log_message(LOG_DEBUG, "account_create: Email copy succeeded.");
 
 	if (!pseudo_string_copy(actptr->birthdate, final_birthdate, BIRTHDATE_LENGTH))
 	{
 		log_message(LOG_ERROR, "pseudo_string_copy failed, tried to create a *char larger than BIRTHDATE_LENGTH.");
 		account_free(actptr); //prevent memory leak
+
 		return(NULL);
 	}
+
 	log_message(LOG_DEBUG, "account_create: Birthdate copy succeeded.");
 
 	// Set defaults
@@ -416,6 +434,7 @@ bool account_is_banned(const account_t *acc)
 	if (acc->unban_time == 0)
 	{
 		log_message(LOG_DEBUG, "account_is_banned: Current time: %ld, Unban time: %ld", (long)time(NULL), (long)acc->unban_time);
+
 		return(false); // no ban
 	}
 
@@ -424,10 +443,12 @@ bool account_is_banned(const account_t *acc)
 	if (current_time == -1)
 	{
 		log_message(LOG_ERROR, "acc_banned: Failed to get the current time.");
+
 		return(true); // False positive probably better than false negative here
 	}
 
 	log_message(LOG_DEBUG, "account_is_banned: Current time: %ld, Unban time: %ld", (long)current_time, (long)acc->unban_time);
+
 	return(acc->unban_time > current_time);
 }
 
@@ -445,6 +466,7 @@ bool account_is_expired(const account_t *acc)
 	if (acc->expiration_time == 0)
 	{
 		log_message(LOG_DEBUG, "account_is_expired: Current time: %ld, Expiration time: %ld", (long)time(NULL), (long)acc->expiration_time);
+
 		return(false); // unlimited
 	}
 
@@ -454,10 +476,12 @@ bool account_is_expired(const account_t *acc)
 	if (current_time == -1)
 	{
 		log_message(LOG_ERROR, "acc_expired: Failed to get the current time.");
+
 		return(true); // False positive probably better than false negative here
 	}
 
 	log_message(LOG_DEBUG, "account_is_expired: Current time: %ld, Expiration time: %ld", (long)current_time, (long)acc->expiration_time);
+
 	return(acc->expiration_time < current_time);
 }
 
@@ -504,14 +528,17 @@ void account_set_email(account_t *acc, const char *new_email)
 	if (!(only_ASCII_printable_chars(new_email)))
 	{
 		log_message(LOG_ERROR, "Invalid email format.");
+
 		return; // not sure how to handle
 	}
 
 	if (!pseudo_string_copy(acc->email, new_email, EMAIL_LENGTH))
 	{
 		log_message(LOG_ERROR, "account_set_email: pseudo_string_copy failed — email too long.");
+
 		return;
 	}
+
 	log_message(LOG_DEBUG, "account_set_email: Email updated to %s", new_email);
 }
 
@@ -559,6 +586,7 @@ bool account_print_summary(const account_t *acct, int fd)
 	if (!ip_to_cstring(acct->last_ip, printableIP, sizeof(printableIP)))
 	{
 		log_message(LOG_ERROR, "account_print_summary: Failed to convert IP.");
+
 		return(false);
 	}
 
@@ -579,6 +607,7 @@ bool account_print_summary(const account_t *acct, int fd)
 	if (bytes_written < 0)
 	{
 		log_message(LOG_ERROR, "account_print_summary: Failed to format summary.");
+
 		return(false);
 	}
 
@@ -589,6 +618,7 @@ bool account_print_summary(const account_t *acct, int fd)
 	if (result == -1)
 	{
 		log_message(LOG_ERROR, "account_print_summary: Failed to write to file descriptor.");
+
 		return(false);
 	}
 

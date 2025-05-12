@@ -11,6 +11,7 @@
 #define LOGIN_H
 
 #include "account.h"
+#include "db.h"
 
 #include <stdint.h>
 #include <stdio.h>

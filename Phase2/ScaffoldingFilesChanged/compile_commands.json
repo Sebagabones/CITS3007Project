@@ -46,12 +46,12 @@
       "-Isrc",
       "-c",
       "-o",
-      "build/stubs.o",
-      "src/stubs.c"
+      "build/account.o",
+      "src/account.c"
     ],
     "directory": "/Users/alech/Desktop/uwa/year3/sem1/cits3007/CITS3007Project/Phase2/ScaffoldingFilesChanged",
-    "file": "/Users/alech/Desktop/uwa/year3/sem1/cits3007/CITS3007Project/Phase2/ScaffoldingFilesChanged/src/stubs.c",
-    "output": "/Users/alech/Desktop/uwa/year3/sem1/cits3007/CITS3007Project/Phase2/ScaffoldingFilesChanged/build/stubs.o"
+    "file": "/Users/alech/Desktop/uwa/year3/sem1/cits3007/CITS3007Project/Phase2/ScaffoldingFilesChanged/src/account.c",
+    "output": "/Users/alech/Desktop/uwa/year3/sem1/cits3007/CITS3007Project/Phase2/ScaffoldingFilesChanged/build/account.o"
   },
   {
     "arguments": [
@@ -127,6 +127,33 @@
       "-Isrc",
       "-c",
       "-o",
+      "build/pwHandling_test.o",
+      "src/pwHandling_test.c"
+    ],
+    "directory": "/Users/alech/Desktop/uwa/year3/sem1/cits3007/CITS3007Project/Phase2/ScaffoldingFilesChanged",
+    "file": "/Users/alech/Desktop/uwa/year3/sem1/cits3007/CITS3007Project/Phase2/ScaffoldingFilesChanged/src/pwHandling_test.c",
+    "output": "/Users/alech/Desktop/uwa/year3/sem1/cits3007/CITS3007Project/Phase2/ScaffoldingFilesChanged/build/pwHandling_test.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-g",
+      "-fno-omit-frame-pointer",
+      "-std=c11",
+      "-pedantic-errors",
+      "-Wall",
+      "-Wextra",
+      "-Isrc",
+      "-isystem",
+      "/opt/homebrew/Cellar/libbsd/0.12.2/include/bsd",
+      "-DLIBBSD_OVERLAY",
+      "-I/opt/homebrew/Cellar/check/0.15.2/include",
+      "-D_THREAD_SAFE",
+      "-I/opt/homebrew/Cellar/argon2/20190702_1/include",
+      "-I/opt/homebrew/Cellar/libsodium/1.0.20/include",
+      "-Isrc",
+      "-c",
+      "-o",
       "build/bogus_main.o",
       "src/bogus_main.c"
     ],
@@ -154,11 +181,11 @@
       "-Isrc",
       "-c",
       "-o",
-      "build/account.o",
-      "src/account.c"
+      "build/stubs.o",
+      "src/stubs.c"
     ],
     "directory": "/Users/alech/Desktop/uwa/year3/sem1/cits3007/CITS3007Project/Phase2/ScaffoldingFilesChanged",
-    "file": "/Users/alech/Desktop/uwa/year3/sem1/cits3007/CITS3007Project/Phase2/ScaffoldingFilesChanged/src/account.c",
-    "output": "/Users/alech/Desktop/uwa/year3/sem1/cits3007/CITS3007Project/Phase2/ScaffoldingFilesChanged/build/account.o"
+    "file": "/Users/alech/Desktop/uwa/year3/sem1/cits3007/CITS3007Project/Phase2/ScaffoldingFilesChanged/src/stubs.c",
+    "output": "/Users/alech/Desktop/uwa/year3/sem1/cits3007/CITS3007Project/Phase2/ScaffoldingFilesChanged/build/stubs.o"
   }
 ]
