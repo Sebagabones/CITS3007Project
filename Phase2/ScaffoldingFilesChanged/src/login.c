@@ -55,11 +55,14 @@ login_result_t handle_login(const char *username, const char *password,
                             int client_output_fd,
                             login_session_data_t *session)
 {
+	log_message(LOG_DEBUG, "handle_login: Attempting login for user '%s'", username);
+
 	//Allocate memory from heap
 	account_t *user = malloc(sizeof(account_t));
 
 	if (user == NULL)
 	{
+		log_message(LOG_DEBUG, "handle_login: malloc failed for user struct");
 		log_message(LOG_ERROR, "Memory allocation failed for user");
 
 		return(LOGIN_FAIL_INTERNAL_ERROR);
@@ -68,6 +71,7 @@ login_result_t handle_login(const char *username, const char *password,
 	//The account_lookup_by_userid() function returns a boolean true or false depending on if there was an account found matching the given username, user is provided so that if an account is found the data is copied to the heap
 	if (!account_lookup_by_userid(username, user))
 	{
+		log_message(LOG_DEBUG, "handle_login: account_lookup_by_userid failed for user '%s'", username);
 		send_client_and_log(client_output_fd, LOG_INFO, username,
 		                    "Login failed: User account doesn't exist\n",
 		                    "User %s not found");
@@ -81,6 +85,7 @@ login_result_t handle_login(const char *username, const char *password,
 	//Check if current time is before unban time
 	if (account_is_banned(user))
 	{
+		log_message(LOG_DEBUG, "handle_login: user '%s' is banned", username);
 		send_client_and_log(client_output_fd, LOG_INFO, username,
 		                    "Login failed: User account is banned\n",
 		                    "User %s is banned");
@@ -92,6 +97,7 @@ login_result_t handle_login(const char *username, const char *password,
 	//Check if account is expired (current time is after expiry and account is not unlimited)
 	if (account_is_expired(user))
 	{
+		log_message(LOG_DEBUG, "handle_login: user '%s' account expired", username);
 		send_client_and_log(client_output_fd, LOG_INFO, username,
 		                    "Login failed: User account is expired\n",
 		                    "User %s's account is expired");
@@ -103,6 +109,7 @@ login_result_t handle_login(const char *username, const char *password,
 	//Login Failure Count
 	if (user->login_fail_count > 10)
 	{
+		log_message(LOG_DEBUG, "handle_login: user '%s' exceeded login_fail_count (%d)", username, user->login_fail_count);
 		send_client_and_log(client_output_fd, LOG_WARN, username,
 		                    "Login failed: too many failed password attempts\n",
 		                    "Too many login attempts for user %s");
@@ -112,10 +119,13 @@ login_result_t handle_login(const char *username, const char *password,
 	}
 
 	//Check Password
+	log_message(LOG_DEBUG, "handle_login: validating password for user '%s'", username);
+
 	//If Password Wrong
 	if (!account_validate_password(user, password))
 	{
 		account_record_login_failure(user); //record unsuccessful login
+		log_message(LOG_DEBUG, "handle_login: wrong password");
 		send_client_and_log(client_output_fd, LOG_INFO, username,
 		                    "Login failed: Wrong password\n",
 		                    "User %s entered wrong password");
@@ -124,12 +134,14 @@ login_result_t handle_login(const char *username, const char *password,
 		return(LOGIN_FAIL_BAD_PASSWORD);
 	}
 
+	log_message(LOG_DEBUG, "handle_login: password correct for user '%s'", username);
 	//If password correct
 	account_record_login_success(user, client_ip); //record successful login with ip and reset unsuccessful logins (assuming both will be done in the function)
 	send_client_and_log(client_output_fd, LOG_INFO, username,
 	                    "Login Successful\n",
 	                    "User %s logged in successfully");
 
+	log_message(LOG_DEBUG, "handle_login: populating session struct for user '%s'", username);
 	//populate session struct with username, login time and session end time
 	session->account_id	   = (int)user->account_id;
 	session->session_start = login_time;
@@ -143,6 +155,7 @@ login_result_t handle_login(const char *username, const char *password,
 		session->expiration_time = user->expiration_time;
 	}
 
+	log_message(LOG_DEBUG, "handle_login: login process completed successfully for user '%s'", username);
 	/* account_free(user); */
 
 	return(LOGIN_SUCCESS);

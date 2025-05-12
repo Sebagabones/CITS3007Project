@@ -5,6 +5,8 @@
  * This file implements the functions for password hashing and validation using the Argon2id
  * algorithm, with sodium for salt generation and constant-time comparison.
  */
+
+// if we include banned here – shit explodes
 #include "pwHandling.h"
 #include <stdio.h>
 #include <string.h>
@@ -14,6 +16,9 @@
 #include <argon2.h>
 #include <sodium.h>
 #include "banned.h"
+
+//  DO NOT TOUCH HASH_LENGTH
+//  char password_hash[HASH_LENGTH];
 
 /**
  * @brief Generates cryptographically secure random bytes
@@ -162,14 +167,19 @@ static bool extract_hash_components(const char *hash_str, unsigned char *salt_ou
 	}
 
 	// Extract memory cost with validation
-	size_t m_cost_value = strtol(params_start, NULL, 10);
 
-	if (m_cost_value <= 0 || m_cost_value > INT_MAX)
+	long long raw = strtoll(params_start, NULL, 10);
+
+	if (raw <= 0 || raw > INT_MAX)
 	{
 		return(false);  // Invalid value
 	}
+	else if (raw == 0)
+	{   // stroll returns 0 on error
+		return(false);
+	}
 
-	*m_cost_output = (int)m_cost_value;
+	size_t m_cost_value = (size_t)raw;
 
 	// Extract time cost with validation
 	char *t_cost_start = strstr(params_start, ",t=");
@@ -214,7 +224,7 @@ static bool extract_hash_components(const char *hash_str, unsigned char *salt_ou
 		return(false);
 	}
 
-	long salt_b64_len = salt_end - salt_start;
+	size_t salt_b64_len = salt_end - salt_start;
 
 	// Validate salt_b64_len is reasonable
 	if (salt_b64_len <= 0 || salt_b64_len >= 64)
