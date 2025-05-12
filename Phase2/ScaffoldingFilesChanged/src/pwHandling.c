@@ -7,24 +7,25 @@
  *
  * V1.0.1 (Just to keep track of my work. Not the project's version number.)
  */
-
- #include "pwHandling.h"
- #include <stdio.h>
- #include <string.h> // NOLINT
- #include <stdlib.h>
- #include <limits.h>
- #include <stdint.h>
- #include <argon2.h>
- #include <sodium.h>
+#include "banned.h"
+#include "pwHandling.h"
+#include <stdio.h>
+#include <string.h> // NOLINT
+#include <stdlib.h>
+#include <limits.h>
+#include <stdint.h>
+#include <argon2.h>
+#include <sodium.h>
 #include "banned.h"
 
 // Define the account structure - People working on 3.3 please change as you need. But DO NOT TOUCH HASH_LENGTH!!!
-struct account
-{
-	char username[32];
-	char password_hash[HASH_LENGTH];
-	// Other fields only if needed
-};
+
+/*struct account
+ * {
+ *  char username[32];
+ *  char password_hash[HASH_LENGTH];
+ *  // Other fields only if needed
+ * };*/
 
 /**
  * @brief Generates cryptographically secure random bytes
@@ -101,7 +102,7 @@ static void format_argon2_hash(char *output, int t_cost, int m_cost, int paralle
 	{
 		if (output != NULL)
 		{
-			output[0] = '\0';  // Set to empty string on error
+			output[0] = '\0'; // Set to empty string on error
 		}
 
 		return;
@@ -180,7 +181,7 @@ static bool extract_hash_components(const char *hash_str, char *salt_output,
 
 	if (m_cost_value <= 0 || m_cost_value > INT_MAX)
 	{
-		return(false);   // Invalid value
+		return(false);  // Invalid value
 	}
 
 	*m_cost_output = (int)m_cost_value;
@@ -197,7 +198,7 @@ static bool extract_hash_components(const char *hash_str, char *salt_output,
 
 	if (t_cost_value <= 0 || t_cost_value > INT_MAX)
 	{
-		return(false);   // Invalid value
+		return(false);  // Invalid value
 	}
 
 	*t_cost_output = t_cost_value;
@@ -214,7 +215,7 @@ static bool extract_hash_components(const char *hash_str, char *salt_output,
 
 	if (p_value <= 0 || p_value > INT_MAX)
 	{
-		return(false);   // Invalid value
+		return(false);  // Invalid value
 	}
 
 	*parallelism_output = (int)p_value;
@@ -237,7 +238,7 @@ static bool extract_hash_components(const char *hash_str, char *salt_output,
 	}
 
 	char salt_b64[64];
-	memset(salt_b64, 0, sizeof(salt_b64));  // Initialize to zeros
+	memset(salt_b64, 0, sizeof(salt_b64)); // Initialize to zeros
 	strncpy(salt_b64, salt_start, salt_b64_len);
 	salt_b64[salt_b64_len] = '\0';
 
@@ -290,15 +291,15 @@ static bool generate_argon2_hash(const char *password,
 
 	// Hashes a password with Argon2id, producing an encoded hash. For some reason the docs don't show up when I hover over the function name.
 	// This description is pulled from line 220 to 232 from https://github.com/jedisct1/libsodium/blob/master/src/libsodium/crypto_pwhash/argon2/argon2.h
-	int result = argon2id_hash_raw(t_cost,            // Time cost
-	                               m_cost,            // Memory cost
-	                               parallelism,       // Parallelism
-	                               password,          // Password
-	                               password_len,      // Password length
-	                               salt,              // Salt
-	                               SALT_LENGTH,       // Salt length
-	                               raw_hash,          // Output hash
-	                               HASH_RAW_LENGTH);  // Output hash length
+	int result = argon2id_hash_raw(t_cost,           // Time cost
+	                               m_cost,           // Memory cost
+	                               parallelism,      // Parallelism
+	                               password,         // Password
+	                               password_len,     // Password length
+	                               salt,             // Salt
+	                               SALT_LENGTH,      // Salt length
+	                               raw_hash,         // Output hash
+	                               HASH_RAW_LENGTH); // Output hash length
 
 	if (result != ARGON2_OK)
 	{
@@ -333,8 +334,7 @@ bool account_validate_password(const account_t *acc,
 	int			  t_cost, m_cost, parallelism;
 
 	// Helper function to extract salt and parameters from stored format
-	if (!extract_hash_components(acc->password_hash, (char *)stored_salt, &t_cost, &
-	                             m_cost, &parallelism))
+	if (!extract_hash_components(acc->password_hash, (char *)stored_salt, &t_cost, &m_cost, &parallelism))
 	{
 		return(false);
 	}
@@ -363,7 +363,7 @@ bool account_update_password(account_t *acc,
 
 	// Generate random salt
 	unsigned char salt[SALT_LENGTH];
-	memset(salt, 0, SALT_LENGTH);  // Initialize to zeros
+	memset(salt, 0, SALT_LENGTH); // Initialize to zeros
 
 	if (!generate_random_bytes(salt, SALT_LENGTH))
 	{
@@ -372,7 +372,7 @@ bool account_update_password(account_t *acc,
 
 	// Hash the new password with Argon2id
 	char new_hash[HASH_LENGTH];
-	memset(new_hash, 0, HASH_LENGTH);  // Initialize to zeros
+	memset(new_hash, 0, HASH_LENGTH); // Initialize to zeros
 
 	if (!generate_argon2_hash(new_plaintext_password, salt, T_COST, M_COST,
 	                          PARALLELISM, new_hash))
@@ -382,7 +382,7 @@ bool account_update_password(account_t *acc,
 
 	// Update the account's password hash
 	strncpy(acc->password_hash, new_hash, HASH_LENGTH - 1);
-	acc->password_hash[HASH_LENGTH - 1] = '\0';     // Ensure null termination
+	acc->password_hash[HASH_LENGTH - 1] = '\0'; // Ensure null termination
 
 	return(true);
 }
