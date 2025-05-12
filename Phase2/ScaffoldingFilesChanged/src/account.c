@@ -334,9 +334,8 @@ void account_free(account_t *acc) //cppcheck-suppress staticFunction
 	if (acc)
 	{
 		explicit_bzero(acc, sizeof(*acc)); //ensures the compiler does not optimise clearing the account memory before freeing it
+		free(acc);
 	}
-
-	free(acc);
 }
 
 /**
