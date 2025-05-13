@@ -39,13 +39,7 @@ tstsuite("handle_login")
 
 	tstcase("Login Failed too many tries")
 	{
-		/* // first 10 times should be normal bad password */
-		/* for (int i = 0; i < 11; i++) */
-		/* { */
-		/* 	tstcheck(handle_login("Too-Many", "noBankai", testip, testtime, -1, &testsession) == LOGIN_FAIL_BAD_PASSWORD) */
-		/* } */
-
-		// 11th time onward is a different message, likely account banned if it gets implemented in login.c
+		// check if trying to log in after more than 10 failed attempts will fail with the correct code
 		tstcheck(handle_login("Too-Many", "someBankai", testip, testtime, -1, &testsession) == LOGIN_FAIL_INTERNAL_ERROR)
 	}
 
