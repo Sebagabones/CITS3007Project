@@ -96,30 +96,6 @@ static bool birthday_valid(const char *s)
 }
 
 /**
- * Assuming hash_password writes the result into the buffer and handles
- * null-termination
- *
- * @param plaintext
- * @param out_hash
- * @param hash_len
- */
-static bool hash_password(const char *plaintext, char *out_hash, size_t hash_len)
-{
-	log_message(LOG_DEBUG, "hash_password: Attempting to copy password to hash buffer.");
-
-	if (strlcpy(out_hash, plaintext, hash_len) >= hash_len)
-	{
-		log_message(LOG_ERROR, "strlcpy tried to create a string larger than hash_len.");
-
-		return(false);         // Handle failure
-	}
-
-	log_message(LOG_DEBUG, "hash_password: Password hash operation succeeded.");
-
-	return(true); // Handle success
-}
-
-/**
  * @brief Copies full input up to FIELD_SIZE. Adds '\0' only if input is shorter
  *
  * @param field where in account the char pointer will be stored
@@ -418,7 +394,7 @@ bool account_is_banned(const account_t *acc)
 {
 	if (acc->unban_time == 0)
 	{
-		log_message(LOG_DEBUG, "account_is_banned: Current time: %ld, Unban time: %ld", (long)time(NULL), (long)acc->unban_time);
+		log_message(LOG_DEBUG, "account_is_banned: Current time: %ld, Unban time: %ld", (size_t)time(NULL), (size_t)acc->unban_time);
 
 		return(false); // no ban
 	}
@@ -432,7 +408,7 @@ bool account_is_banned(const account_t *acc)
 		return(true); // False positive probably better than false negative here
 	}
 
-	log_message(LOG_DEBUG, "account_is_banned: Current time: %ld, Unban time: %ld", (long)current_time, (long)acc->unban_time);
+	log_message(LOG_DEBUG, "account_is_banned: Current time: %ld, Unban time: %ld", (size_t)current_time, (size_t)acc->unban_time);
 
 	return(acc->unban_time > current_time);
 }
@@ -450,7 +426,7 @@ bool account_is_expired(const account_t *acc)
 {
 	if (acc->expiration_time == 0)
 	{
-		log_message(LOG_DEBUG, "account_is_expired: Current time: %ld, Expiration time: %ld", (long)time(NULL), (long)acc->expiration_time);
+		log_message(LOG_DEBUG, "account_is_expired: Current time: %ld, Expiration time: %ld", (size_t)time(NULL), (size_t)acc->expiration_time);
 
 		return(false); // unlimited
 	}
@@ -465,7 +441,7 @@ bool account_is_expired(const account_t *acc)
 		return(true); // False positive probably better than false negative here
 	}
 
-	log_message(LOG_DEBUG, "account_is_expired: Current time: %ld, Expiration time: %ld", (long)current_time, (long)acc->expiration_time);
+	log_message(LOG_DEBUG, "account_is_expired: Current time: %ld, Expiration time: %ld", (size_t)current_time, (size_t)acc->expiration_time);
 
 	return(acc->expiration_time < current_time);
 }
@@ -480,8 +456,8 @@ bool account_is_expired(const account_t *acc)
  */
 void account_set_unban_time(account_t *acc, time_t t)
 {
-	acc->unban_time = t; //this seems like this should be harder, maybe im missing something??
-	log_message(LOG_DEBUG, "account_set_unban_time: Set to %ld", (long)t);
+	acc->unban_time = t;
+	log_message(LOG_DEBUG, "account_set_unban_time: Set to %ld", (size_t)t);
 }
 
 /**
@@ -495,7 +471,7 @@ void account_set_unban_time(account_t *acc, time_t t)
 void account_set_expiration_time(account_t *acc, time_t t)
 {
 	acc->expiration_time = t; //ditto
-	log_message(LOG_DEBUG, "account_set_expiration_time: Set to %ld", (long)t);
+	log_message(LOG_DEBUG, "account_set_expiration_time: Set to %ld", (size_t)t);
 }
 
 /**
