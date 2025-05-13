@@ -19,11 +19,12 @@
  *
  * This function should not return.
  */
-static void panic(const char *msg)
-{
-	fprintf(stderr, "PANIC: %s\n", msg);
-	abort();
-}
+//caused warnings so removed for testing
+//static void panic(const char *msg)
+//{
+//	fprintf(stderr, "PANIC: %s\n", msg);
+//	abort();
+//}
 
 // Global mutex for logging
 // This mutex is used to ensure that log messages are printed in a thread-safe manner.

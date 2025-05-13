@@ -23,7 +23,6 @@ TEST_DIR=.
 # CXX_AVAILABLE := $(shell $(CXX) --version 2>/dev/null)
 
 CFLAGS=-O2 -Wall -I$(TEST_DIR)/ -I$(SRC_DIR)/ $(STATIC) $(COMPACT) $(DEBUG) -DCITS3007_PROJECT_TESTING
-LIBS=
 
 TESTS_SRC_C=$(wildcard t_*.c)
 TESTS_C=$(TESTS_SRC_C:.c=)
@@ -39,8 +38,9 @@ TESTS=$(TESTS_C) $(TESTS_CPP)
 
 SRC_OBJS=$(SRC_DIR)/login.o $(SRC_DIR)/account.o $(TEST_DIR)/stubs.o $(SRC_DIR)/pwHandling.o
 
+#CFLAGS += -DHAVE_STRLCPY 
 LIBS = -lbsd -lsodium -largon2
-CFLAGS += -DHAVE_STRLCPY
+LDFLAGS = -lbsd -lsodium -largon2
 
 # targets
 all: $(TESTS)
@@ -51,16 +51,16 @@ runtest: all
 MAKEFLAGS += --no-builtin-rules
 
 %.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@ $(LDFLAGS)
 
 %: %.o $(SRC_OBJS)
 	$(CC) -o $@ $^ $(LIBS)
 # Specific rule for compiling test stubs
 $(TEST_DIR)/stubs.o: $(TEST_DIR)/stubs.c
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@ $(LDFLAGS)
 
 $(SRC_DIR)/%.o: $(SRC_DIR)/%.c
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@  $(LDFLAGS)
 
 .PRECIOUS: %.o
 
