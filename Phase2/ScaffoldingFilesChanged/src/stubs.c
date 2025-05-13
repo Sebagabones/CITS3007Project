@@ -46,7 +46,9 @@ void log_message(log_level_t level, const char *fmt, ...)
 	switch (level)
 	{
 	case LOG_DEBUG:
-		fprintf(stderr, "DEBUG: ");
+		//fprintf(stderr, "DEBUG: ");
+		pthread_mutex_unlock(&log_mutex);
+		return;
 		break;
 
 	case LOG_INFO:

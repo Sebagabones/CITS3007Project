@@ -12,6 +12,9 @@
 #include <stdbool.h>
 #include "account.h"
 
+#define MIN_PASSWORD_LENGTH	   12
+#define MAX_PASSWORD_LENGTH	   256
+
 // Define constants for password hashing
 #define SALT_LENGTH		   16
 #define HASH_RAW_LENGTH	   32
@@ -36,5 +39,16 @@ bool account_validate_password(const account_t *acc, const char *plaintext_passw
  * @return true if the password was updated successfully, false otherwise.
  */
 bool account_update_password(account_t *acc, const char *new_plaintext_password);
+
+/**
+ * @brief Checks whether a plaintext password meets required length and complexity rules.
+ *
+ * A valid password must be between MIN_PASSWORD_LENGTH and MAX_PASSWORD_LENGTH characters,
+ * and contain at least one lowercase letter, one uppercase letter, one digit, and one symbol.
+ *
+ * @param plaintext_password Null-terminated password string to validate.
+ * @return true if the password meets all criteria, false otherwise.
+ */
+bool password_valid(const char *plaintext_password);
 
 #endif // PWHANDLING_H

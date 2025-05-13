@@ -17,8 +17,8 @@
 #include <sodium.h>
 #include "banned.h"
 
-//  DO NOT TOUCH HASH_LENGTH
-//  char password_hash[HASH_LENGTH];
+#define MIN_PASSWORD_LENGTH	   12
+#define MAX_PASSWORD_LENGTH	   256
 
 /**
  * @brief Generates cryptographically secure random bytes
@@ -321,10 +321,10 @@ static bool generate_argon2_hash(const char *password,
 bool account_validate_password(const account_t *acc, const char *plaintext_password)
 {
 	// Validate preconditions
-	if (acc == NULL || plaintext_password == NULL)
-	{
-		return(false);
-	}
+	// if (acc == NULL || plaintext_password == NULL)
+	// {
+	// 	return(false);
+	// }
 
 	// Parse the stored hash to extract salt and parameters
 	unsigned char stored_salt[SALT_LENGTH];
@@ -357,9 +357,8 @@ bool account_validate_password(const account_t *acc, const char *plaintext_passw
  * @return true if the password was updated successfully, false otherwise
  */
 bool account_update_password(account_t *acc, const char *new_plaintext_password)
-{
-	// Validate preconditions
-	if (acc == NULL || new_plaintext_password == NULL)
+{   // Preconditions: acc is non-null and the char pointer is null-terminated
+	if (!password_valid(new_plaintext_password))
 	{
 		return(false);
 	}

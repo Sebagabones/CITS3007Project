@@ -12,9 +12,8 @@
 #include "banned.h"
 #include "logging.h"
 
-// bogus implementation of main that links in all account and login
-// functions. You can delete this file and replace it with your own main
-// function(s).
+//#define MAIN1
+#ifdef MAIN1
 int main(void)
 {
 	account_t *acc = account_create("user1", "password123", "user@example.com", "2000-01-01");
@@ -56,25 +55,4 @@ int main(void)
 
 	return(0);
 }
-
-/*
- *  (void)argc;
- *  (void)argv;
- *
- *  account_t *acc = account_create("", "", "", "");
- *  account_free(acc);
- *  bool res = account_validate_password(acc, "");
- *  res = account_update_password(acc, "");
- *  account_record_login_success(acc, 0);
- *  account_record_login_failure(acc);
- *  res = account_is_banned(acc);
- *  res = account_is_expired(acc);
- *  account_set_unban_time(acc, 0);
- *  account_set_expiration_time(acc, 0);
- *  account_set_email(acc, "");
- *  (void)account_print_summary(acc, STDOUT_FILENO);
- *  (void)res;
- *  handle_login("", "", 0, 0, STDOUT_FILENO, NULL);
- *
- *  return(0);
- */
+#endif

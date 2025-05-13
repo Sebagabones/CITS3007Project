@@ -8,12 +8,12 @@
 #include <unistd.h>
 #include <ctype.h>
 #include <arpa/inet.h>
+#include <errno.h>
 
 #include "account.h"
 #include "logging.h"
 #include "banned.h"
-
-#define PLAINTEXT_PASSWORD_MAX_LENGTH    100 // alter this for password hashing
+#include "pwHandling.h"
 
 /**
  * @file account.c
@@ -23,7 +23,6 @@
  *
  */
 
-// -----------------Sanitization (+passw) Prototypes-----------------------------------------
 
 /**
  * @brief Function to neutralise email inputs
@@ -56,11 +55,11 @@ static bool only_ASCII_printable_chars(const char *s)
 }
 
 /**
- * @brief needs to check is_real and is_valid_format
+ * @brief birthday input much match expected format YYYY-MM-DD
  */
 static bool birthday_valid(const char *s)
 {
-	// Expected format: YYYY-MM-DD
+
 	if (strlen(s) != 10)
 	{
 		log_message(LOG_DEBUG, "birthday_valid: Incorrect length (%zu).", strlen(s));
@@ -96,6 +95,61 @@ static bool birthday_valid(const char *s)
 }
 
 /**
+ * @brief Checks whether a plaintext password meets required length and complexity rules.
+ *
+ * A valid password must be between MIN_PASSWORD_LENGTH and MAX_PASSWORD_LENGTH characters,
+ * and contain at least one lowercase letter, one uppercase letter, one digit, and one symbol.
+ *
+ * @param plaintext_password Null-terminated password string to validate.
+ * @return true if the password meets all criteria, false otherwise.
+ */
+bool password_valid(const char *plaintext_password)
+{
+	int pass_len = strnlen(plaintext_password, MAX_PASSWORD_LENGTH + 1);
+
+	if (pass_len > MAX_PASSWORD_LENGTH || pass_len < MIN_PASSWORD_LENGTH)
+	{
+		log_message(LOG_ERROR, "Password wrong length. Must be between %d-%d characters.", MIN_PASSWORD_LENGTH, MAX_PASSWORD_LENGTH);
+
+		return(false);
+	}
+
+	bool hasSymbol = false;
+	bool hasNumber = false;
+	bool hasLower  = false;
+	bool hasUpper  = false;
+
+	for (const char *p = plaintext_password; *p; p++)
+	{
+		if (isdigit(*p))
+		{
+			hasNumber = true;
+		}
+		else if (islower(*p))
+		{
+			hasLower = true;
+		}
+		else if (isupper(*p))
+		{
+			hasUpper = true;
+		}
+		else if (ispunct(*p))
+		{
+			hasSymbol = true;
+		}
+	}
+
+	if (!hasNumber || !hasLower || !hasUpper || !hasSymbol)
+	{
+		log_message(LOG_ERROR, "Password must contain at least one lowercase, one uppercase, one digit, and one symbol.");
+
+		return(false);
+	}
+
+	return(true);
+}
+
+/**
  * @brief Copies full input up to FIELD_SIZE. Adds '\0' only if input is shorter
  *
  * @param field where in account the char pointer will be stored
@@ -125,7 +179,10 @@ static bool pseudo_string_copy(char *field, const char *input, size_t FIELD_SIZE
 /**
  * @brief Changes the 'partial pseudo-strings' in acc struct to valid null-terminated char*
  *
- *
+ * @param field
+ * @param field_len
+ * @param out_buf
+ * @param out_buf_size
  */
 static void buffer_to_cstring(const char *field, size_t field_len, char *out_buf, size_t out_buf_size)
 {
@@ -188,11 +245,9 @@ account_t *account_create(const char *userid, const char *plaintext_password,
 		return(NULL);
 	}
 
-	if (strnlen(plaintext_password, PLAINTEXT_PASSWORD_MAX_LENGTH + 1) > PLAINTEXT_PASSWORD_MAX_LENGTH)
-	// Depends on how we do hashing !! (might only care about hashlength?)
+	// Use shared password_valid logic for password requirements
+	if (!password_valid(plaintext_password))
 	{
-		log_message(LOG_ERROR, "Password too long.");
-
 		return(NULL);
 	}
 
@@ -212,7 +267,7 @@ account_t *account_create(const char *userid, const char *plaintext_password,
 
 	const char *final_birthdate;
 
-	if (!birthday_valid(birthdate)) // Or log info?
+	if (!birthday_valid(birthdate))
 	{
 		final_birthdate = "0000-00-00";
 		log_message(LOG_WARN, "Invalid birthdate format. Using default '0000-00-00'.");
@@ -243,10 +298,14 @@ account_t *account_create(const char *userid, const char *plaintext_password,
 
 	log_message(LOG_DEBUG, "account_create: UserID copy succeeded.");
 
-	//hash_password(plaintext_password, actptr->password_hash, HASH_LENGTH);
-	// SORT PASSWORD STUFF HERE
+	if (!account_update_password(actptr, plaintext_password))
+	{
+		log_message(LOG_ERROR, "account_update_password failed.");
+		account_free(actptr); //prevent memory leak
 
-	//---------------------------
+		return(NULL);
+	}
+
 	log_message(LOG_DEBUG, "account_create: Password hash stored.");
 
 	if (!pseudo_string_copy(actptr->email, email, EMAIL_LENGTH))
@@ -310,15 +369,7 @@ void account_free(account_t *acc) //cppcheck-suppress staticFunction
  * @param plaintext_password Null-terminated string of the password to validate.
  * @return true if the password matches, false otherwise.
  */
-/* bool account_validate_password(const account_t *acc, const char *plaintext_password) */
-/* { */
-/* 	if (strncmp(acc->password_hash, plaintext_password, HASH_LENGTH) == 0) */
-/* 	{ */
-/* 		return(true); */
-/* 	} */
-
-/* 	return(false); */
-/* } */
+//------------------------------------------------------------------------------------
 
 /**
  * @brief Update the account's password.
@@ -329,15 +380,7 @@ void account_free(account_t *acc) //cppcheck-suppress staticFunction
  * @param new_plaintext_password Null-terminated string of the new password.
  * @return true if the update was successful, false otherwise.
  */
-/* bool account_update_password(account_t *acc, const char *new_plaintext_password) */
-/* { */
-/* 	if (hash_password(new_plaintext_password, acc->password_hash, HASH_LENGTH)) */
-/* 	{                               // Assuming hash_password writes the result into the buffer and handles */
-/* 		return(true);               // null-termination */
-/* 	} */
-
-/* 	return(false); */
-/* } */
+//------------------------------------------------------------------------------------
 
 /**
  * @brief Record a successful login for the account.
@@ -552,12 +595,12 @@ bool account_print_summary(const account_t *acct, int fd)
 	}
 
 	int bytes_written = asprintf(&buffer,
-	                             "UserID: %.101s\n"
-	                             "Email: %.101s\n"
-	                             "Last Login Time: %s\n"
-	                             "Login Count: %u\n"
-	                             "Login Failures: %u\n"
-	                             "Last IP: %.16s\n", // potentially format ip address...
+	                             "====SUMMARY=====\nUserID:\t\t%.101s\n"
+	                             "Email:\t\t%.101s\n"
+	                             "Last Login:\t%s\n"
+	                             "Login Count:\t%u\n"
+	                             "Login Failures:\t%u\n"
+	                             "Last IP:\t%.16s\n================\n", // potentially format ip address...
 	                             printableUID,
 	                             printableEmail,
 	                             timebuf,
@@ -565,22 +608,37 @@ bool account_print_summary(const account_t *acct, int fd)
 	                             acct->login_fail_count,
 	                             printableIP); //switched from snprintf to asprintf https://stackoverflow.com/questions/12746885/why-use-asprintf-instead-of-sprintf
 
+	if (buffer == NULL)
+	{
+		log_message(LOG_ERROR, "Memory allocation failed during asprintf");
+
+		return(false);
+	}
+
 	if (bytes_written < 0)
 	{
 		log_message(LOG_ERROR, "account_print_summary: Failed to format summary.");
+		free(buffer);
 
 		return(false);
 	}
 
 	log_message(LOG_DEBUG, "account_print_summary: Summary formatted: \n%s", buffer);
 
-	ssize_t result = write(fd, buffer, (size_t)bytes_written);
+	size_t	len		= strlen(buffer);
+	ssize_t written = write(fd, buffer, (size_t)bytes_written);
 
-	if (result == -1)
+	if (written < 0)
 	{
-		log_message(LOG_ERROR, "account_print_summary: Failed to write to file descriptor.");
-
-		return(false);
+		log_message(LOG_ERROR, "Failed to write to fd for user %s: %s", printableUID, strerror(errno));
+	}
+	else if ((size_t)written < len)
+	{
+		log_message(LOG_WARN, "Partial write to client_fd for user %s: wrote %zd of %zu bytes", printableUID, written, len);
+	}
+	else
+	{
+		log_message(LOG_DEBUG, "Sent message to client_fd for user");
 	}
 
 	free(buffer); //need to free it after allocating it with asprintf
