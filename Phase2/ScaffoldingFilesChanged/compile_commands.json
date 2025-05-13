@@ -13,59 +13,12 @@
             "-isystem",
             "/usr/include/bsd",
             "-DLIBBSD_OVERLAY",
-            "-pthread",
-            "-Isrc",
-            "-o",
-            "build/alternate_main.o",
-            "src/alternate_main.c"
-        ],
-        "directory": "/home/vagrant/project/CITS3007Project/Phase2/ScaffoldingFilesChanged",
-        "file": "src/alternate_main.c"
-    },
-    {
-        "arguments": [
-            "gcc",
-            "-c",
-            "-g",
-            "-fno-omit-frame-pointer",
-            "-std=c11",
-            "-pedantic-errors",
-            "-Wall",
-            "-Wextra",
-            "-Isrc",
-            "-isystem",
-            "/usr/include/bsd",
-            "-DLIBBSD_OVERLAY",
-            "-pthread",
-            "-Isrc",
-            "-o",
-            "build/bogus_main.o",
-            "src/bogus_main.c"
-        ],
-        "directory": "/home/vagrant/project/CITS3007Project/Phase2/ScaffoldingFilesChanged",
-        "file": "src/bogus_main.c"
-    },
-    {
-        "arguments": [
-            "gcc",
-            "-c",
-            "-g",
-            "-fno-omit-frame-pointer",
-            "-std=c11",
-            "-pedantic-errors",
-            "-Wall",
-            "-Wextra",
-            "-Isrc",
-            "-isystem",
-            "/usr/include/bsd",
-            "-DLIBBSD_OVERLAY",
-            "-pthread",
             "-Isrc",
             "-o",
             "build/login.o",
             "src/login.c"
         ],
-        "directory": "/home/vagrant/project/CITS3007Project/Phase2/ScaffoldingFilesChanged",
+        "directory": "/home/vagrant/CITS3007Project/Phase2/ScaffoldingFilesChanged",
         "file": "src/login.c"
     },
     {
@@ -82,13 +35,56 @@
             "-isystem",
             "/usr/include/bsd",
             "-DLIBBSD_OVERLAY",
-            "-pthread",
+            "-Isrc",
+            "-o",
+            "build/bogus_main.o",
+            "src/bogus_main.c"
+        ],
+        "directory": "/home/vagrant/CITS3007Project/Phase2/ScaffoldingFilesChanged",
+        "file": "src/bogus_main.c"
+    },
+    {
+        "arguments": [
+            "gcc",
+            "-c",
+            "-g",
+            "-fno-omit-frame-pointer",
+            "-std=c11",
+            "-pedantic-errors",
+            "-Wall",
+            "-Wextra",
+            "-Isrc",
+            "-isystem",
+            "/usr/include/bsd",
+            "-DLIBBSD_OVERLAY",
+            "-Isrc",
+            "-o",
+            "build/alternate_main.o",
+            "src/alternate_main.c"
+        ],
+        "directory": "/home/vagrant/CITS3007Project/Phase2/ScaffoldingFilesChanged",
+        "file": "src/alternate_main.c"
+    },
+    {
+        "arguments": [
+            "gcc",
+            "-c",
+            "-g",
+            "-fno-omit-frame-pointer",
+            "-std=c11",
+            "-pedantic-errors",
+            "-Wall",
+            "-Wextra",
+            "-Isrc",
+            "-isystem",
+            "/usr/include/bsd",
+            "-DLIBBSD_OVERLAY",
             "-Isrc",
             "-o",
             "build/account.o",
             "src/account.c"
         ],
-        "directory": "/home/vagrant/project/CITS3007Project/Phase2/ScaffoldingFilesChanged",
+        "directory": "/home/vagrant/CITS3007Project/Phase2/ScaffoldingFilesChanged",
         "file": "src/account.c"
     },
     {
@@ -105,13 +101,12 @@
             "-isystem",
             "/usr/include/bsd",
             "-DLIBBSD_OVERLAY",
-            "-pthread",
             "-Isrc",
             "-o",
             "build/pwHandling.o",
             "src/pwHandling.c"
         ],
-        "directory": "/home/vagrant/project/CITS3007Project/Phase2/ScaffoldingFilesChanged",
+        "directory": "/home/vagrant/CITS3007Project/Phase2/ScaffoldingFilesChanged",
         "file": "src/pwHandling.c"
     },
     {
@@ -128,13 +123,12 @@
             "-isystem",
             "/usr/include/bsd",
             "-DLIBBSD_OVERLAY",
-            "-pthread",
             "-Isrc",
             "-o",
             "build/stubs.o",
             "src/stubs.c"
         ],
-        "directory": "/home/vagrant/project/CITS3007Project/Phase2/ScaffoldingFilesChanged",
+        "directory": "/home/vagrant/CITS3007Project/Phase2/ScaffoldingFilesChanged",
         "file": "src/stubs.c"
     }
 ]

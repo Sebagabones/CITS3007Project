@@ -4,6 +4,5 @@
 # which will tell you the pkg-config name.
 
 libbsd-overlay
-check
 libargon2
 libsodium
