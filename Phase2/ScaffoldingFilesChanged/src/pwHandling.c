@@ -168,21 +168,17 @@ static bool extract_hash_components(const char *hash_str, unsigned char *salt_ou
 
 	// Extract memory cost with validation
 
-	long long raw = strtoll(params_start, NULL, 10);
+	size_t m_cost_value = strtol(params_start, NULL, 10);
 
-	if (raw <= 0 || raw > INT_MAX)
+	if (m_cost_value == 0 || m_cost_value > INT_MAX)
 	{
-		return(false);  // Invalid value
-	}
-	else if (raw == 0)
-	{   // stroll returns 0 on error
 		return(false);
 	}
 
-	size_t m_cost_value = (size_t)raw;
+	*m_cost_output = (int)m_cost_value;
 
 	// Extract time cost with validation
-	char *t_cost_start = strstr(params_start, ",t=");
+	const char *t_cost_start = strstr(params_start, ",t=");
 
 	if (t_cost_start == NULL)
 	{

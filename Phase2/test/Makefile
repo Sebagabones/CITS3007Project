@@ -22,7 +22,7 @@ SRC_DIR=../ScaffoldingFilesChanged/src
 TEST_DIR=.
 # CXX_AVAILABLE := $(shell $(CXX) --version 2>/dev/null)
 
-CFLAGS=-O2 -Wall -I$(SRC_DIR)/ $(STATIC) $(COMPACT) $(DEBUG) -DCITS3007_PROJECT_TESTING
+CFLAGS=-O2 -Wall -I$(TEST_DIR)/ -I$(SRC_DIR)/ $(STATIC) $(COMPACT) $(DEBUG) -DCITS3007_PROJECT_TESTING
 LIBS=
 
 TESTS_SRC_C=$(wildcard t_*.c)
@@ -46,7 +46,7 @@ CFLAGS += -DHAVE_STRLCPY
 all: $(TESTS)
 
 runtest: all
-	./t_login
+	./tstrun --color
 
 MAKEFLAGS += --no-builtin-rules
 

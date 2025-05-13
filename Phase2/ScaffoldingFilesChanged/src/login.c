@@ -89,7 +89,7 @@ login_result_t handle_login(const char *username, const char *password,
 		send_client_and_log(client_output_fd, LOG_INFO, username,
 		                    "Login failed: User account is banned\n",
 		                    "User %s is banned");
-		/* account_free(user); */
+		account_free(user);
 
 		return(LOGIN_FAIL_ACCOUNT_BANNED);
 	}
@@ -101,7 +101,7 @@ login_result_t handle_login(const char *username, const char *password,
 		send_client_and_log(client_output_fd, LOG_INFO, username,
 		                    "Login failed: User account is expired\n",
 		                    "User %s's account is expired");
-		/* account_free(user); */
+		account_free(user);
 
 		return(LOGIN_FAIL_ACCOUNT_EXPIRED);
 	}
@@ -113,7 +113,7 @@ login_result_t handle_login(const char *username, const char *password,
 		send_client_and_log(client_output_fd, LOG_WARN, username,
 		                    "Login failed: too many failed password attempts\n",
 		                    "Too many login attempts for user %s");
-		/* account_free(user); */
+		account_free(user);
 
 		return(LOGIN_FAIL_INTERNAL_ERROR);
 	}
@@ -129,7 +129,7 @@ login_result_t handle_login(const char *username, const char *password,
 		send_client_and_log(client_output_fd, LOG_INFO, username,
 		                    "Login failed: Wrong password\n",
 		                    "User %s entered wrong password");
-		/* account_free(user); */
+		account_free(user);
 
 		return(LOGIN_FAIL_BAD_PASSWORD);
 	}
@@ -156,7 +156,7 @@ login_result_t handle_login(const char *username, const char *password,
 	}
 
 	log_message(LOG_DEBUG, "handle_login: login process completed successfully for user '%s'", username);
-	/* account_free(user); */
+	account_free(user);
 
 	return(LOGIN_SUCCESS);
 }

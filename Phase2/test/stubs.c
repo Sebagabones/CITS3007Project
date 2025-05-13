@@ -38,28 +38,80 @@ void log_message(log_level_t level, const char *fmt, ...)
 	switch (level)
 	{
 	case LOG_DEBUG:
-		fprintf(stderr, "DEBUG: ");
+		/* fprintf(stderr, "DEBUG: "); */
 		break;
 
 	case LOG_INFO:
-		fprintf(stdout, "INFO: ");
+		/* fprintf(stdout, "INFO: "); */
 		break;
 
 	case LOG_WARN:
-		fprintf(stderr, "WARNING: ");
+		/* fprintf(stderr, "WARNING: "); */
 		break;
 
 	case LOG_ERROR:
-		fprintf(stderr, "ERROR: ");
+		/* fprintf(stderr, "ERROR: "); */
 		break;
 
 	default:
-		panic("Invalid log level");
+		/* panic("Invalid log level"); */
 		break;
 	}
-	vfprintf(stderr, fmt, args);
-	fprintf(stderr, "\n"); // newline, optional
+	/* vfprintf(stderr, fmt, args); */
+	/* fprintf(stderr, "\n"); // newline, optional */
 	va_end(args);
 
 	pthread_mutex_unlock(&log_mutex);
+}
+
+// Mock implementation (replace stubs version for testing only)
+bool account_lookup_by_userid(const char *userid, account_t *acc)
+{
+	// Literally hardcode test users
+	if (strcmp(userid, "Ichigo") == 0)
+	{
+		strcpy(acc->userid, "Ichigo");
+		/* strcpy(acc->password_hash, "Bankai2"); */
+		acc->account_id		  = 1;
+		acc->unban_time		  = 0;
+		acc->expiration_time  = 0;
+		acc->login_fail_count = 0;
+
+		if (!account_update_password(acc, "Bankai2"))
+		{
+			return(false);
+		}
+
+		return(true);
+	}
+	else if (strcmp(userid, "Banned-Account") == 0)
+	{
+		strcpy(acc->userid, "Banned-Account");
+		acc->unban_time		  = time(NULL) + 86400;
+		acc->expiration_time  = 0;
+		acc->login_fail_count = 0;
+
+		return(true);
+	}
+	else if (strcmp(userid, "Expired-Account") == 0)
+	{
+		strcpy(acc->userid, "Expired-Account");
+		acc->unban_time		  = 0;
+		acc->expiration_time  = time(NULL) - 86400;
+		acc->login_fail_count = 0;
+
+		return(true);
+	}
+	else if (strcmp(userid, "Too-Many") == 0)
+	{
+		strcpy(acc->userid, "Too-Many");
+		strcpy(acc->password_hash, "someBankai");
+		acc->unban_time		  = 0;
+		acc->expiration_time  = 0;
+		acc->login_fail_count = 11;
+
+		return(true);
+	}
+
+	return(false);
 }
