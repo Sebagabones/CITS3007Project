@@ -189,20 +189,6 @@ static bool ip_to_cstring(const ip4_addr_t ip, char *out_buf, size_t out_buf_siz
 
 // ----------------------------------------------------------------------------------
 
-#ifndef HAVE_EXPLICIT_BZERO
-void explicit_bzero(void *s, size_t n)
-{
-	volatile unsigned char *p = s;
-
-	while (n--)
-	{
-		*p++ = 0;
-	}
-}
-
-#endif
-// -------------------------------------------------------
-
 /**
  * @brief Create a new account with the specified parameters.
  *

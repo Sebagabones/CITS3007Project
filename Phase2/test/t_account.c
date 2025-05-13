@@ -5,6 +5,7 @@
  * Tests for account creation, modification, validation, and status checking.
  * Follows the tst.h framework for consistent testing across the codebase.
  */
+#define _GNU_SOURCE
 #include <time.h>
 #include <stdlib.h>
 #include <string.h>
@@ -17,8 +18,8 @@
 
 bool hash_password_mock_success(const char *plaintext, char *out_hash, size_t hash_len)
 {
-	strlcpy(out_hash, "HASHED_", hash_len);
-	strlcat(out_hash, plaintext, hash_len);
+	strncpy(out_hash, "HASHED_", hash_len);
+	strncat(out_hash, plaintext, hash_len);
 
 	return(true);
 }
