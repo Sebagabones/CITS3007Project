@@ -135,45 +135,6 @@ Above is a list of threats that could pose an issue to our code. For testing we 
             Try to access restricted files
         Reason: Make sure users don't have access to admin privileges
 
-We also had to test inputs for login.c which was just making sure the inputs had corresponding outputs. Each of these just check for the error output.
-    1.  Input:
-            NULL
-        Output:
-            LOGIN_FAIL_INTERNAL_ERROR
-        Reason: Ensures that the code doesn't crash but also gracefully handle failed memory allocation
-    2.  Input:
-            Username: non-existent
-        Output:
-            LOGIN_FAIL_USER_NOT_FOUND
-        Reason: Ensures system handles a non existent account gracefully without crashing
-    3.  Input:
-            Username: banned-user
-        Output:
-            LOGIN_FAIL_ACCOUNT_BANNED
-        Reason: Ensures system handles banned accounts and prevents login
-    4.  Input:
-            Username: expired-account
-        Output:
-            LOGIN_FAIL_ACCOUNT_EXPIRES
-        Reason: Prevents expired accounts from logging in gracefully with the error
-    5.  Input:
-            10 Login Failed Logins
-        Output:
-            LOGIN_FAIL_INTERNAL_ERROR
-        Reason: Ensures people aren't able to brute-force passwords by giving error after too many attempts
-    6.  Input:
-            Password: Wrong Password
-        Output:
-            LOGIN_FAIL_BAD_PASSWORD
-        Reason: Ensures wromg passwords are not given access to the account for security
-    7.  Input:
-            Username: Valid-Account
-            Password: Correct-Password
-        Output:
-            LOGIN_SUCCESS
-            Tries reset
-        Reason: Ensure the login handles account login correctly. Reset tries and everything.
-
 Then using the tst testing code we had it run unit tests to make sure that the output/error handling working properly based on the inputs given.
 
 tst takes simple inputs and allows us to define the correct output as well as adding our own output to show messages that describe what went wrong with our code.
@@ -199,3 +160,92 @@ tstcheck also has simple functionality:
 tstcase(function(values) == Correct_Output, Message);
 
 This will give a message if the output is not correct based on boolean.
+
+One struggle we had was what test values were needed, so as you will see at the beginning of our tst file is a hardcoded user example:
+Valid Account:
+    User ID:    Ichigo
+    Password:   Bankai2
+    Account ID: 1
+Banned Account:
+    User ID:    Banned-Account
+    Note:       Password and ID not set as it should be impossible to get in
+                regardless
+Expired Account:
+    User ID:    Expired-Account
+    Note:       Password and ID not set as it should be impossible to get in
+                regardless
+Too Many Attempts Account:
+    User ID:    Too-Many
+    Password:   someBankai
+
+Here are some specific tests we made for each section of the code:
+handle_login():
+    1. Case: Username Empty Login
+        Input:
+            Username:
+            Password: Bankai2
+        Expected Output: LOGIN_USER_NOT_FOUND
+        Reason: Ensures that the code doesn't crash but also gracefully handle failed memory allocation
+    2. Case: Username Not Found Login
+        Input:
+            Username: Non-existent
+            Password: Bankai2
+        Expected Output: LOGIN_FAIL_USER_NOT_FOUND
+        Reason: Ensures system handles a non existent account gracefully without crashing
+    3. Case: Account Banned Login
+        Input:
+            Username: Banned-Account
+            Password: Bankai3
+        Expected Output: LOGIN_FAIL_ACCOUNT_BANNED
+        Reason: Ensures system handles banned accounts and prevents login
+    4. Case: Account Expired Login
+        Input:
+            Username: Expired-Account
+            Password: Bankai2
+        Expected Output: LOGIN_FAIL_ACCOUNT_EXPIRED
+        Reason: Prevents expired accounts from logging in gracefully with the error
+    5. Case: Login Failed too many tries
+        Check x 10:
+            Input:
+                Username: Too-Many
+                Password: noBankai
+                Input 11x
+            Expected Output: LOGIN_BAD_PASSWORD
+            Reason: Ensure accounts can't get in with wrong password for security of accounts
+        Check 11:
+            Input:
+                Username: Too-Many
+                Password: someBankai
+                Input 11x
+            Expected Output: LOGIN_FAILED_INTERNAL_ERROR
+            Reason: Ensure that account signed incorrectly can't get in after 10 failed attempts
+    6. Case: Password Wrong Login + Session Check
+        Check:
+            Input:
+                Username: Ichigo
+                Password: Bankai3
+            Expected Output: LOGIN_FAIL_BAD_PASSWORD
+            Reason: Ensures wrong passwords are not given access to the account for security
+        Check: Session ID == 0 means that even the code itself is not logged in for the session
+        Check: Session Start time is correct
+        Check: Session Expiration Time is correct
+    7. Case: Correct Password Login + Session Check
+        Check:
+            Input:
+                Username: Ichigo
+                Password: Bankai2
+            Expected Output: LOGIN_SUCCESS
+            Reason: Ensures user can log in correctly
+        Check: Session ID == 1 means the user id 1 is logged in
+        Check: Session Start time is correct
+        Check: Session Expiration Time is correct
+    8. Case: Session Expiry Overflow
+        We set a default maximum time here
+        Check:
+            Input:
+                Username: Ichigo
+                Password: Bankai2
+            Expected Output: LOGIN_SUCCESS
+        Check: Account session is 1
+        Check: Session start time is correct
+        Check: Check for overflow in expiration time
