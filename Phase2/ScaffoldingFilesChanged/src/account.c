@@ -20,8 +20,7 @@
  *
  * @brief Implementation of functions used for user account management/creation
  *
- *
- */
+*/
 
 
 /**
@@ -32,7 +31,7 @@
  *
  * @param s char pointer to be checked
  * @return true if the string is only ASCII printable characters, false otherwise.
- */
+	*/
 static bool only_ASCII_printable_chars(const char *s)
 {
 	while (*s)
@@ -533,7 +532,7 @@ void account_set_email(account_t *acc, const char *new_email)
 	{
 		log_message(LOG_ERROR, "Invalid email format.");
 
-		return; // not sure how to handle
+		return;
 	}
 
 	if (!pseudo_string_copy(acc->email, new_email, EMAIL_LENGTH))
@@ -623,9 +622,7 @@ bool account_print_summary(const account_t *acct, int fd)
 		return(false);
 	}
 
-	log_message(LOG_DEBUG, "account_print_summary: Summary formatted: \n%s", buffer);
-
-	size_t	len		= strlen(buffer);
+	size_t	len		= (size_t)bytes_written;
 	ssize_t written = write(fd, buffer, (size_t)bytes_written);
 
 	if (written < 0)
