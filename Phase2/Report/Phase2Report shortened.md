@@ -78,6 +78,11 @@ What design decisions did you have to make? How and why did you decide on the ap
     - Two if we only ban the account for a short period of time there is nothing preventing the harasser to do it again after the ban expires
     - As a side note all of these problems would not even be problems if logins used emails (which are private) rather than userid (which is public) in the first place because then you wouldn't be able to randomly pick a guy and DOS his account for the memes
 
+14. Validation for password
+    - We decided to add a few enforced rules to passwords being created, namely requiring the password to have at least a number, a lower case letter, an upper case letter and a symbol
+    - This was done to prevent users from exhibiting smooth brain behaviour and choosing very simple passwords that are easy to guess
+    - After all, no matter how strong our hashing is it won't matter if someone bruteforces your password by finding out your dog's name
+
 
 ### Testing decisions
 

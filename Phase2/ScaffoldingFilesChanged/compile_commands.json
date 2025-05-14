@@ -32,6 +32,26 @@
       "-Isrc",
       "-c",
       "-o",
+      "build/login.o",
+      "src/login.c"
+    ],
+    "directory": "/mnt/c/Users/peter/OneDrive/Documents/.Uni stuff/2025/CITS3007 secure coding/Group project/CITS3007Project/Phase2/ScaffoldingFilesChanged",
+    "file": "/mnt/c/Users/peter/OneDrive/Documents/.Uni stuff/2025/CITS3007 secure coding/Group project/CITS3007Project/Phase2/ScaffoldingFilesChanged/src/login.c",
+    "output": "/mnt/c/Users/peter/OneDrive/Documents/.Uni stuff/2025/CITS3007 secure coding/Group project/CITS3007Project/Phase2/ScaffoldingFilesChanged/build/login.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-g",
+      "-fno-omit-frame-pointer",
+      "-std=c11",
+      "-pedantic-errors",
+      "-Wall",
+      "-Wextra",
+      "-Isrc",
+      "-Isrc",
+      "-c",
+      "-o",
       "build/bogus_main.o",
       "src/bogus_main.c"
     ],
@@ -58,26 +78,6 @@
     "directory": "/mnt/c/Users/peter/OneDrive/Documents/.Uni stuff/2025/CITS3007 secure coding/Group project/CITS3007Project/Phase2/ScaffoldingFilesChanged",
     "file": "/mnt/c/Users/peter/OneDrive/Documents/.Uni stuff/2025/CITS3007 secure coding/Group project/CITS3007Project/Phase2/ScaffoldingFilesChanged/src/stubs.c",
     "output": "/mnt/c/Users/peter/OneDrive/Documents/.Uni stuff/2025/CITS3007 secure coding/Group project/CITS3007Project/Phase2/ScaffoldingFilesChanged/build/stubs.o"
-  },
-  {
-    "arguments": [
-      "/usr/bin/gcc",
-      "-g",
-      "-fno-omit-frame-pointer",
-      "-std=c11",
-      "-pedantic-errors",
-      "-Wall",
-      "-Wextra",
-      "-Isrc",
-      "-Isrc",
-      "-c",
-      "-o",
-      "build/login.o",
-      "src/login.c"
-    ],
-    "directory": "/mnt/c/Users/peter/OneDrive/Documents/.Uni stuff/2025/CITS3007 secure coding/Group project/CITS3007Project/Phase2/ScaffoldingFilesChanged",
-    "file": "/mnt/c/Users/peter/OneDrive/Documents/.Uni stuff/2025/CITS3007 secure coding/Group project/CITS3007Project/Phase2/ScaffoldingFilesChanged/src/login.c",
-    "output": "/mnt/c/Users/peter/OneDrive/Documents/.Uni stuff/2025/CITS3007 secure coding/Group project/CITS3007Project/Phase2/ScaffoldingFilesChanged/build/login.o"
   },
   {
     "arguments": [
