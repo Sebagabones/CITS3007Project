@@ -833,8 +833,8 @@ static bool extract_hash_components(const char *hash_str, unsigned char *salt_ou
 	}
 
 	// Range check
-	char *endptr	   = NULL;
-	long  m_cost_value = strtol(params_start, &endptr, 10);
+	char *	endptr		 = NULL;
+	int32_t m_cost_value = strtol(params_start, &endptr, 10);
 
 	if (m_cost_value < INT32_MIN || m_cost_value > INT32_MAX)
 	{
@@ -842,9 +842,6 @@ static bool extract_hash_components(const char *hash_str, unsigned char *salt_ou
 	}
 
 	*m_cost_output = (int32_t)m_cost_value;
-
-	// Extract memory cost with validation
-	int32_t m_cost_value = strtol(params_start, &endptr, 10);
 
 	if (endptr == params_start || *endptr != ',' ||
 	    m_cost_value <= 0 || m_cost_value > INT_MAX)
