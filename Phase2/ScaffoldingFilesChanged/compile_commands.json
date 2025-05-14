@@ -15,11 +15,11 @@
             "-DLIBBSD_OVERLAY",
             "-Isrc",
             "-o",
-            "build/alternate_main.o",
-            "src/alternate_main.c"
+            "build/bogus_main.o",
+            "src/bogus_main.c"
         ],
         "directory": "/home/vagrant/CITS3007Project/Phase2/ScaffoldingFilesChanged",
-        "file": "src/alternate_main.c"
+        "file": "src/bogus_main.c"
     },
     {
         "arguments": [
@@ -59,10 +59,10 @@
             "-DLIBBSD_OVERLAY",
             "-Isrc",
             "-o",
-            "build/bogus_main.o",
-            "src/bogus_main.c"
+            "build/alternate_main.o",
+            "src/alternate_main.c"
         ],
         "directory": "/home/vagrant/CITS3007Project/Phase2/ScaffoldingFilesChanged",
-        "file": "src/bogus_main.c"
+        "file": "src/alternate_main.c"
     }
 ]

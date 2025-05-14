@@ -30,11 +30,11 @@
 #define MAX_PASSWORD_LENGTH	   256
 
 //	HASHING CONSTANTS
-#define SALT_LENGTH		   16
-#define HASH_RAW_LENGTH	   32
-#define T_COST			   3     // Time cost parameter
-#define M_COST			   65536 // Memory cost parameter (64 MB)
-#define PARALLELISM		   4     // Parallelism parameter
+#define SALT_LENGTH			   16
+#define HASH_RAW_LENGTH		   32
+#define T_COST				   3     // Time cost parameter
+#define M_COST				   65536 // Memory cost parameter (64 MB)
+#define PARALLELISM			   4     // Parallelism parameter
 
 /**
  * @brief Function to neutralise email inputs
@@ -659,8 +659,8 @@ bool account_print_summary(const account_t *acct, int fd)
 	return(true);
 }
 
-
 //-------------------------------------- PASSWORD STUFF
+
 /**
  * @file pwHandling.c
  * @brief Implementation of password hashing and validation functions
@@ -787,8 +787,7 @@ static void format_argon2_hash(char *output, int t_cost, int m_cost, int paralle
 		return;
 	}
 
-
-	int copy_len = (result < HASH_LENGTH - 1) ? result : HASH_LENGTH - 1;
+	int	   copy_len = (result < HASH_LENGTH - 1) ? result : HASH_LENGTH - 1;
 	size_t copy_len = (result < HASH_LENGTH - 1) ? (size_t)result : (size_t)(HASH_LENGTH - 1);
 	output[copy_len] = '\0'; // Ensure null termination
 }
