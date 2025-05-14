@@ -15,7 +15,8 @@ TOCTOU *(/tɒk ˈtuːə/)*
 
 
 ### Design Decisions
-> What design decisions did you have to make? How and why did you decide on the approach you chose?
+>>> What design decisions did you have to make? How and why did you decide on the approach you chose?
+
 #### Guiding Philosophy
 - Boundary of Trust: Our system defines its trust boundary at the point of user input. Once fields such as `userid` and `email` have been validated and sanitised/neutralised, we treat them as clean.
 
@@ -38,7 +39,7 @@ TOCTOU *(/tɒk ˈtuːə/)*
 3. We implemented `explicit_bzero` to securely erases sensitive data in memory after it has been used
     - Prevent sensitive data from remaining within memory by overwriting it with zeroes.
     - Compilers can skip clearing memory before freeing it if the compiler knows that the memory is not used between being cleared and being freed. This optimisation can cause security concerns if sensitive data is not securely erased before releasing memory. `explicit_bzero` tells the compiler to ensure that this memory is erased (by writing 0's over the data) before freeing it.
-    
+
 4. For account field validation we neutralise rather than sanitise.
     - The group decided that instead of trying to sanitise invalid input, we would instead just check for and then refuse any invalid inputs.
       - This was chosen as it is simpler, reducing the possibility of missing a potential vulnerability.
@@ -69,20 +70,18 @@ TOCTOU *(/tɒk ˈtuːə/)*
 
 8. We used `asprintf` over alternatives like `sprintf`/`snprintf`
     - `asprintf` helps to avoid buffer overflows as it automatically allocates a buffer large enough to hold the formatted string.
-    - It improves safety by returning -1 upon failure and the number of bytes written on success, meaning checking for successful writes is trivially easy. 
+    - It improves safety by returning -1 upon failure and the number of bytes written on success, meaning checking for successful writes is trivially easy.
 
-## REPHRASE
 9. Session expiry time
    - For our implementation we chose for the session expiry time to be equal to the user account expiry time, or 24 hours in the cases where there was none.
-   - The reason for this is there is nothing else related to the session expiry time so we simply assumed that the user account expiry and the session expiry are the same thing.
-   
+   - The reason for this is there is nothing else related to the session expiry time so it was assumed that the user account expiry and the session expiry were intended to be related.
 
 10. Not using `LOGIN_FAIL_IP_BANNED`
     - We decided not to use IP banning because of several reasons:
       - For one thing everyone uses dynamic IP addresses nowadays so just by simply rebooting their router they could bypass the ban (or worse, possibly passing the ban along to another innocent player).
       - Even if one does not use dynamic IPs, VPNs exist to do the same thing.
       - Since the given IP is IPv4, due to the scarcity of IPv4 addresses, a lot of Internet Service Providers use CGNAT, meaning banning one IP could inadvertently impact thousands of players, which is not ideal when your product's success is dependant among the player-base being able to, well, play the game.
-    - While there are of course solutions to these problems, our group felt like it was out of scope of the provided project brief. 
+    - While there are of course solutions to these problems, our group felt like it was out of scope of the provided project brief.
 
 11. Passing 10 failed logins will soft ban the account
     - We implemented an enforced login fail when there was more than 10 consecutive failed logins in a row, meaning the account will be impossible to access.
@@ -115,7 +114,7 @@ We used the `tst` testing framework (available [here](https://github.com/rdentat
 
 `tst` takes simple inputs and allows us to define the correct output as well as adding our own output to show debug messages.
 
-The reason we went with `tst` is because it was very simple to implement while retaining most of the features of more complicated test frameworks (such as `check`). 
+The reason we went with `tst` is because it was very simple to implement while retaining most of the features of more complicated test frameworks (such as `check`).
 This helped to increase the speed at which we developed tests, allowing us to test a larger surface area of our code.
 
 Due to the ease of setup, (unlike some other test frameworks with complex build dependencies/setups), all that `tst` required was to include `tst.h`.
@@ -135,20 +134,20 @@ tstsuite(){
     .
 }
 ```
-This means we can split a suite for each functionality that requires testing, then have cases for all the different scenarios to be tested. 
+This means we can split a suite for each functionality that requires testing, then have cases for all the different scenarios to be tested.
 
 We also were able to use `tstsection`'s to increase the separation of different tests, purely for increasing the clarity of the results.
 
 Inside each `tstcheck` we have:
 
-`tstcase(function(values) == Correct_Output, Message)` 
+`tstcase(function(values) == Correct_Output, Message)`
 
-If a `tstcase` fails (eg the expression is not true), then `Message` will be printed out to assist with debugging. 
+If a `tstcase` fails (eg the expression is not true), then `Message` will be printed out to assist with debugging.
 
 
-Additionally, we made our own version of the `stubs.c` file for testing, which allowed us to use functions that were not in the project brief to help with creating more end to end testing, without increasing the code-base for the non-testing sections of our code. Examples of our custom functions are modifications to `log_message` and `account_lookup_by_userid`. This effectively meant we were able to write better tests, using different functionalities from the `stubs.c`, such as custom debug messages (which was carefully done to ensure the code did not deviate from the requirements). 
- 
-The `Makefile` in our code uses `stubs.c` and the custom header file in the testing directory to overwrite `stubs.c` functions when compiling the tests. 
+Additionally, we made our own version of the `stubs.c` file for testing, which allowed us to use functions that were not in the project brief to help with creating more end to end testing, without increasing the code-base for the non-testing sections of our code. Examples of our custom functions are modifications to `log_message` and `account_lookup_by_userid`. This effectively meant we were able to write better tests, using different functionalities from the `stubs.c`, such as custom debug messages (which was carefully done to ensure the code did not deviate from the requirements).
+
+The `Makefile` in our code uses `stubs.c` and the custom header file in the testing directory to overwrite `stubs.c` functions when compiling the tests.
 
 ### How to run tests.
 First go to the testing directory (named `tests`).
@@ -156,6 +155,6 @@ To run the test, make the tests with `make`, making sure to run `make clean` fir
 Then, either run `make runtest` or `./tstrun --color` to run all of the tests, or run individual tests with `./t_<testname> --color`.
 
 
-## Dynamic Analysis 
+## Dynamic Analysis
 We implemented both Valgrind and Google sanitisers in our testing to help with both debugging memory issues, but to also help use check for memory issues/vulnerabilities. This proved to be invaluable, as there were buffer overflows that would not have been caught without our testing system.
 
