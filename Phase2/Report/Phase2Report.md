@@ -72,6 +72,7 @@ What design decisions did you have to make? How and why did you decide on the ap
 13. Type conversions from long int to int32_t in `extract_hash_components`
     - In this function there were multiple instances of the compiler warning us of the possibility of truncations during the conversions.
     - We chose to accept this risk because these conversions were being done on values that would dictate the time and memory usage of the hashing algorithm, which in our project and in the real world would never reach the LONG_MAX limit of 9223372036854775807 (in a modern 64bit machine); and because Argon2 takes those values in KiB, it is simply not possible to have a memory allocation of 8388608 Pebibytes.
+    - The type conversion warning for `p_value` will never become an issue for the same reason; it's the number of threads for Argon2 to use when it calculates the hashes. It would be absolutely impractical for someone to use that much threads.
     - And to make us feel safe, even though it is not necessary, we implemented a range check where these type conversion warnings came up to ensure an abundance of safety.
 
 

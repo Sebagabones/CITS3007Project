@@ -44,12 +44,12 @@ What design decisions did you have to make? How and why did you decide on the ap
         - Time cost: 4 iterations
         - Parallelism: 4 threads
     - We enforced a minimum password length of 8 characters, and a maximum of 256 characters. The minimum length is to prevent brute force attacks – as short passwords are weaker even when salted and hashed. The maximum length serves to prevent the user from entering a password that is too long, which could cause issues with memory allocation and performance. We also enforce a minimum of 1 uppercase letter, 1 lowercase letter, 1 number, and 1 symbol to ensure that the password is strong enough to resist brute force attacks.
-    - A main motivator of using Argon2 is that it is the winner of the Password Hashing Competition (PHC) and is widely considered to be the most secure password hashing algorithm available. It is very modern and industry standard. 
+    - A main motivator of using Argon2 is that it is the winner of the Password Hashing Competition (PHC) and is widely considered to be the most secure password hashing algorithm available. It is very modern and industry standard.
 
 6. Writing to file
     - We used write to file instead of using `fprintf` because it is more efficient, and we are given a file descriptor
     - For printing the account summary *solely*, we employ a mutex lock to prevent a data race condition. We do this by locking the mutex before writing to the file and unlocking it after we are done writing. This ensures that only one thread can write to the file at a time, preventing any potential data corruption or inconsistencies
-    - We did this because we believe the ACS would best be used in a multi-threaded environment, where it can handle multiple requests simultaneously. By using a mutex lock, we can ensure that the ACS can handle multiple requests to create accounts/log people in etc without issue – and printing the account summary won't block any of those more frequent requests. 
+    - We did this because we believe the ACS would best be used in a multi-threaded environment, where it can handle multiple requests simultaneously. By using a mutex lock, we can ensure that the ACS can handle multiple requests to create accounts/log people in etc without issue – and printing the account summary won't block any of those more frequent requests.
     - We did not use a mutex for the client fd printing, because we believe that the client wouldn't be sending multiple requests quickly enough to cause a race condition.
 
 7. Using `inet_ntop` in `ip_to_cstring`
@@ -80,7 +80,7 @@ What design decisions did you have to make? How and why did you decide on the ap
     - As a side note all of these problems would not even be problems if logins used emails (which are private) rather than userid (which is public) in the first place. This is because an attacker wouldn't be able to target an account user by username and DOS his account, violating it's accessibility.
 
 12. Validation for password
-    - We decided to add a few enforced rules to passwords being created, namely requiring the password to have at least a number, a lower case letter, an upper case letter and a symbol. 
+    - We decided to add a few enforced rules to passwords being created, namely requiring the password to have at least a number, a lower case letter, an upper case letter and a symbol.
     - This was done to prevent users from choosing passwords that may be vulnerable to some form of targetted password guessing attack.
     - After all, no matter how strong our hashing is it won't matter if someone socially engineers the password out of the user.
 
@@ -92,6 +92,7 @@ What design decisions did you have to make? How and why did you decide on the ap
 14. Type conversions from long int to int32_t in `extract_hash_components`
     - In this function there were multiple instances of the compiler warning us of the possibility of truncations during the conversions.
     - We chose to accept this risk because these conversions were being done on values that would dictate the time and memory usage of the hashing algorithm, which in our project and in the real world would never reach the LONG_MAX limit of 9223372036854775807 (in a modern 64bit machine); and because Argon2 takes those values in KiB, it is simply not possible to have a memory allocation of 8388608 Pebibytes.
+    - The type conversion warning for `p_value` will never become an issue for the same reason; it's the number of threads for Argon2 to use when it calculates the hashes. It would be absolutely impractical for someone to use that much threads.
     - And to make us feel safe, even though it is not necessary, we implemented a range check where these type conversion warnings came up to ensure an abundance of safety.
 
 ### Testing decisions
