@@ -34,10 +34,12 @@ What design decisions did you have to make? How and why did you decide on the ap
     - We believe that this is the safest and easiest way to go about it ~~because if a user is unable to fill in a date as a date maybe they shouldn't deserve an account~~
     - To do this we included many validation functions including `password_valid`, `birthday_valid` and `only_ASCII_printable_chars`
 
-5. Salting and Argon2
-    - Salting with randomly generated salt for each password to prevent rainbow attacks
+5. Salting and Hashing using Sodium and Argon2
+    - Salting using the Sodium library for each password to prevent rainbow table attacks
     - Argon2id has balanced protection against brute-force and side-channel attacks
-    - plus more from Scotty if needed
+    - Due to the possibility of brute forcing the hash as well, we have chosen to use Sodium's constant time comparison function to compare the computed hash and the hash stored.
+    - In order to be more efficient with calculating the hashes, Argon2 provides us with the ability to use multi-threading to make use of multiple CPU cores (in our case 4 cores) to calculate or validate the hashes for very long passwords.
+    - Similarly, we have used a resonable number (measured in KiB) for the time and memory cost parameter in the Argon2 parameters to make the resulting hashes more cryptographically secure, which by extension makes it more computationally expensive for the attacker to crack the password.
 
 6. Writing to file
     - Seb stuff here
