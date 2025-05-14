@@ -47,7 +47,7 @@ What design decisions did you have to make? How and why did you decide on the ap
 7. Writing to file
     - Seb stuff here
 
-8. `ip_to_cstring`
+8. Using inet_ntop() in `ip_to_cstring`
     - Older version inet_ntoa() is not thread safe, it uses shared static buffer across calls meaning race conditions are caused when multiple threads call it at the same time
     - We used inet_ntop because it is thread safe since it uses caller provided buffers, and it supports multiple protocols like IPv6
 
@@ -65,11 +65,8 @@ What design decisions did you have to make? How and why did you decide on the ap
 
 12. Casting user->account_id to int
     - Due to a mysterious case of inconsistent int types between the user struct and the session struct we had to cast user->account_id to int
-    - If only there was a way to fix this slight inconsistency by removing 4 characters from account.h but alas we were not able to use this method
+    - If only there was a way to fix this slight inconsistency by removing 4 characters from account.h
 
-
-### 3.6 Coding Standards
-1. We are using C11
 
 ### 3.7 Test Code
 Threat Modelling:
