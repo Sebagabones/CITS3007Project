@@ -191,7 +191,7 @@ tstsuite("account_password_validation")
 	{
 		account_t account = { 0 };
 
-		for (int i = 15; i < 30; i++)
+		for (int i = 0; i < 500; i++)
 		{
 			size_t length = (size_t)(15 + rand() % 25);
 			char   random_password[33]; // Max 32 chars + null terminator
