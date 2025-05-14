@@ -70,6 +70,14 @@ What design decisions did you have to make? How and why did you decide on the ap
     - Even if one does not use dynamic IPs, VPNs exist to do the same thing
     - Since the given IP is IPv4, due to the scarcity ISPs use CGNAT meaning banning one ip can affect thousands of people which is exactly what you don't want when your product is kept alive by said people
 
+13. Passing 10 failed logins will soft ban the account
+    - We implemented an enforced login fail when there's more than 10 consecutive failed logins in a row, meaning the account will be impossible to access
+    - We intend there to be an email sent out to the account owner prompting them to change their userid/password in order to unlock their account, however this is impossible to implement in our given scope
+    - The alternative is to ban the account for a short period of time but we decided against that because of two reasons
+    - One there is only one ban status, and it is for real bans where the only method of appealing is through presumably some customer service portal which is obviously too severe and inconvenient for just 10 consecutive failed logins
+    - Two if we only ban the account for a short period of time there is nothing preventing the harasser to do it again after the ban expires
+    - As a side note all of these problems would not even be problems if logins used emails (which are private) rather than userid (which is public) in the first place because then you wouldn't be able to randomly pick a guy and DOS his account for the memes
+
 
 ### Testing decisions
 
