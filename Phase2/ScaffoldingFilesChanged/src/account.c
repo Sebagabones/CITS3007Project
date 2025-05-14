@@ -4,7 +4,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <strings.h>
-
 #include <unistd.h>
 #include <ctype.h>
 #include <arpa/inet.h>
@@ -13,6 +12,7 @@
 #include <stdint.h>
 #include <argon2.h>
 #include <sodium.h>
+#include <pthread.h>
 
 #include "account.h"
 #include "logging.h"
@@ -35,6 +35,9 @@
 #define T_COST				   3     // Time cost parameter
 #define M_COST				   65536 // Memory cost parameter (64 MB)
 #define PARALLELISM			   4     // Parallelism parameter
+
+// Global Mutex for printing the account summary atomically
+static pthread_mutex_t acc_summary_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 /**
  * @brief Function to neutralise email inputs
@@ -634,8 +637,12 @@ bool account_print_summary(const account_t *acct, int fd)
 		return(false);
 	}
 
+	pthread_mutex_lock(&acc_summary_mutex);
+
 	size_t	len		= (size_t)bytes_written;
 	ssize_t written = write(fd, buffer, (size_t)bytes_written);
+	
+	pthread_mutex_unlock(&acc_summary_mutex);	
 
 	if (written < 0)
 	{
