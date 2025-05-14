@@ -69,6 +69,11 @@ What design decisions did you have to make? How and why did you decide on the ap
     - Due to a mysterious case of inconsistent int types between the user struct and the session struct we had to cast user->account_id to int
     - If only there was a way to fix this slight inconsistency by removing 4 characters from account.h
 
+13. Type conversions from long int to int32_t in `extract_hash_components`
+    - In this function there were multiple instances of the compiler warning us of the possibility of truncations during the conversions.
+    - We chose to accept this risk because these conversions were being done on values that would dictate the time and memory usage of the hashing algorithm, which in our project and in the real world would never reach the LONG_MAX limit of 9223372036854775807 (in a modern 64bit machine); and because Argon2 takes those values in KiB, it is simply not possible to have a memory allocation of 8388608 Pebibytes.
+    - And to make us feel safe, even though it is not necessary, we implemented a range check where these type conversion warnings came up to ensure an abundance of safety.
+
 
 ### 3.7 Test Code
 Threat Modelling:
