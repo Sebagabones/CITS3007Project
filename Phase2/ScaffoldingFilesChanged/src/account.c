@@ -20,8 +20,7 @@
  *
  * @brief Implementation of functions used for user account management/creation
  *
-*/
-
+ */
 
 /**
  * @brief Function to neutralise email inputs
@@ -31,7 +30,7 @@
  *
  * @param s char pointer to be checked
  * @return true if the string is only ASCII printable characters, false otherwise.
-	*/
+ */
 static bool only_ASCII_printable_chars(const char *s)
 {
 	while (*s)
@@ -58,7 +57,6 @@ static bool only_ASCII_printable_chars(const char *s)
  */
 static bool birthday_valid(const char *s)
 {
-
 	if (strlen(s) != 10)
 	{
 		log_message(LOG_DEBUG, "birthday_valid: Incorrect length (%zu).", strlen(s));
@@ -628,10 +626,14 @@ bool account_print_summary(const account_t *acct, int fd)
 	if (written < 0)
 	{
 		log_message(LOG_ERROR, "Failed to write to fd for user %s: %s", printableUID, strerror(errno));
+
+		return(false);
 	}
 	else if ((size_t)written < len)
 	{
 		log_message(LOG_WARN, "Partial write to client_fd for user %s: wrote %zd of %zu bytes", printableUID, written, len);
+
+		return(false);
 	}
 	else
 	{

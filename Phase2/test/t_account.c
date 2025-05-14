@@ -44,7 +44,7 @@ tstsuite("Account Testing")
 	{
 		tstsection("Valid Account Creation")
 		{
-			account_t *acc = account_create("testuser", "password123", "test@example.com", "1990-01-01");
+			account_t *acc = account_create("testuser", "Password123&", "test@example.com", "1990-01-01");
 
 			tstcheck(acc != NULL)
 
@@ -77,20 +77,20 @@ tstsuite("Account Testing")
 			memset(long_userid, 'a', sizeof(long_userid));
 			long_userid[USER_ID_LENGTH + 9] = '\0';
 
-			account_t *acc = account_create(long_userid, "password123", "test@example.com", "1990-01-01");
+			account_t *acc = account_create(long_userid, "Password123&", "test@example.com", "1990-01-01");
 			tstcheck(acc == NULL)
 		}
 
 		tstsection("Invalid Email (Non-ASCII)")
 		{
-			account_t *acc = account_create("testuser", "password123", "test\x01@example.com", "1990-01-01");
+			account_t *acc = account_create("testuser", "Password123&", "test\x01@example.com", "1990-01-01");
 
 			tstcheck(acc == NULL)
 		}
 
 		tstsection("Invalid Birthday Format")
 		{
-			account_t *acc = account_create("testuser", "password123", "test@example.com", "1990/01/01");
+			account_t *acc = account_create("testuser", "Password123&", "test@example.com", "1990/01/01");
 
 			tstcheck(acc != NULL)
 
@@ -272,10 +272,11 @@ tstsuite("Account Testing")
 			tstcheck(bytes_read > 0)
 
 			// check for expected fields
-			tstcheck(strstr(buffer, "UserID: testuser") != NULL)
-			tstcheck(strstr(buffer, "Email: test@example.com") != NULL)
-			tstcheck(strstr(buffer, "Login Count: 42") != NULL)
-			tstcheck(strstr(buffer, "Login Failures: 5") != NULL)
+			tstcheck(strstr(buffer, "UserID:\t\ttestuser") != NULL)
+			tstcheck(strstr(buffer, "Email:\t\ttest@example.com") != NULL)
+			tstcheck(strstr(buffer, "Login Count:\t42") != NULL)
+			tstcheck(strstr(buffer, "Login Failures:\t5") != NULL)
+			tstcheck(strstr(buffer, "Last IP:\t3.0.0.0") != NULL)
 
 			close(fd);
 		}
@@ -288,7 +289,7 @@ tstsuite("Account Testing")
 
 			// use invalid file descriptor
 			bool result = account_print_summary(&acc, -1);
-			tstcheck(!result)
+			tstcheck(!result, "%i", result)
 		}
 	}
 }

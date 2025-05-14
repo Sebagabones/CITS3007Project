@@ -19,12 +19,12 @@
  *
  * This function should not return.
  */
-//caused warnings so removed for testing
-//static void panic(const char *msg)
-//{
-//	fprintf(stderr, "PANIC: %s\n", msg);
-//	abort();
-//}
+/* caused warnings so removed for testing */
+/* static void panic(const char *msg) */
+/* { */
+/* 	fprintf(stderr, "PANIC: %s\n", msg); */
+/* 	abort(); */
+/* } */
 
 // Global mutex for logging
 // This mutex is used to ensure that log messages are printed in a thread-safe manner.
@@ -78,7 +78,7 @@ bool account_lookup_by_userid(const char *userid, account_t *acc)
 		acc->expiration_time  = 0;
 		acc->login_fail_count = 0;
 
-		if (!account_update_password(acc, "Bankai2"))
+		if (!account_update_password(acc, "Bankai22222$$$$$"))
 		{
 			return(false);
 		}
@@ -106,7 +106,7 @@ bool account_lookup_by_userid(const char *userid, account_t *acc)
 	else if (strcmp(userid, "Too-Many") == 0)
 	{
 		strcpy(acc->userid, "Too-Many");
-		strcpy(acc->password_hash, "someBankai");
+		strcpy(acc->password_hash, "someBankai192####");
 		acc->unban_time		  = 0;
 		acc->expiration_time  = 0;
 		acc->login_fail_count = 11;

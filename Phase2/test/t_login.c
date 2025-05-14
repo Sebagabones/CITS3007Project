@@ -19,12 +19,12 @@ tstsuite("handle_login")
 
 	tstcase("Username Empty Login")
 	{
-		tstcheck(handle_login("", "Bankai2", testip, testtime, -1, &testsession) == LOGIN_FAIL_USER_NOT_FOUND)
+		tstcheck(handle_login("", "Bankai22222$$$$$", testip, testtime, -1, &testsession) == LOGIN_FAIL_USER_NOT_FOUND)
 	}
 
 	tstcase("Username Not Found Login")
 	{
-		tstcheck(handle_login("Non-existent", "Bankai2", testip, testtime, -1, &testsession) == LOGIN_FAIL_USER_NOT_FOUND)
+		tstcheck(handle_login("Non-existent", "Bankai22222$$$$$", testip, testtime, -1, &testsession) == LOGIN_FAIL_USER_NOT_FOUND)
 	}
 
 	tstcase("Account Banned Login")
@@ -34,18 +34,20 @@ tstsuite("handle_login")
 
 	tstcase("Account Expired Login")
 	{
-		tstcheck(handle_login("Expired-Account", "Bankai2", testip, testtime, -1, &testsession) == LOGIN_FAIL_ACCOUNT_EXPIRED)
+		tstcheck(handle_login("Expired-Account", "Bankai22222$$$$$", testip, testtime, -1, &testsession) == LOGIN_FAIL_ACCOUNT_EXPIRED)
 	}
 
 	tstcase("Login Failed too many tries")
 	{
 		// check if trying to log in after more than 10 failed attempts will fail with the correct code
-		tstcheck(handle_login("Too-Many", "someBankai", testip, testtime, -1, &testsession) == LOGIN_FAIL_INTERNAL_ERROR)
+		tstcheck(handle_login("Too-Many", "someBankai192####", testip, testtime, -1, &testsession) == LOGIN_FAIL_INTERNAL_ERROR)
 	}
 
 	tstcase("Password Wrong Login + Session Check")
 	{
-		tstcheck(handle_login("Ichigo", "Bankai3", testip, testtime, -1, &testsession) == LOGIN_FAIL_BAD_PASSWORD)
+		login_result_t temp = handle_login("Ichigo", "Bankai3", testip, testtime, -1, &testsession);
+
+		tstcheck(temp == LOGIN_FAIL_BAD_PASSWORD, "%i", temp)
 		tstcheck(testsession.account_id == 0)
 		tstcheck(testsession.session_start == 0)
 		tstcheck(testsession.expiration_time == 0)
@@ -53,7 +55,9 @@ tstsuite("handle_login")
 
 	tstcase("Correct Password Login + Session Check")
 	{
-		tstcheck(handle_login("Ichigo", "Bankai2", testip, testtime, -1, &testsession) == LOGIN_SUCCESS)
+		login_result_t temp = handle_login("Ichigo", "Bankai22222$$$$$", testip, testtime, -1, &testsession);
+
+		tstcheck(temp == LOGIN_SUCCESS, "%i", temp)
 		tstcheck(testsession.account_id == 1)
 		tstcheck(testsession.session_start == testtime)
 		tstcheck(testsession.expiration_time == testtime + 86400)
@@ -61,7 +65,7 @@ tstsuite("handle_login")
 	testtime = time(NULL); //this needs to be updated because successful login
 	tstcase("Correct Username and Password")
 	{
-		tstcheck(handle_login("Ichigo", "Bankai2", testip, testtime, -1, &testsession) == LOGIN_SUCCESS)
+		tstcheck(handle_login("Ichigo", "Bankai22222$$$$$", testip, testtime, -1, &testsession) == LOGIN_SUCCESS)
 		tstcheck(testsession.account_id == 1)
 		tstcheck(testsession.session_start == testtime)
 		tstcheck(testsession.expiration_time == testtime + 86400)
@@ -72,7 +76,7 @@ tstsuite("handle_login")
 		login_session_data_t specsession;
 		time_t spectime = INT_MAX - 86200;
 
-		tstcheck(handle_login("Ichigo", "Bankai2", testip, spectime, -1, &specsession) == LOGIN_SUCCESS)
+		tstcheck(handle_login("Ichigo", "Bankai22222$$$$$", testip, spectime, -1, &specsession) == LOGIN_SUCCESS)
 		tstcheck(specsession.account_id == 1)
 		tstcheck(specsession.session_start == spectime)
 		tstcheck(specsession.expiration_time > specsession.session_start) // Check for overflow
