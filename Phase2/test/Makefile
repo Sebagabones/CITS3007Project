@@ -36,7 +36,7 @@ endif
 TESTS_SRC=$(TST_SRC_C) $(TST_SRC_CPP)
 TESTS=$(TESTS_C) $(TESTS_CPP)
 
-SRC_OBJS=$(SRC_DIR)/login.o $(SRC_DIR)/account.o $(TEST_DIR)/stubs.o $(SRC_DIR)/pwHandling.o
+SRC_OBJS=$(SRC_DIR)/login.o $(SRC_DIR)/account.o $(TEST_DIR)/stubs.o
 
 #CFLAGS += -DHAVE_STRLCPY 
 LIBS = -lbsd -lsodium -largon2

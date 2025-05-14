@@ -14,7 +14,6 @@
 
 #include "tst.h"
 #include "account.h"
-#include "pwHandling.h"
 #include "login.h"
 #include "logging.h"
 #include "db.h"

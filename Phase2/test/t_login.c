@@ -9,7 +9,6 @@
 #include "login.h"
 #include "logging.h"
 #include "db.h"
-#include "pwHandling.h"
 
 tstsuite("handle_login")
 {
