@@ -37,11 +37,33 @@
             "-DLIBBSD_OVERLAY",
             "-Isrc",
             "-o",
-            "build/alternate_main.o",
-            "src/alternate_main.c"
+            "build/login.o",
+            "src/login.c"
         ],
         "directory": "/home/vagrant/CITS3007Project/Phase2/ScaffoldingFilesChanged",
-        "file": "src/alternate_main.c"
+        "file": "src/login.c"
+    },
+    {
+        "arguments": [
+            "gcc",
+            "-c",
+            "-g",
+            "-fno-omit-frame-pointer",
+            "-std=c11",
+            "-pedantic-errors",
+            "-Wall",
+            "-Wextra",
+            "-Isrc",
+            "-isystem",
+            "/usr/include/bsd",
+            "-DLIBBSD_OVERLAY",
+            "-Isrc",
+            "-o",
+            "build/stubs.o",
+            "src/stubs.c"
+        ],
+        "directory": "/home/vagrant/CITS3007Project/Phase2/ScaffoldingFilesChanged",
+        "file": "src/stubs.c"
     },
     {
         "arguments": [
@@ -64,5 +86,27 @@
         ],
         "directory": "/home/vagrant/CITS3007Project/Phase2/ScaffoldingFilesChanged",
         "file": "src/account.c"
+    },
+    {
+        "arguments": [
+            "gcc",
+            "-c",
+            "-g",
+            "-fno-omit-frame-pointer",
+            "-std=c11",
+            "-pedantic-errors",
+            "-Wall",
+            "-Wextra",
+            "-Isrc",
+            "-isystem",
+            "/usr/include/bsd",
+            "-DLIBBSD_OVERLAY",
+            "-Isrc",
+            "-o",
+            "build/alternate_main.o",
+            "src/alternate_main.c"
+        ],
+        "directory": "/home/vagrant/CITS3007Project/Phase2/ScaffoldingFilesChanged",
+        "file": "src/alternate_main.c"
     }
 ]

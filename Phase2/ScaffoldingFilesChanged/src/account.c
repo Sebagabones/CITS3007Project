@@ -787,7 +787,6 @@ static void format_argon2_hash(char *output, int t_cost, int m_cost, int paralle
 		return;
 	}
 
-	int	   copy_len = (result < HASH_LENGTH - 1) ? result : HASH_LENGTH - 1;
 	size_t copy_len = (result < HASH_LENGTH - 1) ? (size_t)result : (size_t)(HASH_LENGTH - 1);
 	output[copy_len] = '\0'; // Ensure null termination
 }
@@ -829,9 +828,9 @@ static bool extract_hash_components(const char *hash_str, unsigned char *salt_ou
 		return(false);
 	}
 
-	// Range check
-	char *endptr	   = NULL;
-	long  m_cost_value = strtol(params_start, &endptr, 10);
+	// Extract memory cost with proper range checking
+	char *	endptr		 = NULL;
+	int32_t m_cost_value = strtol(params_start, &endptr, 10);
 
 	if (m_cost_value < INT32_MIN || m_cost_value > INT32_MAX)
 	{
@@ -839,9 +838,6 @@ static bool extract_hash_components(const char *hash_str, unsigned char *salt_ou
 	}
 
 	*m_cost_output = (int32_t)m_cost_value;
-
-	// Extract memory cost with validation
-	int32_t m_cost_value = strtol(params_start, &endptr, 10);
 
 	if (endptr == params_start || *endptr != ',' ||
 	    m_cost_value <= 0 || m_cost_value > INT_MAX)
