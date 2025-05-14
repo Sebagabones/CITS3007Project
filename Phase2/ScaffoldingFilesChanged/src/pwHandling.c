@@ -17,6 +17,9 @@
 #include <sodium.h>
 #include "banned.h"
 
+// For safe string/memory operations
+#define __STDC_WANT_LIB_EXT1__    1
+
 //  DO NOT TOUCH HASH_LENGTH
 //  char password_hash[HASH_LENGTH];
 
@@ -100,33 +103,41 @@ static void format_argon2_hash(char *output, int t_cost, int m_cost, int paralle
 		return;
 	}
 
-	char salt_b64[64];
-	char hash_b64[64];
+	// Use smaller buffers to minimize the chance of truncation
+	// Base64 encoding of binary data increases size by ~4/3
+	// For SALT_LENGTH and HASH_RAW_LENGTH, calculate safe sizes
+	char salt_b64[((SALT_LENGTH + 2) / 3) * 4 + 4]; // +4 for padding and null terminator
+	char hash_b64[((HASH_RAW_LENGTH + 2) / 3) * 4 + 4];
 
-	// Initialize buffers to prevent uninitialized data
-	memset(salt_b64, 0, sizeof(salt_b64));
-	memset(hash_b64, 0, sizeof(hash_b64));
+	// Initialize buffers to prevent uninitialized data (using secure zeroing)
+	sodium_memzero(salt_b64, sizeof(salt_b64));
+	sodium_memzero(hash_b64, sizeof(hash_b64));
 
 	// Encode salt and hash to base64
 	sodium_bin2base64(salt_b64, sizeof(salt_b64), salt, SALT_LENGTH, sodium_base64_VARIANT_ORIGINAL);
 	sodium_bin2base64(hash_b64, sizeof(hash_b64), raw_hash, HASH_RAW_LENGTH, sodium_base64_VARIANT_ORIGINAL);
 
-	// Calculate required length to ensure we don't truncate
-	int required_length = snprintf(NULL, 0, "$argon2id$v=19$m=%d,t=%d,p=%d$%s$%s",
-	                               m_cost, t_cost, parallelism, salt_b64, hash_b64);
+	// Use a temp buffer for safe formatting to avoid potential buffer overflow
+	char temp_buf[HASH_LENGTH * 2]; // Double size to ensure space
+	sodium_memzero(temp_buf, sizeof(temp_buf));
 
-	if (required_length < HASH_LENGTH - 1)
+	// Format the hash with all parameters
+	int result = snprintf(temp_buf, sizeof(temp_buf), "$argon2id$v=19$m=%d,t=%d,p=%d$%s$%s",
+	                      m_cost, t_cost, parallelism, salt_b64, hash_b64);
+
+	// Check for formatting success and length constraints
+	if (result < 0 || result >= HASH_LENGTH)
 	{
-		// We have enough space, format the final string
-		snprintf(output, HASH_LENGTH,
-		         "$argon2id$v=19$m=%d,t=%d,p=%d$%s$%s",
-		         m_cost, t_cost, parallelism, salt_b64, hash_b64);
-	}
-	else
-	{
-		// Not enough space, indicate error by setting to empty string
+		// Error or too long - set to empty string
 		output[0] = '\0';
+
+		return;
 	}
+
+	// Copy to output buffer with safe length handling
+	size_t copy_len = (result < HASH_LENGTH - 1) ? result : HASH_LENGTH - 1;
+	strncpy(output, temp_buf, copy_len);
+	output[copy_len] = '\0'; // Ensure null termination
 }
 
 /**
@@ -167,10 +178,11 @@ static bool extract_hash_components(const char *hash_str, unsigned char *salt_ou
 	}
 
 	// Extract memory cost with validation
+	char *	endptr		 = NULL;
+	int32_t m_cost_value = strtol(params_start, &endptr, 10);
 
-	size_t m_cost_value = strtol(params_start, NULL, 10);
-
-	if (m_cost_value == 0 || m_cost_value > INT_MAX)
+	if (endptr == params_start || *endptr != ',' ||
+	    m_cost_value <= 0 || m_cost_value > INT_MAX)
 	{
 		return(false);
 	}
@@ -185,14 +197,16 @@ static bool extract_hash_components(const char *hash_str, unsigned char *salt_ou
 		return(false);
 	}
 
-	int t_cost_value = (int)strtol(t_cost_start + 3, NULL, 10);
+	endptr = NULL;
+	int32_t t_cost_value = strtol(t_cost_start + 3, &endptr, 10);
 
-	if (t_cost_value <= 0 || t_cost_value > INT_MAX)
+	if (endptr == (t_cost_start + 3) || (*endptr != ',' && *endptr != '$') ||
+	    t_cost_value <= 0 || t_cost_value > INT_MAX)
 	{
 		return(false);  // Invalid value
 	}
 
-	*t_cost_output = t_cost_value;
+	*t_cost_output = (int)t_cost_value;
 
 	// Extract parallelism with validation
 	const char *p_start = strstr(params_start, ",p=");
@@ -202,14 +216,16 @@ static bool extract_hash_components(const char *hash_str, unsigned char *salt_ou
 		return(false);
 	}
 
-	int p_value = (int)strtol(p_start + 3, NULL, 10);
+	endptr = NULL;
+	int32_t p_value = strtol(p_start + 3, &endptr, 10);
 
-	if (p_value <= 0 || p_value > INT_MAX)
+	if (endptr == (p_start + 3) || (*endptr != ',' && *endptr != '$') ||
+	    p_value <= 0 || p_value > INT_MAX)
 	{
 		return(false);  // Invalid value
 	}
 
-	*parallelism_output = p_value;
+	*parallelism_output = (int)p_value;
 
 	// Extract salt
 	char *salt_start = params_end + 1;
@@ -223,22 +239,38 @@ static bool extract_hash_components(const char *hash_str, unsigned char *salt_ou
 	size_t salt_b64_len = salt_end - salt_start;
 
 	// Validate salt_b64_len is reasonable
-	if (salt_b64_len <= 0 || salt_b64_len >= 64)
+	if (salt_b64_len >= 64)
 	{
 		return(false);
 	}
 
+	// Temporary buffer for salt base64 string
 	char salt_b64[64];
-	memset(salt_b64, 0, sizeof(salt_b64)); // Initialize to zeros
-	strncpy(salt_b64, salt_start, salt_b64_len);
-	salt_b64[salt_b64_len] = '\0';
+
+	// Clear the buffer using secure zeroing
+	sodium_memzero(salt_b64, sizeof(salt_b64));
+
+	if (salt_b64_len < sizeof(salt_b64))
+	{
+		// Safely copy salt string with proper bounds checking
+		if (salt_b64_len > 0)
+		{
+			strncpy(salt_b64, salt_start, salt_b64_len);
+		}
+
+		salt_b64[salt_b64_len] = '\0';
+	}
+	else
+	{
+		return(false);
+	}
 
 	// Decode salt from base64
 	size_t salt_bin_len;
 
 	if (sodium_base642bin(salt_output, SALT_LENGTH, salt_b64,
 	                      salt_b64_len, NULL, &salt_bin_len, NULL,
-	                      sodium_base64_VARIANT_ORIGINAL) != 0)
+	                      sodium_base64_VARIANT_ORIGINAL) != 0 || salt_bin_len != SALT_LENGTH)
 	{
 		return(false);
 	}
@@ -366,7 +398,7 @@ bool account_update_password(account_t *acc, const char *new_plaintext_password)
 
 	// Generate random salt
 	unsigned char salt[SALT_LENGTH];
-	memset(salt, 0, SALT_LENGTH); // Initialize to zeros
+	sodium_memzero(salt, SALT_LENGTH); // Initialize to zeros using secure zeroing
 
 	if (!generate_random_bytes(salt, SALT_LENGTH))
 	{
@@ -377,6 +409,9 @@ bool account_update_password(account_t *acc, const char *new_plaintext_password)
 	if (!generate_argon2_hash(new_plaintext_password, salt, T_COST, M_COST,
 	                          PARALLELISM, acc->password_hash))
 	{
+		// Securely wipe the salt from memory before returning
+		sodium_memzero(salt, SALT_LENGTH);
+
 		return(false);
 	}
 
