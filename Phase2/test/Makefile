@@ -20,11 +20,11 @@ TEST_DIR=.
 
 SANITIZE_FLAGS_MORE=-fsanitize=undefined,float-divide-by-zero,float-cast-overflow,bounds,null,return,vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -fsanitize=undefined,address,leak -fno-sanitize-recover=signed-integer-overflow -fno-omit-frame-pointer
 
-
+# valgrind tests are commented out, uncomment for testing
 CFLAGS=-O3 -Wall -std=c11 -funsigned-char -fstack-protector-all -mshstk $(SANITIZE_FLAGS_MORE) -I$(TEST_DIR)/ -I$(SRC_DIR)/ $(STATIC) $(COMPACT) $(DEBUG) -isystem /usr/include/bsd -DLIBBSD_OVERLAY -DCITS3007_PROJECT_TESTING
+# CFLAGS= -g -O0 -Wall -std=c11 -funsigned-char -fstack-protector-all -mshstk -I$(TEST_DIR)/ -I$(SRC_DIR)/ $(STATIC) $(COMPACT) $(DEBUG) -isystem /usr/include/bsd -DLIBBSD_OVERLAY -DCITS3007_PROJECT_TESTING  #valgrind
 
 
-# CFLAGS= -O2 -Wall -I$(TEST_DIR)/ -I$(SRC_DIR)/ $(STATIC) $(COMPACT) $(DEBUG) -isystem /usr/include/bsd -DLIBBSD_OVERLAY -DCITS3007_PROJECT_TESTING
 TESTS_SRC_C=$(wildcard t_*.c)
 TESTS_C=$(TESTS_SRC_C:.c=)
 ifneq ($(CXX_AVAILABLE),)
@@ -35,8 +35,9 @@ endif
 TESTS_SRC=$(TST_SRC_C) $(TST_SRC_CPP)
 TESTS=$(TESTS_C) $(TESTS_CPP)
 SRC_OBJS=$(SRC_DIR)/login.o $(SRC_DIR)/account.o $(TEST_DIR)/stubs.o
-LIBS = -lbsd -lsodium -largon2
-# LDFLAGS = -lbsd -lsodium -largon2
+# LIBS = -lbsd -lsodium -largon2 #valgrind
+LIBS = -fsanitize=address -lbsd -lsodium -largon2
+#LDFLAGS = -lbsd -lsodium -largon2 #valgrind
 LDFLAGS = $(SANITIZE_FLAGS_MORE) -lbsd -lsodium -largon2
 
 # targets
@@ -48,6 +49,7 @@ MAKEFLAGS += --no-builtin-rules
 	$(CC) $(CFLAGS) -c $< -o $@
 
 %: %.o $(SRC_OBJS)
+	#$(CC) -o $@ $^ $(LIBS) #valgrind
 	$(CC) $(SANITIZE_FLAGS_MORE) -o $@ $^ $(LIBS)
 
 # Specific rule for compiling test stubs
