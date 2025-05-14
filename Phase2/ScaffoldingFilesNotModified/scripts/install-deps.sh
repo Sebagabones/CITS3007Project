@@ -32,7 +32,7 @@ while IFS= read -r pkg; do
   if [[ -z "$pkg" || "$pkg" =~ ^# ]]; then
     continue
   fi
-  
+
   echo "Installing $pkg..."
   apt-get install -y --no-install-recommends "$pkg" || {
     echo "Failed to install $pkg" >&2

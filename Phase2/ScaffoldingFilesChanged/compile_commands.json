@@ -10,6 +10,9 @@
             "-Wall",
             "-Wextra",
             "-Isrc",
+            "-isystem",
+            "/usr/include/bsd",
+            "-DLIBBSD_OVERLAY",
             "-Isrc",
             "-o",
             "build/bogus_main.o",
@@ -29,13 +32,16 @@
             "-Wall",
             "-Wextra",
             "-Isrc",
+            "-isystem",
+            "/usr/include/bsd",
+            "-DLIBBSD_OVERLAY",
             "-Isrc",
             "-o",
-            "build/login.o",
-            "src/login.c"
+            "build/stubs.o",
+            "src/stubs.c"
         ],
         "directory": "/home/vagrant/CITS3007Project/Phase2/ScaffoldingFilesChanged",
-        "file": "src/login.c"
+        "file": "src/stubs.c"
     },
     {
         "arguments": [
@@ -48,6 +54,9 @@
             "-Wall",
             "-Wextra",
             "-Isrc",
+            "-isystem",
+            "/usr/include/bsd",
+            "-DLIBBSD_OVERLAY",
             "-Isrc",
             "-o",
             "build/alternate_main.o",
@@ -67,6 +76,9 @@
             "-Wall",
             "-Wextra",
             "-Isrc",
+            "-isystem",
+            "/usr/include/bsd",
+            "-DLIBBSD_OVERLAY",
             "-Isrc",
             "-o",
             "build/account.o",
@@ -86,12 +98,15 @@
             "-Wall",
             "-Wextra",
             "-Isrc",
+            "-isystem",
+            "/usr/include/bsd",
+            "-DLIBBSD_OVERLAY",
             "-Isrc",
             "-o",
-            "build/stubs.o",
-            "src/stubs.c"
+            "build/login.o",
+            "src/login.c"
         ],
         "directory": "/home/vagrant/CITS3007Project/Phase2/ScaffoldingFilesChanged",
-        "file": "src/stubs.c"
+        "file": "src/login.c"
     }
 ]
