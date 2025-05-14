@@ -8,7 +8,6 @@
 #include "db.h"
 #include "login.h"
 #include "logging.h"
-#include "pwHandling.h"
 #include "banned.h"
 
 #define DEFAULT_SESSION_LENGTH    86400

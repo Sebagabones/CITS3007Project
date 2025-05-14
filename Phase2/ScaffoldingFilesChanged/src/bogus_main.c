@@ -12,7 +12,7 @@
 #include "banned.h"
 #include "logging.h"
 
-//#define MAIN1
+#define MAIN1
 #ifdef MAIN1
 int main(void)
 {
