@@ -97,6 +97,7 @@ Unlike other bulky test frameworks with complex build dependencies, all we need 
 
 Tst can split into testsuites which can contain many testcases each with their own testchecks, for example:
 
+```
 tstsuite(){
     tstcase(1) {
         tstcheck(1);
@@ -108,8 +109,10 @@ tstsuite(){
     .
     .
 }
+```
+This means we can split a suite for each functionality that requires testing, then have cases for all the different scenarios to be tested. 
 
-This means we can split a suite for each functionality that requires testing, then have cases for all the different scenarios to be tested.
+We also were able to use `tstsection`'s to increase the separation of different tests, purely for increasing the clarity of the results.
 
 Inside each tstcheck we have:
 
@@ -125,6 +128,11 @@ Here is a brief summary of our testing:
 To run the test, make the tests with `make`, but make sure to run `make clean` first.
 Then, you can either run `make runtest` or `./tstrun --color` to run all of the tests, or run indivudal tests with `./t_<testname> --color`
 -> insert some testing results or something here, might be too long to include all like 200 tests
+
+
+## Dynamic Analysis 
+
+## File Structure
 
 ### Project difficulties and how we addressed them
 
