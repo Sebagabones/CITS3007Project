@@ -117,7 +117,11 @@ This will give a message if the output is not correct based on boolean.
 
 Additionally, we made our own stubs.c file that allowed us to use mocks of functions that were not required to be written by us, including `log_message` and `account_lookup_by_userid`. We did not use the given stubs.c inside src/ because that one gets overwritten and we wanted different functionalities such as custom debug messages.
 
+There is also a header file in the test directory as our stubs code needs it to work.
+
 Here is a brief summary of our testing:
+To run the test, make the tests with `make`, but make sure to run `make clean` first.
+Then, you can either run `make runtest` or `./tstrun --color` to run all of the tests, or run indivudal tests with `./t_<testname> --color`
 -> insert some testing results or something here, might be too long to include all like 200 tests
 
 ### Project difficulties and how we addressed them

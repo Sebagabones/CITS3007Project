@@ -12,6 +12,46 @@
       "-Isrc",
       "-c",
       "-o",
+      "build/bogus_main.o",
+      "src/bogus_main.c"
+    ],
+    "directory": "/mnt/c/Users/peter/OneDrive/Documents/.Uni stuff/2025/CITS3007 secure coding/Group project/CITS3007Project/Phase2/ScaffoldingFilesChanged",
+    "file": "/mnt/c/Users/peter/OneDrive/Documents/.Uni stuff/2025/CITS3007 secure coding/Group project/CITS3007Project/Phase2/ScaffoldingFilesChanged/src/bogus_main.c",
+    "output": "/mnt/c/Users/peter/OneDrive/Documents/.Uni stuff/2025/CITS3007 secure coding/Group project/CITS3007Project/Phase2/ScaffoldingFilesChanged/build/bogus_main.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-g",
+      "-fno-omit-frame-pointer",
+      "-std=c11",
+      "-pedantic-errors",
+      "-Wall",
+      "-Wextra",
+      "-Isrc",
+      "-Isrc",
+      "-c",
+      "-o",
+      "build/account.o",
+      "src/account.c"
+    ],
+    "directory": "/mnt/c/Users/peter/OneDrive/Documents/.Uni stuff/2025/CITS3007 secure coding/Group project/CITS3007Project/Phase2/ScaffoldingFilesChanged",
+    "file": "/mnt/c/Users/peter/OneDrive/Documents/.Uni stuff/2025/CITS3007 secure coding/Group project/CITS3007Project/Phase2/ScaffoldingFilesChanged/src/account.c",
+    "output": "/mnt/c/Users/peter/OneDrive/Documents/.Uni stuff/2025/CITS3007 secure coding/Group project/CITS3007Project/Phase2/ScaffoldingFilesChanged/build/account.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-g",
+      "-fno-omit-frame-pointer",
+      "-std=c11",
+      "-pedantic-errors",
+      "-Wall",
+      "-Wextra",
+      "-Isrc",
+      "-Isrc",
+      "-c",
+      "-o",
       "build/alternate_main.o",
       "src/alternate_main.c"
     ],
@@ -52,51 +92,11 @@
       "-Isrc",
       "-c",
       "-o",
-      "build/bogus_main.o",
-      "src/bogus_main.c"
-    ],
-    "directory": "/mnt/c/Users/peter/OneDrive/Documents/.Uni stuff/2025/CITS3007 secure coding/Group project/CITS3007Project/Phase2/ScaffoldingFilesChanged",
-    "file": "/mnt/c/Users/peter/OneDrive/Documents/.Uni stuff/2025/CITS3007 secure coding/Group project/CITS3007Project/Phase2/ScaffoldingFilesChanged/src/bogus_main.c",
-    "output": "/mnt/c/Users/peter/OneDrive/Documents/.Uni stuff/2025/CITS3007 secure coding/Group project/CITS3007Project/Phase2/ScaffoldingFilesChanged/build/bogus_main.o"
-  },
-  {
-    "arguments": [
-      "/usr/bin/gcc",
-      "-g",
-      "-fno-omit-frame-pointer",
-      "-std=c11",
-      "-pedantic-errors",
-      "-Wall",
-      "-Wextra",
-      "-Isrc",
-      "-Isrc",
-      "-c",
-      "-o",
       "build/stubs.o",
       "src/stubs.c"
     ],
     "directory": "/mnt/c/Users/peter/OneDrive/Documents/.Uni stuff/2025/CITS3007 secure coding/Group project/CITS3007Project/Phase2/ScaffoldingFilesChanged",
     "file": "/mnt/c/Users/peter/OneDrive/Documents/.Uni stuff/2025/CITS3007 secure coding/Group project/CITS3007Project/Phase2/ScaffoldingFilesChanged/src/stubs.c",
     "output": "/mnt/c/Users/peter/OneDrive/Documents/.Uni stuff/2025/CITS3007 secure coding/Group project/CITS3007Project/Phase2/ScaffoldingFilesChanged/build/stubs.o"
-  },
-  {
-    "arguments": [
-      "/usr/bin/gcc",
-      "-g",
-      "-fno-omit-frame-pointer",
-      "-std=c11",
-      "-pedantic-errors",
-      "-Wall",
-      "-Wextra",
-      "-Isrc",
-      "-Isrc",
-      "-c",
-      "-o",
-      "build/account.o",
-      "src/account.c"
-    ],
-    "directory": "/mnt/c/Users/peter/OneDrive/Documents/.Uni stuff/2025/CITS3007 secure coding/Group project/CITS3007Project/Phase2/ScaffoldingFilesChanged",
-    "file": "/mnt/c/Users/peter/OneDrive/Documents/.Uni stuff/2025/CITS3007 secure coding/Group project/CITS3007Project/Phase2/ScaffoldingFilesChanged/src/account.c",
-    "output": "/mnt/c/Users/peter/OneDrive/Documents/.Uni stuff/2025/CITS3007 secure coding/Group project/CITS3007Project/Phase2/ScaffoldingFilesChanged/build/account.o"
   }
 ]
