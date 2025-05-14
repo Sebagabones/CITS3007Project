@@ -116,7 +116,7 @@ static bool birthday_valid(const char *s)
  */
 bool password_valid(const char *plaintext_password)
 {
-	int pass_len = strnlen(plaintext_password, MAX_PASSWORD_LENGTH + 1);
+	size_t pass_len = strnlen(plaintext_password, MAX_PASSWORD_LENGTH + 1);
 
 	if (pass_len > MAX_PASSWORD_LENGTH || pass_len < MIN_PASSWORD_LENGTH)
 	{
@@ -789,7 +789,7 @@ static void format_argon2_hash(char *output, int t_cost, int m_cost, int paralle
 
 
 	int copy_len = (result < HASH_LENGTH - 1) ? result : HASH_LENGTH - 1;
-	memcpy(output, temp_buf, copy_len);
+	size_t copy_len = (result < HASH_LENGTH - 1) ? (size_t)result : (size_t)(HASH_LENGTH - 1);
 	output[copy_len] = '\0'; // Ensure null termination
 }
 
