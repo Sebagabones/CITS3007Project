@@ -114,7 +114,7 @@ static bool birthday_valid(const char *s)
  * @param plaintext_password Null-terminated password string to validate.
  * @return true if the password meets all criteria, false otherwise.
  */
-bool password_valid(const char *plaintext_password)
+static bool password_valid(const char *plaintext_password)
 {
 	int pass_len = strnlen(plaintext_password, MAX_PASSWORD_LENGTH + 1);
 
@@ -882,8 +882,8 @@ static bool extract_hash_components(const char *hash_str, unsigned char *salt_ou
 	*parallelism_output = (int)p_value;
 
 	// Extract salt
-	char *salt_start = params_end + 1;
-	char *salt_end	 = strchr(salt_start, '$');
+	const char *salt_start = params_end + 1;
+	const char *salt_end   = strchr(salt_start, '$');
 
 	if (salt_end == NULL)
 	{
