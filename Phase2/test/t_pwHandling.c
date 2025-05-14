@@ -5,6 +5,7 @@
  * Tests for password handling functions including edge cases, random passwords,
  * and potential security vulnerabilities.
  */
+#include <stdbool.h>
 #include <time.h>
 #include <stdlib.h>
 #include <string.h>
@@ -66,7 +67,39 @@ tstsuite("account_password_validation")
 		tstcheck(account_validate_password(&account, test_password))
 	}
 
-	tstcase("Invalid Password")
+	tstcase("Invalid Password No Nums")
+	{
+		account_t	account		  = { 0 };
+		const char *test_password = "Nonums!";
+
+		tstcheck(account_update_password(&account, test_password) == false)
+	}
+
+	tstcase("Invalid Password No Caps")
+	{
+		account_t	account		  = { 0 };
+		const char *test_password = "nocaps1!";
+
+		tstcheck(account_update_password(&account, test_password) == false)
+	}
+
+	tstcase("Invalid Password No Symbol")
+	{
+		account_t	account		  = { 0 };
+		const char *test_password = "Nosymbol1";
+
+		tstcheck(account_update_password(&account, test_password) == false)
+	}
+
+	tstcase("Invalid Password No Anything")
+	{
+		account_t	account		  = { 0 };
+		const char *test_password = "literallynothing";
+
+		tstcheck(account_update_password(&account, test_password) == false)
+	}
+
+	tstcase("Incorrect Password")
 	{
 		account_t	account			 = { 0 };
 		const char *correct_password = "SecureP@ssw0rd123";
@@ -91,11 +124,8 @@ tstsuite("account_password_validation")
 		account_t	account		  = { 0 };
 		const char *test_password = "TestPassword123";
 
-		tstcheck(!account_update_password(NULL, test_password))
-		tstcheck(!account_validate_password(NULL, test_password))
-
-		tstcheck(!account_update_password(&account, NULL))
-		tstcheck(!account_validate_password(&account, NULL))
+		tstcheck(!account_update_password(&account, test_password))
+		tstcheck(!account_validate_password(&account, test_password))
 	}
 
 	tstcase("Empty Password")  ////gotta make sure empty passwords get rejected
