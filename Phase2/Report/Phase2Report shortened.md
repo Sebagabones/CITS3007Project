@@ -5,13 +5,13 @@ TOCTOU *(/tɒk ˈtuːə/)*
 23
 
 #### Group Members:
-| Student Number | Title | First Name | Last Name |
-|----------------|-------|------------|-----------|
-| 23832656       | Mr    | Peter      | Fang      |
-| 23417131       | Mx    | Seb        | Gazey     |
-| 23804015       | Mr    | Alec       | Hassell   |
-| 23478063       | Mr    | Scotty     | Maw       |
-| 23926055       | Lord  | Henry      | Yau       |
+| Student Number | Title |   First Name   | Last Name |
+|----------------|-------|----------------|-----------|
+| 23832656       | Mr    | Peter          | Fang      |
+| 23417131       | Mx    | Seb            | Gazey     |
+| 23804015       | Mr    | Alec           | Hassell   |
+| 23478063       | Mr    | Minn Khant     | Maw       |
+| 23926055       | Lord  | Henry          | Yau       |
 
 
 ### Design Decisions

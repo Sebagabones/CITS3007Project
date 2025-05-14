@@ -31,25 +31,6 @@
             "-Isrc",
             "-Isrc",
             "-o",
-            "build/account.o",
-            "src/account.c"
-        ],
-        "directory": "/home/vagrant/CITS3007Project/Phase2/ScaffoldingFilesChanged",
-        "file": "src/account.c"
-    },
-    {
-        "arguments": [
-            "gcc",
-            "-c",
-            "-g",
-            "-fno-omit-frame-pointer",
-            "-std=c11",
-            "-pedantic-errors",
-            "-Wall",
-            "-Wextra",
-            "-Isrc",
-            "-Isrc",
-            "-o",
             "build/alternate_main.o",
             "src/alternate_main.c"
         ],
@@ -74,6 +55,25 @@
         ],
         "directory": "/home/vagrant/CITS3007Project/Phase2/ScaffoldingFilesChanged",
         "file": "src/stubs.c"
+    },
+    {
+        "arguments": [
+            "gcc",
+            "-c",
+            "-g",
+            "-fno-omit-frame-pointer",
+            "-std=c11",
+            "-pedantic-errors",
+            "-Wall",
+            "-Wextra",
+            "-Isrc",
+            "-Isrc",
+            "-o",
+            "build/account.o",
+            "src/account.c"
+        ],
+        "directory": "/home/vagrant/CITS3007Project/Phase2/ScaffoldingFilesChanged",
+        "file": "src/account.c"
     },
     {
         "arguments": [
