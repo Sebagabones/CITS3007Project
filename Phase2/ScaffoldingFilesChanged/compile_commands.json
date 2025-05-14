@@ -37,11 +37,11 @@
             "-DLIBBSD_OVERLAY",
             "-Isrc",
             "-o",
-            "build/account.o",
-            "src/account.c"
+            "build/alternate_main.o",
+            "src/alternate_main.c"
         ],
         "directory": "/home/vagrant/CITS3007Project/Phase2/ScaffoldingFilesChanged",
-        "file": "src/account.c"
+        "file": "src/alternate_main.c"
     },
     {
         "arguments": [
@@ -59,10 +59,10 @@
             "-DLIBBSD_OVERLAY",
             "-Isrc",
             "-o",
-            "build/alternate_main.o",
-            "src/alternate_main.c"
+            "build/account.o",
+            "src/account.c"
         ],
         "directory": "/home/vagrant/CITS3007Project/Phase2/ScaffoldingFilesChanged",
-        "file": "src/alternate_main.c"
+        "file": "src/account.c"
     }
 ]

@@ -829,8 +829,18 @@ static bool extract_hash_components(const char *hash_str, unsigned char *salt_ou
 		return(false);
 	}
 
+	// Range check
+	char *endptr	   = NULL;
+	long  m_cost_value = strtol(params_start, &endptr, 10);
+
+	if (m_cost_value < INT32_MIN || m_cost_value > INT32_MAX)
+	{
+		return(false);
+	}
+
+	*m_cost_output = (int32_t)m_cost_value;
+
 	// Extract memory cost with validation
-	char *	endptr		 = NULL;
 	int32_t m_cost_value = strtol(params_start, &endptr, 10);
 
 	if (endptr == params_start || *endptr != ',' ||
@@ -888,7 +898,12 @@ static bool extract_hash_components(const char *hash_str, unsigned char *salt_ou
 		return(false);
 	}
 
-	size_t salt_b64_len = salt_end - salt_start;
+	if (salt_end <= salt_start)
+	{
+		return(false);
+	}
+
+	size_t salt_b64_len = (size_t)(salt_end - salt_start);
 
 	// Validate salt_b64_len is reasonable
 	if (salt_b64_len >= 64)
@@ -965,15 +980,15 @@ static bool generate_argon2_hash(const char *password,
 	size_t password_len = strlen(password);
 
 	// Hash the password with Argon2id
-	int result = argon2id_hash_raw(t_cost,           // Time cost
-	                               m_cost,           // Memory cost
-	                               parallelism,      // Parallelism
-	                               password,         // Password
-	                               password_len,     // Password length
-	                               salt,             // Salt
-	                               SALT_LENGTH,      // Salt length
-	                               raw_hash,         // Output hash
-	                               HASH_RAW_LENGTH); // Output hash length
+	int result = argon2id_hash_raw((uint32_t)t_cost,           // Time cost
+	                               (uint32_t)m_cost,           // Memory cost
+	                               (uint32_t)parallelism,      // Parallelism
+	                               password,                   // Password
+	                               password_len,               // Password length
+	                               salt,                       // Salt
+	                               SALT_LENGTH,                // Salt length
+	                               raw_hash,                   // Output hash
+	                               HASH_RAW_LENGTH);           // Output hash length
 
 	if (result != ARGON2_OK)
 	{

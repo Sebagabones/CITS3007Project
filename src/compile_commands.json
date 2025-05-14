@@ -22,11 +22,11 @@
             "-O",
             "-g",
             "-o",
-            "build/account.o",
-            "src/account.c"
+            "build/bogus_main.o",
+            "src/bogus_main.c"
         ],
         "directory": "/home/vagrant/CITS3007Project/src",
-        "file": "src/account.c"
+        "file": "src/bogus_main.c"
     },
     {
         "arguments": [
@@ -51,11 +51,11 @@
             "-O",
             "-g",
             "-o",
-            "build/bogus_main.o",
-            "src/bogus_main.c"
+            "build/account.o",
+            "src/account.c"
         ],
         "directory": "/home/vagrant/CITS3007Project/src",
-        "file": "src/bogus_main.c"
+        "file": "src/account.c"
     },
     {
         "arguments": [
