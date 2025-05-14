@@ -46,7 +46,9 @@ void log_message(log_level_t level, const char *fmt, ...)
 	switch (level)
 	{
 	case LOG_DEBUG:
-		fprintf(stderr, "DEBUG: ");
+		//fprintf(stderr, "DEBUG: ");
+		pthread_mutex_unlock(&log_mutex);
+		return;
 		break;
 
 	case LOG_INFO:
@@ -72,6 +74,8 @@ void log_message(log_level_t level, const char *fmt, ...)
 	pthread_mutex_unlock(&log_mutex);
 }
 
+/* #ifndef CITS3007_PROJECT_TESTING */
+// ignored for the tests so that there is no conflict with the hard coded version
 bool account_lookup_by_userid(const char *userid, account_t *acc)
 {
 	// This is a stub function. In a real implementation, this function would
@@ -104,3 +108,5 @@ bool account_lookup_by_userid(const char *userid, account_t *acc)
 
 	return(false);
 }
+
+/* #endif */

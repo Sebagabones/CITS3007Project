@@ -40,7 +40,7 @@ account_t *account_create(const char *userid, const char *plaintext_password, co
     strncpy(actptr->userid, userid, USER_ID_LENGTH);
     actptr->userid[USER_ID_LENGTH - 1] = '\0';
 
-    hash_password(plaintext_password, actptr->password_hash, HASH_LENGTH); 
+    hash_password(plaintext_password, actptr->password_hash, HASH_LENGTH);
     // Assuming hash_password writes the result into the buffer and handles null-termination
 
     strncpy(actptr->email, email, EMAIL_LENGTH);
@@ -61,7 +61,7 @@ account_t *account_create(const char *userid, const char *plaintext_password, co
 }
 ```
 **Questions I have:**
-- What password hashing function are we using. 
+- What password hashing function are we using.
 - How are account ID's generated? Do I need to be checking them here
 - Whats the log format
 - Can also check if email is being truncated (not currently doing that)
@@ -69,7 +69,7 @@ account_t *account_create(const char *userid, const char *plaintext_password, co
 ```c
 void account_set_email(account_t *acc, const char *new_email)
 {
-	// Preconds: both args are non-null & new-email has '\0'	  
+	// Preconds: both args are non-null & new-email has '\0'
 	if (!only_ASCII_printable_chars(new_email) || !no_spaces(new_email))
 	{
 		log_message(LOG_ERROR, "Invalid email format in account_set_email.");
@@ -93,13 +93,13 @@ bool account_is_banned(const account_t *acc)
 	}
 	time_t current_time = time(NULL);
 	if (current_time == -1)
-	{  
-		log_message(LOG_ERROR, "acc_banned: Failed to get the current time.");  
-		return  true; // False positive probably better than false negative here  
+	{
+		log_message(LOG_ERROR, "acc_banned: Failed to get the current time.");
+		return  true; // False positive probably better than false negative here
 	}
 	return acc->unban_time > current_time;
-	
-	
+
+
 }
 
 bool  account_is_expired(const account_t *acc){
@@ -107,24 +107,43 @@ bool  account_is_expired(const account_t *acc){
 	{
 		return false; // unlimited
 	}
-	time_t current_time;  
+	time_t current_time;
 	current_time = time(NULL);
 	if (current_time == -1)
-	{  
-		log_message(LOG_ERROR, "acc_expired: Failed to get the current time.");  
-		return  true; // False positive probably better than false negative here  
+	{
+		log_message(LOG_ERROR, "acc_expired: Failed to get the current time.");
+		return  true; // False positive probably better than false negative here
 	}
 	return acc->expiration_time < current_time;
 }
 ```
 
 ### Printing Account Summary
-lots of freedom it looks like
+Complete freedom as to format, I've chosen to use `snprintf` to format the string and then write it to the file descriptor.
 
 ```c
 bool account_print_summary(const account_t *acct, int fd)
 {	// Caller is required to make sure fd is valid + writeable
-	
+
+    char buffer[256]; // Buffer to hold the formatted string
+    char *string = "Account ID: %d\nUserID: %s\nEmail: %s\nBirthdate: %s\n";
+
+    int bytes_written = snprintf(buffer, sizeof(buffer), "%s", string);
+
+    if (bytes_written < 0 || bytes_written >= sizeof(buffer))
+    {
+        log_message(LOG_ERROR, "account_print_summary: Failed to format account summary.");
+        return false;
+    }
+
+    ssize_t result = write(fd, buffer, bytes_written);
+    if (result == -1)
+    {
+        log_message(LOG_ERROR, "account_print_summary: Failed to write to file descriptor.");
+        return false;
+    }
+
+    return true;
 }
 
 ```
