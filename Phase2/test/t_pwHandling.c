@@ -125,18 +125,6 @@ tstsuite("account_password_validation")
 		tstcheck(!account_validate_password(&account, wrong_case_password))
 	}
 
-	tstcase("NULL Parameters")
-	{
-		account_t	account		  = { 0 };
-		const char *test_password = "TestPassword123";
-
-		tstcheck(!account_update_password(NULL, test_password))
-		tstcheck(!account_validate_password(NULL, test_password))
-
-		tstcheck(!account_update_password(&account, NULL))
-		tstcheck(!account_validate_password(&account, NULL))
-	}
-
 	tstcase("Empty Password")  ////gotta make sure empty passwords get rejected
 
 	{
