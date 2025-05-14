@@ -8,30 +8,51 @@
 
 #include <stdlib.h>
 #include <unistd.h>
+#include <time.h>
 #include "banned.h"
+#include "logging.h"
 
-// bogus implementation of main that links in all account and login
-// functions. You can delete this file and replace it with your own main
-// function(s).
-int main(int argc, char *argv[])
+#define MAIN1
+#ifdef MAIN1
+int main(void)
 {
-	(void)argc;
-	(void)argv;
+	account_t *acc = account_create("user1", "password123", "user@example.com", "2000-01-01");
 
-	account_t *acc = account_create("", "", "", "");
-	account_free(acc);
-	bool res = account_validate_password(acc, "");
-	res = account_update_password(acc, "");
-	account_record_login_success(acc, 0);
+	if (!acc)
+	{
+		log_message(LOG_ERROR, "Failed to create account.");
+
+		return(1);
+	}
+
+	account_set_email(acc, "new_email@example.com");
+	account_set_unban_time(acc, time(NULL) + 3600);
+	account_set_expiration_time(acc, time(NULL) + 86400);
+
 	account_record_login_failure(acc);
-	res = account_is_banned(acc);
-	res = account_is_expired(acc);
-	account_set_unban_time(acc, 0);
-	account_set_expiration_time(acc, 0);
-	account_set_email(acc, "");
-	(void)account_print_summary(acc, STDOUT_FILENO);
-	(void)res;
-	handle_login("", "", 0, 0, STDOUT_FILENO, NULL);
+	account_record_login_success(acc, 0x7f000001); // 127.0.0.1
+
+	if (account_validate_password(acc, "password123"))
+	{
+		log_message(LOG_INFO, "Password validated successfully.");
+	}
+	else
+	{
+		log_message(LOG_WARN, "Password validation failed.");
+	}
+
+	if (!account_update_password(acc, "newpassword456"))
+	{
+		log_message(LOG_ERROR, "Password update failed.");
+	}
+
+	if (account_print_summary(acc, STDOUT_FILENO))
+	{
+		log_message(LOG_INFO, "Summary printed.");
+	}
+
+	account_free(acc);
 
 	return(0);
 }
+#endif
