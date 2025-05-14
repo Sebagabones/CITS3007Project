@@ -118,7 +118,7 @@ fputs("expected 1 arg, FILENAME\n", stderr);
 
 - I want to add clang-tidy
   [action](https://github.com/marketplace/actions/clang-tidy-review) at
-  some point in the future
+  some point in the future.
 
 #### Related Info
 
