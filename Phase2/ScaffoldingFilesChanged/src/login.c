@@ -4,6 +4,8 @@
 #include <strings.h>
 #include <unistd.h>
 #include <ctype.h>
+#include <errno.h>  
+#include <string.h> 
 
 #include "db.h"
 #include "login.h"
@@ -18,8 +20,6 @@
  * @brief Implementation of the functions that handle user login
  *
  */
-#include <errno.h>  // for errno
-#include <string.h> // for strerror()
 
 static void send_client_and_log(int client_fd, log_level_t level, const char *msg)
 {
@@ -88,9 +88,6 @@ login_result_t handle_login(const char *username, const char *password,
 		return(LOGIN_FAIL_USER_NOT_FOUND);
 	}
 
-	//Banned or Expired Accounts
-
-	//Check if current time is before unban time
 	if (account_is_banned(user))
 	{
 		send_client_and_log(client_output_fd, LOG_INFO, "Login failed: User account is banned");
@@ -99,7 +96,6 @@ login_result_t handle_login(const char *username, const char *password,
 		return(LOGIN_FAIL_ACCOUNT_BANNED);
 	}
 
-	//Check if account is expired (current time is after expiry and account is not unlimited)
 	if (account_is_expired(user))
 	{
 		send_client_and_log(client_output_fd, LOG_INFO, "Login failed: User account is expired");
@@ -108,7 +104,7 @@ login_result_t handle_login(const char *username, const char *password,
 		return(LOGIN_FAIL_ACCOUNT_EXPIRED);
 	}
 
-	//Login Failure Count
+	// Soft ban for > 10 failed logins
 	if (user->login_fail_count > 10)
 	{
 		send_client_and_log(client_output_fd, LOG_WARN, "Login failed: too many failed password attempts");
@@ -117,7 +113,6 @@ login_result_t handle_login(const char *username, const char *password,
 		return(LOGIN_FAIL_INTERNAL_ERROR);
 	}
 
-	//If Password Wrong
 	if (!account_validate_password(user, password))
 	{
 		account_record_login_failure(user); //record unsuccessful login
@@ -128,8 +123,7 @@ login_result_t handle_login(const char *username, const char *password,
 		return(LOGIN_FAIL_BAD_PASSWORD);
 	}
 
-	//If password correct
-	account_record_login_success(user, client_ip); //record successful login with ip and reset unsuccessful logins (assuming both will be done in the function)
+	account_record_login_success(user, client_ip);
 	send_client_and_log(client_output_fd, LOG_INFO, "Login Successful");
 
 	//populate session struct with username, login time and session end time
@@ -143,8 +137,7 @@ login_result_t handle_login(const char *username, const char *password,
 	else
 	{
 		session->expiration_time = user->expiration_time;
-	}
-
+	}	
 	log_message(LOG_DEBUG, "handle_login: login process completed successfully for user");
 	account_free(user);
 

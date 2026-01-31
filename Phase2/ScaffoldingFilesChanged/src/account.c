@@ -69,11 +69,9 @@ static bool only_ASCII_printable_chars(const char *s)
 	return(true);
 }
 
-/**
- * @brief birthday input much match expected format YYYY-MM-DD
- */
+
 static bool birthday_valid(const char *s)
-{
+{	// To match expected format YYYY-MM-DD
 	if (strlen(s) != 10)
 	{
 		log_message(LOG_DEBUG, "birthday_valid: Incorrect length (%zu).", strlen(s));
@@ -192,11 +190,6 @@ static bool pseudo_string_copy(char *field, const char *input, size_t FIELD_SIZE
 
 /**
  * @brief Changes the 'partial pseudo-strings' in acc struct to valid null-terminated char*
- *
- * @param field
- * @param field_len
- * @param out_buf
- * @param out_buf_size
  */
 static void buffer_to_cstring(const char *field, size_t field_len, char *out_buf, size_t out_buf_size)
 {
@@ -234,7 +227,6 @@ static bool ip_to_cstring(const ip4_addr_t ip, char *out_buf, size_t out_buf_siz
 	return(true);
 }
 
-// ----------------------------------------------------------------------------------
 
 /**
  * @brief Create a new account with the specified parameters.
@@ -251,7 +243,6 @@ static bool ip_to_cstring(const ip4_addr_t ip, char *out_buf, size_t out_buf_siz
 account_t *account_create(const char *userid, const char *plaintext_password,
                           const char *email, const char *birthdate)
 {
-// Precondition: all pointers are non-null and strings are null-terminated.
 	if (strnlen(userid, USER_ID_LENGTH + 1) > USER_ID_LENGTH)
 	{
 		log_message(LOG_ERROR, "UserID too long.");
@@ -374,29 +365,6 @@ void account_free(account_t *acc) //cppcheck-suppress staticFunction
 }
 
 /**
- * @brief Validate a plaintext password against the stored hash.
- *
- * Compares the given plaintext password with the stored password hash
- * to verify if they match.
- *
- * @param acc Pointer to the account structure.
- * @param plaintext_password Null-terminated string of the password to validate.
- * @return true if the password matches, false otherwise.
- */
-//------------------------------------------------------------------------------------
-
-/**
- * @brief Update the account's password.
- *
- * Hashes the new plaintext password and updates the stored password hash.
- *
- * @param acc Pointer to the account structure to update.
- * @param new_plaintext_password Null-terminated string of the new password.
- * @return true if the update was successful, false otherwise.
- */
-//------------------------------------------------------------------------------------
-
-/**
  * @brief Record a successful login for the account.
  *
  * Updates the account's metadata following a successful login:
@@ -462,7 +430,7 @@ bool account_is_banned(const account_t *acc)
 	{
 		log_message(LOG_ERROR, "acc_banned: Failed to get the current time.");
 
-		return(true); // False positive probably better than false negative here
+		return(true); // False positive probably better than false negative
 	}
 
 	log_message(LOG_DEBUG, "account_is_banned: Current time: %ld, Unban time: %ld", (size_t)current_time, (size_t)acc->unban_time);
@@ -495,7 +463,7 @@ bool account_is_expired(const account_t *acc)
 	{
 		log_message(LOG_ERROR, "acc_expired: Failed to get the current time.");
 
-		return(true); // False positive probably better than false negative here
+		return(true); // False positive probably better than false negative
 	}
 
 	log_message(LOG_DEBUG, "account_is_expired: Current time: %ld, Expiration time: %ld", (size_t)current_time, (size_t)acc->expiration_time);
@@ -527,7 +495,7 @@ void account_set_unban_time(account_t *acc, time_t t)
  */
 void account_set_expiration_time(account_t *acc, time_t t)
 {
-	acc->expiration_time = t; //ditto
+	acc->expiration_time = t;
 	log_message(LOG_DEBUG, "account_set_expiration_time: Set to %ld", (size_t)t);
 }
 
@@ -573,7 +541,6 @@ void account_set_email(account_t *acc, const char *new_email)
 bool account_print_summary(const account_t *acct, int fd)
 {
 	// Caller is required to make sure fd is valid + writeable
-	// char buffer[516];       // Buffer to hold the formatted string //  switching to asprintf which will allocate the buffer for us
 	char *buffer;
 	char  timebuf[64];
 
@@ -589,7 +556,6 @@ bool account_print_summary(const account_t *acct, int fd)
 			return(false);
 		}
 
-		/* strncpy(timebuf, "Invalid time", sizeof(timebuf)); */
 		timebuf[sizeof(timebuf) - 1] = '\0';
 	}
 
@@ -614,13 +580,13 @@ bool account_print_summary(const account_t *acct, int fd)
 	                             "Last Login:\t%s\n"
 	                             "Login Count:\t%u\n"
 	                             "Login Failures:\t%u\n"
-	                             "Last IP:\t%.16s\n================\n", // potentially format ip address...
+	                             "Last IP:\t%.16s\n================\n",
 	                             printableUID,
 	                             printableEmail,
 	                             timebuf,
 	                             acct->login_count,
 	                             acct->login_fail_count,
-	                             printableIP); //switched from snprintf to asprintf https://stackoverflow.com/questions/12746885/why-use-asprintf-instead-of-sprintf
+	                             printableIP);
 
 	if (buffer == NULL)
 	{
@@ -637,7 +603,7 @@ bool account_print_summary(const account_t *acct, int fd)
 		return(false);
 	}
 
-	pthread_mutex_lock(&acc_summary_mutex);
+	pthread_mutex_lock(&acc_summary_mutex);	// Check implementation: isn't necessary unless multithreaded + same fd is used in calls (e.g. not tmp/ files)
 
 	size_t	len		= (size_t)bytes_written;
 	ssize_t written = write(fd, buffer, (size_t)bytes_written);
@@ -668,19 +634,14 @@ bool account_print_summary(const account_t *acct, int fd)
 	return(true);
 }
 
-//-------------------------------------- PASSWORD STUFF
+//-------------------------------------- PASSWORD HANDLING -----------------------------------
 
 /**
- * @file pwHandling.c
- * @brief Implementation of password hashing and validation functions
- *
- * This file implements the functions for password hashing and validation using the Argon2id
+ * Implements the functions for password hashing and validation using the Argon2id
  * algorithm, with sodium for salt generation and constant-time comparison.
  */
 // For safe string/memory operations
 #define __STDC_WANT_LIB_EXT1__    1
-
-// if we include banned here – shit explodes
 
 //  DO NOT TOUCH HASH_LENGTH
 //  char password_hash[HASH_LENGTH];
@@ -775,12 +736,11 @@ static void format_argon2_hash(char *output, int t_cost, int m_cost, int paralle
 	sodium_memzero(salt_b64, sizeof(salt_b64));
 	sodium_memzero(hash_b64, sizeof(hash_b64));
 
-	// Encode salt and hash to base64
 	sodium_bin2base64(salt_b64, sizeof(salt_b64), salt, SALT_LENGTH, sodium_base64_VARIANT_ORIGINAL);
 	sodium_bin2base64(hash_b64, sizeof(hash_b64), raw_hash, HASH_RAW_LENGTH, sodium_base64_VARIANT_ORIGINAL);
 
 	// Use a temp buffer for safe formatting to avoid potential buffer overflow
-	char temp_buf[HASH_LENGTH * 2]; // Double size to ensure space
+	char temp_buf[HASH_LENGTH * 2];
 	sodium_memzero(temp_buf, sizeof(temp_buf));
 
 	// Format the hash with all parameters
@@ -790,7 +750,6 @@ static void format_argon2_hash(char *output, int t_cost, int m_cost, int paralle
 	// Check for formatting success and length constraints
 	if (result < 0 || result >= HASH_LENGTH)
 	{
-		// Error or too long - set to empty string
 		output[0] = '\0';
 
 		return;
@@ -815,7 +774,6 @@ static void format_argon2_hash(char *output, int t_cost, int m_cost, int paralle
 static bool extract_hash_components(const char *hash_str, unsigned char *salt_output,
                                     int *t_cost_output, int *m_cost_output, int *parallelism_output)
 {
-	// Validate parameters
 	if (hash_str == NULL || salt_output == NULL ||
 	    t_cost_output == NULL || m_cost_output == NULL || parallelism_output == NULL)
 	{
@@ -824,13 +782,11 @@ static bool extract_hash_components(const char *hash_str, unsigned char *salt_ou
 
 	// Expected format: $argon2id$v=19$m=65536,t=3,p=4$[salt_base64]$[hash_base64]
 
-	// Check if the hash starts with the expected prefix
 	if (strncmp(hash_str, "$argon2id$v=19$m=", 17) != 0)
 	{
 		return(false);
 	}
 
-	// Parse parameters
 	char *params_start = (char *)hash_str + 17;
 	char *params_end   = strchr(params_start, '$');
 
@@ -920,13 +876,10 @@ static bool extract_hash_components(const char *hash_str, unsigned char *salt_ou
 
 	// Temporary buffer for salt base64 string
 	char salt_b64[64];
-
-	// Clear the buffer using secure zeroing
 	sodium_memzero(salt_b64, sizeof(salt_b64));
 
 	if (salt_b64_len < sizeof(salt_b64))
 	{
-		// Safely copy salt string with proper bounds checking
 		if (salt_b64_len > 0)
 		{
 			strncpy(salt_b64, salt_start, salt_b64_len);
@@ -939,7 +892,6 @@ static bool extract_hash_components(const char *hash_str, unsigned char *salt_ou
 		return(false);
 	}
 
-	// Decode salt from base64
 	size_t salt_bin_len;
 
 	if (sodium_base642bin(salt_output, SALT_LENGTH, salt_b64,
@@ -968,7 +920,6 @@ static bool generate_argon2_hash(const char *password,
                                  int t_cost, int m_cost, int parallelism,
                                  char *output)
 {
-	// Validate parameters
 	if (password == NULL || salt == NULL || output == NULL)
 	{
 		return(false);
@@ -983,10 +934,8 @@ static bool generate_argon2_hash(const char *password,
 	// Create a buffer for the raw hash
 	unsigned char raw_hash[HASH_RAW_LENGTH];
 
-	// Calculate password length safely
 	size_t password_len = strlen(password);
-
-	// Hash the password with Argon2id
+	
 	int result = argon2id_hash_raw((uint32_t)t_cost,           // Time cost
 	                               (uint32_t)m_cost,           // Memory cost
 	                               (uint32_t)parallelism,      // Parallelism
@@ -1005,7 +954,6 @@ static bool generate_argon2_hash(const char *password,
 	// Format the final hash string with parameters and salt
 	format_argon2_hash(output, t_cost, m_cost, parallelism, salt, raw_hash);
 
-	// Check if formatting was successful (empty string on error)
 	if (output[0] == '\0')
 	{
 		return(false);
@@ -1026,17 +974,10 @@ static bool generate_argon2_hash(const char *password,
  */
 bool account_validate_password(const account_t *acc, const char *plaintext_password)
 {
-	// Validate preconditions
-	// if (acc == NULL || plaintext_password == NULL)
-	// {
-	// 	return(false);
-	// }
-
 	// Parse the stored hash to extract salt and parameters
 	unsigned char stored_salt[SALT_LENGTH];
 	int			  t_cost, m_cost, parallelism;
 
-	// Extract salt and parameters from stored format
 	if (!extract_hash_components(acc->password_hash, stored_salt, &t_cost, &m_cost, &parallelism))
 	{
 		return(false);
@@ -1071,7 +1012,7 @@ bool account_update_password(account_t *acc, const char *new_plaintext_password)
 
 	// Generate random salt
 	unsigned char salt[SALT_LENGTH];
-	sodium_memzero(salt, SALT_LENGTH); // Initialize to zeros using secure zeroing
+	sodium_memzero(salt, SALT_LENGTH);
 
 	if (!generate_random_bytes(salt, SALT_LENGTH))
 	{
@@ -1082,13 +1023,11 @@ bool account_update_password(account_t *acc, const char *new_plaintext_password)
 	if (!generate_argon2_hash(new_plaintext_password, salt, T_COST, M_COST,
 	                          PARALLELISM, acc->password_hash))
 	{
-		// Securely wipe the salt from memory before returning
 		sodium_memzero(salt, SALT_LENGTH);
 
 		return(false);
 	}
 
-	// Securely wipe the salt from memory
 	sodium_memzero(salt, SALT_LENGTH);
 
 	return(true);
